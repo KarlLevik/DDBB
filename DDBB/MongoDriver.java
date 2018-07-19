@@ -155,7 +155,10 @@ public class MongoDriver {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(report_name + ".txt", true));
 			
-			if(error_amount > 0){
+			File error_file = new File(error_name + ".txt");
+			File records_file = new File(records_name + ".txt");
+
+			if(error_file.exists()){
 				BufferedReader error_reader = new BufferedReader(new FileReader(error_name + ".txt"));
 
 				writer.write("-------------------------");
@@ -163,6 +166,10 @@ public class MongoDriver {
 				writer.write("-------------------------");
 				writer.newLine();
 				writer.write("ERRORS");
+				writer.newLine();
+				writer.write("-------------------------");
+				writer.newLine();
+				writer.write("AMOUNT: " + error_amount);
 				writer.newLine();
 				writer.write("-------------------------");
 				writer.newLine();
@@ -174,8 +181,13 @@ public class MongoDriver {
 					current_line = error_reader.readLine();
 				}
 				
-				error_reader.close();
+				if(error_file.delete()){
+					System.out.println("Error file deleted successfully");
+				} else {
+					System.out.println("Failed to delete the error file");
+				}
 
+				error_reader.close();
 			} else {
 				writer.write("-------------------------");
 				writer.newLine();
@@ -189,8 +201,15 @@ public class MongoDriver {
 				writer.newLine();
 				writer.write("-------------------------");
 				writer.newLine();
-
 			}
+
+			if(records_file.exists()){
+				if(records_file.delete()){
+					System.out.println("Records file deleted successfully");
+				} else {
+					System.out.println("Failed to delete the records file");
+				}
+			} 
 
 			writer.close();
 		}
@@ -198,6 +217,7 @@ public class MongoDriver {
 			System.out.println("-------------------------");
 			System.out.println("Can't merge temp files to report file");
 			System.out.println(e);
+			System.out.println("Not deleting temporary files!");
 		}		
 	}
 
@@ -320,9 +340,9 @@ public class MongoDriver {
 		catch(FileNotFoundException e) {
 			reportError("Unable to open file 'config.txt'", e.toString());
 		}
-        catch(IOException e) {
+		catch(IOException e) {
 			reportError("Error reading file 'config.txt'", e.toString());
-        }
+		}
 	}
 
 	public static void main( String args[] ) {
