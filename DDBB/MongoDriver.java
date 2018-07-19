@@ -41,13 +41,21 @@ public class MongoDriver {
 	public static Integer cfg_test_amount = 0;
 	public static List<String> cfg_collection = new ArrayList<String>();
 	public static List<String> cfg_record_size = new ArrayList<String>();
-	public static List<String> cfg_record_amount = new ArrayList<String>();
+	public static List<Integer> cfg_record_amount = new ArrayList<Integer>();
 	public static List<String> cfg_write_random = new ArrayList<String>();
 	public static List<String> cfg_rand_reads = new ArrayList<String>();
 	public static List<String> cfg_rand_dels = new ArrayList<String>();
 	public static List<String> cfg_threads = new ArrayList<String>();
 	public static List<String> cfg_mrt = new ArrayList<String>();
 	public static List<String> cfg_repeats = new ArrayList<String>();
+	public static List<Integer> cfg_rcrd_interval = new ArrayList<Integer>();
+	public static List<Boolean> cfg_max_response = new ArrayList<Boolean>();
+	public static List<Boolean> cfg_avg_response = new ArrayList<Boolean>();
+	public static List<Boolean> cfg_min_response = new ArrayList<Boolean>();
+	public static List<Boolean> cfg_max_throughput = new ArrayList<Boolean>();
+	public static List<Boolean> cfg_avg_throughput = new ArrayList<Boolean>();
+	public static List<Boolean> cfg_min_throughput = new ArrayList<Boolean>();
+	public static List<Boolean> cfg_storage_eff = new ArrayList<Boolean>();
 
 	public static long runtime(){
 		return (System.currentTimeMillis() - start_time);
@@ -285,8 +293,8 @@ public class MongoDriver {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(records_name + ".txt", true));
 
 		record_number = 0;
-		while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
-			writer.write(generateRandomString(Integer.parseInt(cfg_record_size.get(test_number)), false));
+		while(record_number != cfg_test_amount){
+			writer.write(generateRandomString(Integer.parseInt((cfg_record_size).get(test_number)), false));
 			writer.newLine();
 			record_number++;
 		}
@@ -303,11 +311,16 @@ public class MongoDriver {
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 		record_number = 0;
-		while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
+		while(record_number != test_number){
 			String line = bufferedReader.readLine();
 			Document document = new Document("1", line);
 			collection.insertOne(document); 
 			record_number++;
+
+			if(record_number % cfg_rcrd_interval.get(test_number) == 0 || record_number == cfg_record_amount.get(test_number)){
+
+			}
+
 		}
 
 		bufferedReader.close();
@@ -344,7 +357,7 @@ public class MongoDriver {
 				bufferedReader.readLine();
 				cfg_record_size.add(bufferedReader.readLine());
 				bufferedReader.readLine();
-				cfg_record_amount.add(bufferedReader.readLine());
+				cfg_record_amount.add(Integer.parseInt(bufferedReader.readLine()));
 				bufferedReader.readLine();
 				cfg_write_random.add(bufferedReader.readLine());
 				bufferedReader.readLine();
@@ -357,6 +370,22 @@ public class MongoDriver {
 				cfg_mrt.add(bufferedReader.readLine());
 				bufferedReader.readLine();
 				cfg_repeats.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_rcrd_interval.add(Integer.parseInt(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_max_response.add(Boolean.parseBoolean(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_avg_response.add(Boolean.parseBoolean(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_min_response.add(Boolean.parseBoolean(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_max_throughput.add(Boolean.parseBoolean(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_avg_throughput.add(Boolean.parseBoolean(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_min_throughput.add(Boolean.parseBoolean(bufferedReader.readLine()));
+				bufferedReader.readLine();
+				cfg_storage_eff.add(Boolean.parseBoolean(bufferedReader.readLine()));
 				cfg_test_amount++;
 			}
 
