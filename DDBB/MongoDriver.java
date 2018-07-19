@@ -2,18 +2,27 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import java.io.*;
+import java.util.*;
 
 public class MongoDriver {
 
 	public static String cfg_db_type = "";
 	public static String cfg_test_name = "";
-	public static String cfg_threads = "";
 	// public static String cfg_memory_limit = "";
 	public static String cfg_db_name = "";
 	public static String cfg_server_ip = "";
 	public static Integer cfg_server_port = 27017;
 	public static String cfg_user = "";
 	public static String cfg_pwd = "";
+
+	public static List<String> cfg_collection = new ArrayList<String>();
+	public static List<String> cfg_rsize = new ArrayList<String>();
+	public static List<String> cfg_ramount = new ArrayList<String>();
+	public static List<String> cfg_randreads = new ArrayList<String>();
+	public static List<String> cfg_randdels = new ArrayList<String>();
+	public static List<String> cfg_threads = new ArrayList<String>();
+	public static List<String> cfg_mrt = new ArrayList<String>();
+	public static List<String> cfg_repeats = new ArrayList<String>();
 
 	public static void loadConfig(){
 		try {
@@ -27,8 +36,6 @@ public class MongoDriver {
 			cfg_db_type = bufferedReader.readLine();
 			bufferedReader.readLine();
 			cfg_test_name = bufferedReader.readLine();
-			bufferedReader.readLine();
-			cfg_threads = bufferedReader.readLine();
 			// bufferedReader.readLine();
 			// cfg_memory_limit = 0;
 			bufferedReader.readLine();
@@ -41,6 +48,24 @@ public class MongoDriver {
 			cfg_user = bufferedReader.readLine();
 			bufferedReader.readLine();
 			cfg_pwd = bufferedReader.readLine();
+			while(bufferedReader.readLine() != null){
+				bufferedReader.readLine();
+				cfg_collection.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_rsize.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_ramount.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_randreads.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_randdels.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_threads.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_mrt.add(bufferedReader.readLine());
+				bufferedReader.readLine();
+				cfg_repeats.add(bufferedReader.readLine());
+			}
 
 			/*
 			System.out.println(cfg_db_type);
@@ -52,6 +77,15 @@ public class MongoDriver {
 			System.out.println(Integer.toString(cfg_server_port));
 			System.out.println(cfg_user);
 			System.out.println(cfg_pwd);
+
+			System.out.println(cfg_collection);
+			System.out.println(cfg_rsize);
+			System.out.println(cfg_ramount);
+			System.out.println(cfg_randreads);
+			System.out.println(cfg_randdels);
+			System.out.println(cfg_threads);
+			System.out.println(cfg_mrt);
+			System.out.println(cfg_repeats);
 			*/
 
 			// Always close files.
