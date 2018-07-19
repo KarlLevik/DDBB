@@ -24,10 +24,11 @@ public class MongoDriver {
 	public static String error_name = "EROR_" + uId;
 	public static Integer error_amount = 0;
 	public static String records_name = "RCRD_" + uId;
+	public static Integer record_number = 0;
 	public static String results_name = "RSLT_" + uId;
 	public static Integer results_amount = 0;
+	
 	public static Integer test_number = 0;
-	public static Integer record_number = 0;
 
 	public static String cfg_db_type = "";
 	public static String cfg_b_name = "";
@@ -59,6 +60,10 @@ public class MongoDriver {
 
 	public static long runtime(){
 		return (System.currentTimeMillis() - start_time);
+	}
+
+	public static void testRecord(Long runtime, List<String> results){
+
 	}
 
 	public static void reportGenerate(){
@@ -310,15 +315,18 @@ public class MongoDriver {
 		// Always wrap FileReader in BufferedReader.
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
+		List<String> interval_results = new ArrayList<String>();
+
 		record_number = 0;
 		while(record_number != test_number){
 			String line = bufferedReader.readLine();
 			Document document = new Document("1", line);
-			collection.insertOne(document); 
+			collection.insertOne(document);
 			record_number++;
 
 			if(record_number % cfg_rcrd_interval.get(test_number) == 0 || record_number == cfg_record_amount.get(test_number)){
-
+				testRecord(runtime(), interval_results);
+				interval_results = new ArrayList<String>();
 			}
 
 		}
