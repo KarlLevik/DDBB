@@ -24,6 +24,8 @@ public class MongoDriver {
 	public static String error_name = "EROR_" + uId;
 	public static Integer error_amount = 0;
 	public static String records_name = "RCRD_" + uId;
+	public static String results_name = "RSLT_" + uId;
+	public static Integer results_amount = 0;
 	public static Integer test_number = 0;
 	public static Integer record_number = 0;
 
@@ -157,6 +159,7 @@ public class MongoDriver {
 			
 			File error_file = new File(error_name + ".txt");
 			File records_file = new File(records_name + ".txt");
+			File results_file = new File(results_name + ".txt");
 
 			if(error_file.exists()){
 				BufferedReader error_reader = new BufferedReader(new FileReader(error_name + ".txt"));
@@ -200,6 +203,51 @@ public class MongoDriver {
 				writer.write("None!");
 				writer.newLine();
 				writer.write("-------------------------");
+				writer.newLine();
+			}
+
+			if(results_file.exists()){
+				BufferedReader results_reader = new BufferedReader(new FileReader(error_name + ".txt"));
+
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+				writer.write("RESULTS");
+				writer.newLine();
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+				writer.write("AMOUNT: " + results_amount);
+				writer.newLine();
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+
+				String current_line = results_reader.readLine();
+				while(current_line != null){
+					writer.write(current_line);
+					writer.newLine();
+					current_line = results_reader.readLine();
+				}
+				
+				if(results_file.delete()){
+					System.out.println("Results file deleted successfully");
+				} else {
+					System.out.println("Failed to delete the results file");
+				}
+
+				results_reader.close();
+			} else {
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+				writer.write("RESULTS");
+				writer.newLine();
+				writer.write("+++++++++++++++++++++++++");
+				writer.newLine();
+				writer.write("None!");
+				writer.newLine();
+				writer.write("+++++++++++++++++++++++++");
 				writer.newLine();
 			}
 
