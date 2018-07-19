@@ -21,7 +21,8 @@ public class MongoDriver {
 
 	public static String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + generateRandomString(5, true);
 	public static String report_name = "";
-	public static String error_name = "ERROR_" + uId;
+	public static String error_name = "EROR_" + uId;
+	public static String records_name = "RCRD_" + uId;
 	public static Integer test_number = 0;
 	public static Integer record_number = 0;
 
@@ -148,6 +149,36 @@ public class MongoDriver {
 		}
 	}
 
+	public static void reportMerge(){
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(report_name + ".txt", true));
+			BufferedReader error_reader = new BufferedReader(new FileReader(error_name + ".txt"));
+
+			writer.write("-------------------------");
+			writer.newLine();
+			writer.write("-------------------------");
+			writer.newLine();
+			writer.write("ERRORS");
+			writer.newLine();
+			writer.write("-------------------------");
+			writer.newLine();
+
+			String current_line = error_reader.readLine();
+			while(current_line != null){
+				writer.write(current_line);
+				writer.newLine();
+				current_line = error_reader.readLine();
+			}
+			writer.close();
+			error_reader.close();
+		}
+		catch(Exception e){
+			System.out.println("-------------------------");
+			System.out.println("Can't merge temp files to report file");
+			System.out.println(e);
+		}		
+	}
+
 	public static String generateRandomString(Integer length, Boolean use_plain){		
 		Random r = new Random();
 		String rng_val = "";
@@ -159,9 +190,9 @@ public class MongoDriver {
 	}
 
 	public static void generateRecords() throws Exception{
-		new File("generateRecords.txt").createNewFile();
-		FileChannel.open(Paths.get("generateRecords.txt"), StandardOpenOption.WRITE).truncate(0).close();
-		BufferedWriter writer = new BufferedWriter(new FileWriter("generateRecords.txt", true));
+		new File(records_name + ".txt").createNewFile();
+		FileChannel.open(Paths.get(records_name + ".txt"), StandardOpenOption.WRITE).truncate(0).close();
+		BufferedWriter writer = new BufferedWriter(new FileWriter(records_name + ".txt", true));
 
 		record_number = 0;
 		while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
@@ -176,7 +207,7 @@ public class MongoDriver {
 
 	public static void createRecords(MongoCollection<Document> collection) throws Exception{
 		// FileReader reads text files in the default encoding.
-		FileReader fileReader = new FileReader("generateRecords.txt");
+		FileReader fileReader = new FileReader(records_name + ".txt");
 
 		// Always wrap FileReader in BufferedReader.
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -313,7 +344,7 @@ public class MongoDriver {
 		}
 
 
-
+		reportMerge();
 	}
 
 }
