@@ -22,6 +22,7 @@ public class MongoDriver {
 	public static String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + generateRandomString(5, true);
 	public static String report_name = "";
 	public static String error_name = "EROR_" + uId;
+	public static Integer error_amount = 0;
 	public static String records_name = "RCRD_" + uId;
 	public static Integer test_number = 0;
 	public static Integer record_number = 0;
@@ -130,6 +131,7 @@ public class MongoDriver {
 
 	public static void reportError(String message, String error){
 		try {
+			error_amount++;
 			(new File(error_name + ".txt")).createNewFile();
 			BufferedWriter writer = new BufferedWriter(new FileWriter(error_name + ".txt", true));
 			writer.write("RUNTIME: " + runtime());
@@ -152,25 +154,45 @@ public class MongoDriver {
 	public static void reportMerge(){
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(report_name + ".txt", true));
-			BufferedReader error_reader = new BufferedReader(new FileReader(error_name + ".txt"));
+			
+			if(error_amount > 0){
+				BufferedReader error_reader = new BufferedReader(new FileReader(error_name + ".txt"));
 
-			writer.write("-------------------------");
-			writer.newLine();
-			writer.write("-------------------------");
-			writer.newLine();
-			writer.write("ERRORS");
-			writer.newLine();
-			writer.write("-------------------------");
-			writer.newLine();
-
-			String current_line = error_reader.readLine();
-			while(current_line != null){
-				writer.write(current_line);
+				writer.write("-------------------------");
 				writer.newLine();
-				current_line = error_reader.readLine();
+				writer.write("-------------------------");
+				writer.newLine();
+				writer.write("ERRORS");
+				writer.newLine();
+				writer.write("-------------------------");
+				writer.newLine();
+
+				String current_line = error_reader.readLine();
+				while(current_line != null){
+					writer.write(current_line);
+					writer.newLine();
+					current_line = error_reader.readLine();
+				}
+				
+				error_reader.close();
+
+			} else {
+				writer.write("-------------------------");
+				writer.newLine();
+				writer.write("-------------------------");
+				writer.newLine();
+				writer.write("ERRORS");
+				writer.newLine();
+				writer.write("-------------------------");
+				writer.newLine();
+				writer.write("None!");
+				writer.newLine();
+				writer.write("-------------------------");
+				writer.newLine();
+
 			}
+
 			writer.close();
-			error_reader.close();
 		}
 		catch(Exception e){
 			System.out.println("-------------------------");
