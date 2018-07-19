@@ -6,6 +6,8 @@ import com.mongodb.MongoCredential;
 
 import java.io.*;
 import java.util.*;
+import java.nio.channels.*;
+import java.nio.file.*;
 
 import org.bson.Document;  
 
@@ -37,8 +39,7 @@ public class MongoDriver {
 	public static List<String> cfg_repeats = new ArrayList<String>();
 
 	public static void generateRecords() throws Exception{
-		PrintWriter pw = new PrintWriter("generateRecords.txt");
-		pw.close();
+		FileChannel.open(Paths.get("generateRecords.txt"), StandardOpenOption.WRITE).truncate(0).close();
 		BufferedWriter writer = new BufferedWriter(new FileWriter("generateRecords.txt", true));
 
 		record_number = 0;
