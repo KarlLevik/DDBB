@@ -63,7 +63,7 @@ public class MongoDriver {
 	}
 
 	public static void testRecord(Long runtime, List<String> results){
-
+		
 	}
 
 	public static void reportGenerate(){
