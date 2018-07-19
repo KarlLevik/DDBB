@@ -54,8 +54,71 @@ public class MongoDriver {
 				if(cfg_db_name.length() > 16){
 					short_b_name = short_b_name.substring(0,5);
 				}
-				report_name = "DDBB_" + cfg_db_type + "_" + short_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt";
-				(new File(report_name)).createNewFile();
+				report_name = "DDBB_" + cfg_db_type + "_" + short_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val;
+				(new File(report_name + ".txt")).createNewFile();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public static void reportConfig(){
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(report_name + ".txt", true));
+			writer.write("=========================");
+			writer.newLine();
+			writer.write("=========================");
+			writer.newLine();
+			writer.write("report_name: " + report_name);
+			writer.newLine();
+			writer.write("=========================");
+			writer.newLine();
+			writer.write("DDBB CONFIGURATION");
+			writer.newLine();
+			writer.write("cfg_db_type: " + cfg_db_type);
+			writer.newLine();
+			writer.write("cfg_b_name: " + cfg_b_name);
+			writer.newLine();
+			writer.write("cfg_db_name: " + cfg_db_name);
+			writer.newLine();
+			writer.write("cfg_server_ip: " + cfg_server_ip);
+			writer.newLine();
+			writer.write("cfg_server_port: " + cfg_server_port);
+			writer.newLine();
+			writer.write("cfg_user: " + cfg_user);
+			writer.newLine();
+			//writer.write("cfg_pwd");
+			//writer.newLine();
+			writer.write("=========================");
+			writer.newLine();
+			Integer r_test_number = 0;
+			while(r_test_number != cfg_test_amount){
+				writer.write("TEST " + r_test_number + " CONFIGURATION");
+				writer.newLine();
+				writer.write("cfg_collection: " + cfg_collection.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_record_size: " + cfg_record_size.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_record_amount: " + cfg_record_amount.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_write_random: " + cfg_write_random.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_rand_reads: " + cfg_rand_reads.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_rand_dels: " + cfg_rand_dels.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_threads: " + cfg_threads.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_mrt: " + cfg_mrt.get(r_test_number));
+				writer.newLine();
+				writer.write("cfg_repeats: " + cfg_repeats.get(r_test_number));
+				writer.newLine();
+				writer.write("=========================");
+				writer.newLine();
+				r_test_number++;
+			}
+			
+			writer.close();
 		}
 		catch(Exception e) {
 			System.out.println(e);
@@ -188,6 +251,7 @@ public class MongoDriver {
 		
 		loadConfig();
 		reportGenerate();
+		reportConfig();
 
 		// Creating a Mongo client 
 		MongoClient mongo = new MongoClient( cfg_server_ip , cfg_server_port );
