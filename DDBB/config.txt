@@ -1,0 +1,16 @@
+cfg_db_type:
+MongoDB
+cfg_test_name:
+test1
+cfg_threads:
+1
+cfg_db_name:
+myDb
+cfg_server_ip:
+localhost
+cfg_server_port:
+27017
+cfg_user:
+sampleUser
+cfg_pwd:
+password
