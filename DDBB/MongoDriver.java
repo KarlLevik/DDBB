@@ -62,8 +62,26 @@ public class MongoDriver {
 		return (System.currentTimeMillis() - start_time);
 	}
 
-	public static void testRecord(Long runtime, List<String> results){
-		
+	public static void testRecord(Long runtime, List<Integer> results){
+		try {
+			/*
+			results_amount++;
+			(new File(results_name + ".txt")).createNewFile();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(results_name + ".txt", true));
+			writer.write("RUNTIME: " + runtime());
+
+			for(Integer result in results){
+				writer.write(result);
+				writer.newLine();
+			}
+			writer.write("+++++++++++++++++++++++++");
+			writer.newLine();
+			writer.close();
+			*/
+		}
+		catch(Exception e){
+			reportError("Can't print result to results file", e.toString());
+		}
 	}
 
 	public static void reportGenerate(){
@@ -315,7 +333,7 @@ public class MongoDriver {
 		// Always wrap FileReader in BufferedReader.
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-		List<String> interval_results = new ArrayList<String>();
+		List<Integer> interval_results = new ArrayList<Integer>();
 
 		record_number = 0;
 		while(record_number != test_number){
@@ -326,7 +344,7 @@ public class MongoDriver {
 
 			if(record_number % cfg_rcrd_interval.get(test_number) == 0 || record_number == cfg_record_amount.get(test_number)){
 				testRecord(runtime(), interval_results);
-				interval_results = new ArrayList<String>();
+				interval_results = new ArrayList<Integer>();
 			}
 
 		}
