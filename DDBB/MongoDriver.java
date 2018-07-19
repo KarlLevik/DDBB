@@ -49,8 +49,12 @@ public class MongoDriver {
 				for(int x = 0; x < 5; x++){
 					rng_val = rng_val + plain_alphabet.charAt(r.nextInt(plain_alphabet.length()));
 				}
-				System.out.println("DDBB_" + cfg_db_type + "_" + cfg_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt");
-				(new File("DDBB_" + cfg_db_type + "_" + cfg_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt")).createNewFile();
+				String short_b_name = cfg_b_name;
+				short_b_name = short_b_name.replaceAll("[-!£$%^&*()=_+{}'#@~,./<>? |]","");
+				if(cfg_db_name.length() > 16){
+					short_b_name = short_b_name.substring(0,5);
+				}
+				(new File("DDBB_" + cfg_db_type + "_" + short_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt")).createNewFile();
 		}
 		catch(Exception e) {
 			System.out.println(e);
@@ -144,7 +148,7 @@ public class MongoDriver {
 
 			/*
 			System.out.println(cfg_db_type);
-			System.out.println(cfg_test_name);
+			System.out.println(cfg_b_name);
 			System.out.println(cfg_threads);
 			//System.out.println(cfg_memory_limit);
 			System.out.println(cfg_db_name);

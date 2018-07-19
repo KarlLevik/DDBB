@@ -1,7 +1,7 @@
 cfg_db_type:
 MongoDB
 cfg_b_name:
-test1
+st1 ho!£% e
 cfg_db_name:
 myDbTest3
 cfg_server_ip:
