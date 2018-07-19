@@ -16,12 +16,14 @@ import org.bson.Document;
 
 public class MongoDriver {
 
+	public static long start_time = System.currentTimeMillis();
+	public static String time_date = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date()));
+
+	public static String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + generateRandomString(5, true);
 	public static String report_name = "";
+	public static String error_name = "ERROR_" + uId;
 	public static Integer test_number = 0;
 	public static Integer record_number = 0;
-	public static Random r = new Random();
-	public static String alphabet = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
-	public static String plain_alphabet = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public static String cfg_db_type = "";
 	public static String cfg_b_name = "";
@@ -43,22 +45,22 @@ public class MongoDriver {
 	public static List<String> cfg_mrt = new ArrayList<String>();
 	public static List<String> cfg_repeats = new ArrayList<String>();
 
+	public static long runtime(){
+		return (System.currentTimeMillis() - start_time);
+	}
+
 	public static void reportGenerate(){
 		try {
-			String rng_val = "";
-				for(int x = 0; x < 5; x++){
-					rng_val = rng_val + plain_alphabet.charAt(r.nextInt(plain_alphabet.length()));
-				}
-				String short_b_name = cfg_b_name;
-				short_b_name = short_b_name.replaceAll("[-!£$%^&*()=_+{}'#@~,./<>? |]","");
-				if(cfg_db_name.length() > 16){
-					short_b_name = short_b_name.substring(0,5);
-				}
-				report_name = "DDBB_" + cfg_db_type + "_" + short_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val;
-				(new File(report_name + ".txt")).createNewFile();
+			String short_b_name = cfg_b_name;
+			short_b_name = short_b_name.replaceAll("[-!£$%^&*()=_+{}'#@~,./<>? |]","");
+			if(cfg_db_name.length() > 16){
+				short_b_name = short_b_name.substring(0,5);
+			}
+			report_name = "DDBB_" + cfg_db_type + "_" + short_b_name + "_" + uId;
+			(new File(report_name + ".txt")).createNewFile();
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			reportError("Can't create report file", e.toString());
 		}
 	}
 
@@ -121,8 +123,39 @@ public class MongoDriver {
 			writer.close();
 		}
 		catch(Exception e) {
+			reportError("Can't write configuration to report file", e.toString());
+		}
+	}
+
+	public static void reportError(String message, String error){
+		try {
+			(new File(error_name + ".txt")).createNewFile();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(error_name + ".txt", true));
+			writer.write("RUNTIME: " + runtime());
+			writer.newLine();
+			writer.write(message);
+			writer.newLine();
+			writer.write(error);
+			writer.newLine();
+			writer.write("-------------------------");
+			writer.newLine();
+			writer.close();
+		}
+		catch(Exception e){
+			System.out.println("-------------------------");
+			System.out.println("Can't print errors to report file");
 			System.out.println(e);
 		}
+	}
+
+	public static String generateRandomString(Integer length, Boolean use_plain){		
+		Random r = new Random();
+		String rng_val = "";
+		String alphabet = use_plain ? "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" : "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
+		while(rng_val.length() != length){
+			rng_val = rng_val + alphabet.charAt(r.nextInt(alphabet.length()));
+		}
+		return rng_val;
 	}
 
 	public static void generateRecords() throws Exception{
@@ -132,11 +165,7 @@ public class MongoDriver {
 
 		record_number = 0;
 		while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
-			String rng_val = "";
-			while(rng_val.length() != Integer.parseInt(cfg_record_size.get(test_number))){
-				rng_val = rng_val + alphabet.charAt(r.nextInt(alphabet.length()));
-			}
-			writer.write(rng_val);
+			writer.write(generateRandomString(Integer.parseInt(cfg_record_size.get(test_number)), false));
 			writer.newLine();
 			record_number++;
 		}
@@ -235,20 +264,15 @@ public class MongoDriver {
 			// Always close files.
 			bufferedReader.close();
 		}
-		catch(FileNotFoundException ex) {
-			System.out.println(
-				"Unable to open file 'config.txt'");                
+		catch(FileNotFoundException e) {
+			reportError("Unable to open file 'config.txt'", e.toString());
 		}
-        catch(IOException ex) {
-            System.out.println(
-                "Error reading file 'config.txt'");                  
-            // Or we could just do this: 
-            // ex.printStackTrace();
+        catch(IOException e) {
+			reportError("Error reading file 'config.txt'", e.toString());
         }
 	}
 
 	public static void main( String args[] ) {
-		
 		loadConfig();
 		reportGenerate();
 		reportConfig();
@@ -273,11 +297,16 @@ public class MongoDriver {
 
 			try {
 				generateRecords();
+			}
+			catch(Exception e) {
+				reportError("Can't generate records", e.toString());
+			}
 
+			try {
 				createRecords(collection);
 			}
 			catch(Exception e) {
-				System.out.println(e);
+				reportError("Can't create records", e.toString());
 			}
 
 			test_number++;
