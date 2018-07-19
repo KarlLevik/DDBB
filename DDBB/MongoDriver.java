@@ -25,6 +25,7 @@ public class MongoDriver {
 	public static String cfg_user = "";
 	public static String cfg_pwd = "";
 
+	public static Integer cfg_test_amount = 0;
 	public static List<String> cfg_collection = new ArrayList<String>();
 	public static List<String> cfg_record_size = new ArrayList<String>();
 	public static List<String> cfg_record_amount = new ArrayList<String>();
@@ -34,6 +35,45 @@ public class MongoDriver {
 	public static List<String> cfg_threads = new ArrayList<String>();
 	public static List<String> cfg_mrt = new ArrayList<String>();
 	public static List<String> cfg_repeats = new ArrayList<String>();
+
+	public static void generateRecords() throws Exception{
+		PrintWriter pw = new PrintWriter("generateRecords.txt");
+		pw.close();
+		BufferedWriter writer = new BufferedWriter(new FileWriter("generateRecords.txt", true));
+
+		record_number = 0;
+		while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
+			String rng_val = "";
+			while(rng_val.length() != Integer.parseInt(cfg_record_size.get(test_number))){
+				rng_val = rng_val + alphabet.charAt(r.nextInt(alphabet.length()));
+			}
+			writer.write(rng_val);
+			writer.newLine();
+			record_number++;
+		}
+
+		writer.close();
+		System.out.println("Generated " + record_number + " records.");
+	}
+
+	public static void createRecords(MongoCollection<Document> collection) throws Exception{
+		// FileReader reads text files in the default encoding.
+		FileReader fileReader = new FileReader("generateRecords.txt");
+
+		// Always wrap FileReader in BufferedReader.
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+		record_number = 0;
+		while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
+			String line = bufferedReader.readLine();
+			Document document = new Document("1", line);
+			collection.insertOne(document); 
+			record_number++;
+		}
+
+		bufferedReader.close();
+		System.out.println("Created " + record_number + " records."); 
+	}
 
 	public static void loadConfig(){
 		try {
@@ -78,6 +118,7 @@ public class MongoDriver {
 				cfg_mrt.add(bufferedReader.readLine());
 				bufferedReader.readLine();
 				cfg_repeats.add(bufferedReader.readLine());
+				cfg_test_amount++;
 			}
 
 			/*
@@ -126,35 +167,27 @@ public class MongoDriver {
 			
 		// Creating Credentials 
 		MongoCredential credential;
-		credential = MongoCredential.createCredential(cfg_user, cfg_db_name,
-			cfg_pwd.toCharArray());
+		credential = MongoCredential.createCredential(cfg_user, cfg_db_name, cfg_pwd.toCharArray());
 		System.out.println("Connected to the database successfully");
 		
 		// Accessing the database 
 		MongoDatabase database = mongo.getDatabase(cfg_db_name);
 		System.out.println("Credentials ::"+ credential);
 
-		while(test_number != cfg_test_name.length()){
+		while(test_number < cfg_test_amount){
 
 			// Retrieving a collection
 			MongoCollection<Document> collection = database.getCollection(cfg_collection.get(test_number)); 
 			System.out.println("Collection " + cfg_collection.get(test_number) + " selected successfully");
 
-			record_number = 0;
-			while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
-				String rng_val = "";
-				while(rng_val.length() != Integer.parseInt(cfg_record_size.get(test_number))){
-					rng_val = rng_val + alphabet.charAt(r.nextInt(alphabet.length()));
-				}
+			try {
+				generateRecords();
 
-				Document document = new Document("1", rng_val);
-				collection.insertOne(document); 
-
-				record_number++;
-				System.out.println("Added " + record_number + " records.");
+				createRecords(collection);
 			}
-			
-			System.out.println("Document inserted successfully");  
+			catch(Exception e) {
+				System.out.println(e);
+			}
 
 			test_number++;
 		}
