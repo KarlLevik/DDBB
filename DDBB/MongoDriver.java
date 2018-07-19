@@ -1,12 +1,20 @@
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection; 
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
+
 import java.io.*;
 import java.util.*;
+
+import org.bson.Document;  
 
 public class MongoDriver {
 
 	public static Integer test_number = 0;
+	public static Integer record_number = 0;
+	public static Random r = new Random();
+	public static String alphabet = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
 
 	public static String cfg_db_type = "";
 	public static String cfg_test_name = "";
@@ -126,8 +134,30 @@ public class MongoDriver {
 		MongoDatabase database = mongo.getDatabase(cfg_db_name);
 		System.out.println("Credentials ::"+ credential);
 
+		while(test_number != cfg_test_name.length()){
 
+			// Retrieving a collection
+			MongoCollection<Document> collection = database.getCollection(cfg_collection.get(test_number)); 
+			System.out.println("Collection " + cfg_collection.get(test_number) + " selected successfully");
 
+			record_number = 0;
+			while(record_number != Integer.parseInt(cfg_record_amount.get(test_number))){
+				String rng_val = "";
+				while(rng_val.length() != Integer.parseInt(cfg_record_size.get(test_number))){
+					rng_val = rng_val + alphabet.charAt(r.nextInt(alphabet.length()));
+				}
+
+				Document document = new Document("1", rng_val);
+				collection.insertOne(document); 
+
+				record_number++;
+				System.out.println("Added " + record_number + " records.");
+			}
+			
+			System.out.println("Document inserted successfully");  
+
+			test_number++;
+		}
 
 
 
