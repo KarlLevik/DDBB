@@ -15,13 +15,15 @@ password
 -- test 1 --
 cfg_collection:
 1
-cfg_rsize:
+cfg_record_size:
 2
-cfg_ramount:
+cfg_record_amount:
 3
-cfg_randreads:
+cfg_write_random:
+0
+cfg_rand_reads:
 4
-cfg_randdels:
+cfg_rand_dels:
 5
 cfg_threads:
 6
@@ -32,13 +34,15 @@ cfg_repeats:
 -- test 2 --
 cfg_collection:
 9
-cfg_rsize:
+cfg_record_size:
 10
-cfg_ramount:
+cfg_record_amount:
 11
-cfg_randreads:
+cfg_write_random:
+0
+cfg_rand_reads:
 12
-cfg_randdels:
+cfg_rand_dels:
 13
 cfg_threads:
 14
