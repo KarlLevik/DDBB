@@ -43,7 +43,7 @@ public class MongoDriver {
 	public static List<String> cfg_mrt = new ArrayList<String>();
 	public static List<String> cfg_repeats = new ArrayList<String>();
 
-	public static void generateReport(){
+	public static void reportGenerate(){
 		try {
 			String rng_val = "";
 				for(int x = 0; x < 5; x++){
@@ -54,7 +54,8 @@ public class MongoDriver {
 				if(cfg_db_name.length() > 16){
 					short_b_name = short_b_name.substring(0,5);
 				}
-				(new File("DDBB_" + cfg_db_type + "_" + short_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt")).createNewFile();
+				report_name = "DDBB_" + cfg_db_type + "_" + short_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt";
+				(new File(report_name)).createNewFile();
 		}
 		catch(Exception e) {
 			System.out.println(e);
@@ -186,7 +187,7 @@ public class MongoDriver {
 	public static void main( String args[] ) {
 		
 		loadConfig();
-		generateReport();
+		reportGenerate();
 
 		// Creating a Mongo client 
 		MongoClient mongo = new MongoClient( cfg_server_ip , cfg_server_port );
