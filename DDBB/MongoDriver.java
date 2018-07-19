@@ -8,18 +8,23 @@ import java.io.*;
 import java.util.*;
 import java.nio.channels.*;
 import java.nio.file.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime; 
+import java.text.SimpleDateFormat;   
 
 import org.bson.Document;  
 
 public class MongoDriver {
 
+	public static String report_name = "";
 	public static Integer test_number = 0;
 	public static Integer record_number = 0;
 	public static Random r = new Random();
 	public static String alphabet = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
+	public static String plain_alphabet = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public static String cfg_db_type = "";
-	public static String cfg_test_name = "";
+	public static String cfg_b_name = "";
 	// public static String cfg_memory_limit = "";
 	public static String cfg_db_name = "";
 	public static String cfg_server_ip = "";
@@ -38,7 +43,22 @@ public class MongoDriver {
 	public static List<String> cfg_mrt = new ArrayList<String>();
 	public static List<String> cfg_repeats = new ArrayList<String>();
 
+	public static void generateReport(){
+		try {
+			String rng_val = "";
+				for(int x = 0; x < 5; x++){
+					rng_val = rng_val + plain_alphabet.charAt(r.nextInt(plain_alphabet.length()));
+				}
+				System.out.println("DDBB_" + cfg_db_type + "_" + cfg_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt");
+				(new File("DDBB_" + cfg_db_type + "_" + cfg_b_name + "_" + (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + rng_val + ".txt")).createNewFile();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+	}
+
 	public static void generateRecords() throws Exception{
+		new File("generateRecords.txt").createNewFile();
 		FileChannel.open(Paths.get("generateRecords.txt"), StandardOpenOption.WRITE).truncate(0).close();
 		BufferedWriter writer = new BufferedWriter(new FileWriter("generateRecords.txt", true));
 
@@ -87,7 +107,7 @@ public class MongoDriver {
 			bufferedReader.readLine();
 			cfg_db_type = bufferedReader.readLine();
 			bufferedReader.readLine();
-			cfg_test_name = bufferedReader.readLine();
+			cfg_b_name = bufferedReader.readLine();
 			// bufferedReader.readLine();
 			// cfg_memory_limit = 0;
 			bufferedReader.readLine();
@@ -145,7 +165,7 @@ public class MongoDriver {
 			*/
 
 			// Always close files.
-			bufferedReader.close();         
+			bufferedReader.close();
 		}
 		catch(FileNotFoundException ex) {
 			System.out.println(
@@ -162,6 +182,7 @@ public class MongoDriver {
 	public static void main( String args[] ) {
 		
 		loadConfig();
+		generateReport();
 
 		// Creating a Mongo client 
 		MongoClient mongo = new MongoClient( cfg_server_ip , cfg_server_port );

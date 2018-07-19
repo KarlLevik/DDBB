@@ -1,6 +1,6 @@
 cfg_db_type:
 MongoDB
-cfg_test_name:
+cfg_b_name:
 test1
 cfg_db_name:
 myDbTest3
@@ -37,7 +37,7 @@ testCol2
 cfg_record_size:
 10
 cfg_record_amount:
-10
+1
 cfg_write_random:
 0
 cfg_rand_reads:
