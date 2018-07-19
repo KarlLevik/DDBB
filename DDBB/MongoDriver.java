@@ -11,7 +11,7 @@ public class MongoDriver {
 	// public static String cfg_memory_limit = "";
 	public static String cfg_db_name = "";
 	public static String cfg_server_ip = "";
-	public static String cfg_server_port = "";
+	public static Integer cfg_server_port = 27017;
 	public static String cfg_user = "";
 	public static String cfg_pwd = "";
 
@@ -36,7 +36,7 @@ public class MongoDriver {
 			bufferedReader.readLine();
 			cfg_server_ip = bufferedReader.readLine();
 			bufferedReader.readLine();
-			cfg_server_port = bufferedReader.readLine();
+			cfg_server_port = Integer.parseInt(bufferedReader.readLine());
 			bufferedReader.readLine();
 			cfg_user = bufferedReader.readLine();
 			bufferedReader.readLine();
@@ -49,7 +49,7 @@ public class MongoDriver {
 			//System.out.println(cfg_memory_limit);
 			System.out.println(cfg_db_name);
 			System.out.println(cfg_server_ip);
-			System.out.println(cfg_server_port);
+			System.out.println(Integer.toString(cfg_server_port));
 			System.out.println(cfg_user);
 			System.out.println(cfg_pwd);
 			*/
@@ -74,16 +74,16 @@ public class MongoDriver {
 		loadConfig();
 
 		// Creating a Mongo client 
-		MongoClient mongo = new MongoClient( "localhost" , 27017 );
+		MongoClient mongo = new MongoClient( cfg_server_ip , cfg_server_port );
 			
 		// Creating Credentials 
 		MongoCredential credential;
-		credential = MongoCredential.createCredential("sampleUser", "myDb",
-			"password".toCharArray());
+		credential = MongoCredential.createCredential(cfg_user, cfg_db_name,
+			cfg_pwd.toCharArray());
 		System.out.println("Connected to the database successfully");
 		
 		// Accessing the database 
-		MongoDatabase database = mongo.getDatabase("myDb");
+		MongoDatabase database = mongo.getDatabase(cfg_db_name);
 		System.out.println("Credentials ::"+ credential);
 
 	}
