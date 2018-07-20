@@ -449,9 +449,6 @@ public class MongoDriver {
 	}
 
 	public static void main( String args[] ) {
-		System.out.println("HELLO");
-		//MongoReport.test("HELLOOOOOOOO");
-		System.out.println("BYE");
 
 		loadConfig();
 		reportGenerate();
