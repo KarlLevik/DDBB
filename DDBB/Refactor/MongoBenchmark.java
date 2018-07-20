@@ -7,8 +7,8 @@ public class MongoBenchmark {
 	public Hashtable<String, MongoTest> tests = new Hashtable<String, MongoTest>();
 	//public List<MongoTest> tests = ArrayList<MongoTest>();
 
-	MongoBenchmark(String filename) throws Exception {
-		BufferedReader cfg_reader = new BufferedReader(new FileReader(filename + ".txt"));
+	MongoBenchmark() throws Exception {
+		BufferedReader cfg_reader = new BufferedReader(new FileReader("config.txt"));
 
 		String key = cfg_reader.readLine();
 		String value = cfg_reader.readLine();
