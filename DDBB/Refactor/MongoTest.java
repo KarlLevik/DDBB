@@ -1,6 +1,13 @@
 import java.util.*;
 import java.io.*;
 
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection; 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+
+import org.bson.Document;  
+
 public class MongoTest {
 
 	public Hashtable<String, String> cfg = new Hashtable<String, String>();
@@ -24,12 +31,31 @@ public class MongoTest {
 	public MongoReport run(String uId){
 		Long start_time = System.currentTimeMillis();
 
-		// generate(uId);
+		// Creating a Mongo client 
+		MongoClient mongo = new MongoClient(cfg.get("ip"), Integer.parseInt(cfg.get("port")));
+			
+		// Creating Credentials 
+		MongoCredential credential;
+		credential = MongoCredential.createCredential(cfg.get("user"), cfg.get("db_name"), cfg.get("pwd").toCharArray());
+		System.out.println("Connected to the database successfully");
+		
+		// Accessing the database 
+		MongoDatabase database = mongo.getDatabase(cfg.get("db_name"));
+		System.out.println("Credentials ::"+ credential);
 
-		create();
-		read();
-		update();
-		delete();
+		// Retrieving a collection
+		MongoCollection<Document> collection = database.getCollection(cfg.get("collection")); 
+		System.out.println("Collection " + cfg.get("collection") + " selected successfully");
+
+		// generate(collection, uId);
+		try {
+		create(collection);
+		read(collection);
+		update(collection);
+		delete(collection);
+		} catch(Exception e){
+			System.out.println(e);
+		}
 
 		return report;
 	}
@@ -70,27 +96,39 @@ public class MongoTest {
 
 	}
 
-	private void create(){
+	private void create(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
 		while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
+			Document document = new Document("", 
+			DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
+			collection.insertOne(document);
+			record_number++;
 
+			/*
+			if(record_number % cfg_rcrd_interval.get(test_number) == 0 || record_number == cfg_record_amount.get(test_number)){
+				testRecord(runtime(), interval_results);
+				interval_results = new ArrayList<Integer>();
+			}
+			*/
 		}
 
+		System.out.println("Generated " + record_number + " records.");
+
 	}
 
-	private void read(){
+	private void read(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 
 	}
 
-	private void update(){
+	private void update(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 
 	}
 
-	private void delete(){
+	private void delete(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 
 	}
