@@ -1,18 +1,7 @@
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection; 
-
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-
-import java.io.*;
 import java.util.*;
-import java.nio.channels.*;
-import java.nio.file.*;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime; 
 import java.text.SimpleDateFormat;   
-
-import org.bson.Document;  
 
 public class MongoDriver {
 
