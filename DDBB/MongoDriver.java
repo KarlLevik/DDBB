@@ -316,7 +316,8 @@ public class MongoDriver {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(records_name + ".txt", true));
 
 		record_number = 0;
-		while(record_number != cfg_test_amount){
+		System.out.println(cfg_record_amount.get(test_number));
+		while(record_number != cfg_record_amount.get(test_number)){
 			writer.write(generateRandomString(Integer.parseInt((cfg_record_size).get(test_number)), false));
 			writer.newLine();
 			record_number++;
@@ -336,7 +337,11 @@ public class MongoDriver {
 		List<Integer> interval_results = new ArrayList<Integer>();
 
 		record_number = 0;
-		while(record_number != test_number){
+		System.out.println("HERE");
+		System.out.println(cfg_record_amount.get(test_number));
+		System.out.println("HERE");
+
+		while(record_number != cfg_record_amount.get(test_number)){
 			String line = bufferedReader.readLine();
 			Document document = new Document("1", line);
 			collection.insertOne(document);

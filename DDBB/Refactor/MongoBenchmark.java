@@ -15,20 +15,28 @@ public class MongoBenchmark {
 		String test_file;
 		String test_name;
 
-		while(key != null && value != null && key != "====="){
+		while(key != null && value != null && key.equals("=====") == false){
 			cfg.put(key, value);
+			System.out.println("key : " + key);
+			System.out.println("value : " + value);
 			key = cfg_reader.readLine();
 			value = cfg_reader.readLine();
 		}
 
-		test_name = cfg_reader.readLine();
+		test_name = value;
 		test_file = cfg_reader.readLine();
-		while(test_name != null && test_file != null){
+		while(test_name != null && test_file != null && test_name.equals("-----") == false){
+			System.out.println("test_name : " + test_name);
+			System.out.println("test_file : " + test_file);
 			cfg.put(test_name, cfg_reader.readLine());
 			tests.put(test_name, new MongoTest(test_file));
 			test_name = cfg_reader.readLine();
 			test_file = cfg_reader.readLine();
+			System.out.println("test_name1 : " + test_name);
+			System.out.println("test_file1 : " + test_file);
 		}
+
+		System.out.println("a)");
 		
 	}
 }
