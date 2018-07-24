@@ -69,7 +69,14 @@ public class MongoDriver {
 
 					}
 
+					writer.write("    ---");
+					writer.newLine();
+
 				}
+
+				writer.write("++++");
+				writer.newLine();
+
 			}
 
 			writer.close();
