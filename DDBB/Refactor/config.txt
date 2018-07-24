@@ -14,7 +14,7 @@ pwd
 password
 =====
 test1
-test_config
+test_config1
 test2
-test_config
+test_config2
 -----

@@ -6,16 +6,15 @@ import java.text.SimpleDateFormat;
 
 public class MongoDriver {
 
-	// Unique ID generated for each session of MongoDriver
-	public static String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
-		DDBBTool.generateRandomString(5, true);
-
-	public static Hashtable<String, MongoReport> test_reports = new Hashtable<String, MongoReport>();
-
 	public static void main(String args[]) {
 		
-		try {
+		// Unique ID generated for each session of MongoDriver
+		String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
+			DDBBTool.generateRandomString(5, true);
 
+		Hashtable<String, MongoReport> test_reports = new Hashtable<String, MongoReport>();
+		
+		try {
 			// Creates a new benchmark (each MongoBenchmark consistents of MongoTests)
 			MongoBenchmark bench = new MongoBenchmark();
 			// Gets the set of test names

@@ -1,5 +1,9 @@
 import java.util.*;
 import java.io.*;
+import java.nio.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime; 
+import java.text.SimpleDateFormat; 
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection; 
@@ -13,6 +17,8 @@ public class MongoTest {
 	public Hashtable<String, String> cfg = new Hashtable<String, String>();
 	public List<String> generated = new ArrayList<String>();
 	public MongoReport report = new MongoReport();
+	public String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
+			DDBBTool.generateRandomString(5, true);
 
 	MongoTest(String filename) throws Exception {
 		// Opens th cfg file for the test
@@ -51,14 +57,13 @@ public class MongoTest {
 		MongoCollection<Document> collection = database.getCollection(cfg.get("collection")); 
 		System.out.println("Collection " + cfg.get("collection") + " selected successfully");
 
-		// generate(collection, uId);
-
 		// Carries out the creation, reading, updating or deleletion of records
 		try {
-		create(collection);
-		read(collection);
-		update(collection);
-		delete(collection);
+			generate();
+			create(collection);
+			read(collection);
+			update(collection);
+			delete(collection);
 		} catch(Exception e){
 			System.out.println(e);
 		}
@@ -66,40 +71,32 @@ public class MongoTest {
 		return report;
 	}
 
-	private void generate(){
+	private void generate() throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
 		// Generates records and stores them in a file or in RAM
-		if(cfg.containsKey("create_in_file") && cfg.get("create_in_file") == "1"){
+		if(cfg.containsKey("generate_in_file") && (cfg.get("generate_in_file").equals("true") || 
+			cfg.get("generate_in_file").equals("True") || cfg.get("generate_in_file").equals("1") || 
+			cfg.get("generate_in_file").equals("yes") || cfg.get("generate_in_file").equals("Yes"))){
 
-			/*
-			new File("RCRD_" + uId + ".txt").createNewFile();
-			FileChannel.open(Paths.get("RCRD_" + uId + ".txt)", StandardOpenOption.WRITE).truncate(0).close();
-			BufferedWriter writer = new BufferedWriter(new FileWriter(records_name + ".txt", true));
+			System.out.println("HIII1");
+			BufferedWriter writer = new BufferedWriter(new FileWriter("RCRD_" + this.uId + ".txt", true));
 
 			record_number = 0;
-			while(record_number != cfg_test_amount){
-				writer.write(generateRandomString(Integer.parseInt((cfg_record_size).get(test_number)), false));
+			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
+				writer.write(DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 				writer.newLine();
 				record_number++;
 			}
 
 			writer.close();
-			*/
+			System.out.println("HIIA1");
 
-		} else {	// Otherwise saves the records inside RAM
+			this.report.save("generate", "total_time", String.valueOf(DDBBTool.runtime(start_time)));
+			this.report.save("generate", "record_amount", String.valueOf(record_number));
 
-			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
-
-				generated.add(DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
-				record_number++;
-
-			}
-
-		}
-
-		System.out.println("Generated " + record_number + " records.");
+		} 
 
 	}
 
@@ -108,19 +105,40 @@ public class MongoTest {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
-		while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
+		// If records are not to be generated in a file, do:
+		if(cfg.containsKey("generate_in_file") == false || cfg.get("generate_in_file").equals("false") || 
+			cfg.get("generate_in_file").equals("False") || cfg.get("generate_in_file").equals("0") || 
+			cfg.get("generate_in_file").equals("no") || cfg.get("generate_in_file").equals("No")){
+			System.out.println("HIII2");
+			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
 			// Creates randomly generated documents
 			Document document = new Document("", 
 			DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 			collection.insertOne(document);
 			record_number++;
 
-			/*
-			if(record_number % cfg_rcrd_interval.get(test_number) == 0 || record_number == cfg_record_amount.get(test_number)){
-				testRecord(runtime(), interval_results);
-				interval_results = new ArrayList<Integer>();
 			}
-			*/
+
+		} else { // OTherwise, if they were generated into a file, do:
+
+			try {
+				System.out.println("HIIA2");
+				System.out.println("CREATE : " + this.uId);
+				BufferedReader rng_reader = new BufferedReader(new FileReader("RCRD_" + this.uId + ".txt"));
+
+				while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
+				// Use randomly generated string file to create records
+				Document document = new Document("", rng_reader.readLine());
+				collection.insertOne(document);
+				record_number++;
+
+				}
+
+				rng_reader.close();
+			} catch(Exception e){
+				System.out.println(e);
+			}
+
 		}
 
 		System.out.println("Generated " + record_number + " records.");
