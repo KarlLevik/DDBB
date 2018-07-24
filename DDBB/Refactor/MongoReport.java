@@ -10,6 +10,7 @@ public class MongoReport {
 
 	MongoReport(){ }
 
+	// Saves results in the report
 	public void save(String op, String type, String result){
 
 		if(report.containsKey(op)) {

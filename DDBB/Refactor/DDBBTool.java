@@ -9,8 +9,8 @@ public class DDBBTool {
 		String rng_val = "";
 		// Allows you to change which symbols are in the alphabet for the random string generation
 		String alphabet = use_plain ? "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" : 
-			"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-			`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
+			"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			+ "`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
 
 		while(rng_val.length() != length){
 
