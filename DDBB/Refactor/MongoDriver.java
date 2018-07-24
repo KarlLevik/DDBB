@@ -39,7 +39,7 @@ public class MongoDriver {
 
 				writer.write(setting);
 				writer.newLine();
-				writer.write(bench.cfg.get(setting));
+				writer.write("    " + bench.cfg.get(setting));
 				writer.newLine();
 
 			}
