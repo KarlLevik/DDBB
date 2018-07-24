@@ -15,4 +15,6 @@ password
 =====
 test1
 test_config
+test2
+test_config
 -----

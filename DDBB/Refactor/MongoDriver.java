@@ -20,7 +20,6 @@ public class MongoDriver {
 
 			// Executes each test in order
 			for(String test : tests){
-
 				(bench.tests.get(test)).run(uId);
 			
 			}

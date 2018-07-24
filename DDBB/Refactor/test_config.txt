@@ -1,9 +1,9 @@
 collection
-testCol1
+testCol5
 create_record_size
-50
+3
 create_record_amount
-10
+2
 db_type
 MongoDB
 b_name

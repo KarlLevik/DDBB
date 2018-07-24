@@ -24,7 +24,7 @@ public class MongoBenchmark {
 		test_name = value;
 		test_file = cfg_reader.readLine();
 		while(test_name != null && test_file != null && test_name.equals("-----") == false){
-			cfg.put(test_name, cfg_reader.readLine());
+			cfg.put(test_name, test_file);
 			tests.put(test_name, new MongoTest(test_file));
 			test_name = cfg_reader.readLine();
 			test_file = cfg_reader.readLine();
