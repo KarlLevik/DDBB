@@ -32,7 +32,7 @@ public class MongoTest {
 	}
 
 	// Method to run the test
-	public MongoReport run(String uId){
+	public MongoReport run(){
 		Long start_time = System.currentTimeMillis();
 
 		// Creating a Mongo client 
@@ -66,7 +66,7 @@ public class MongoTest {
 		return report;
 	}
 
-	private void generate(String uId){
+	private void generate(){
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 

@@ -10,7 +10,7 @@ public class MongoDriver {
 	public static String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
 		DDBBTool.generateRandomString(5, true);
 
-	public static List<MongoReport> test_reports = new ArrayList<MongoReport>();
+	public static Hashtable<String, MongoReport> test_reports = new Hashtable<String, MongoReport>();
 
 	public static void main(String args[]) {
 		
@@ -24,7 +24,7 @@ public class MongoDriver {
 			// Executes each test in order
 			for(String test : tests){
 
-				test_reports.add((bench.tests.get(test)).run(uId));
+				test_reports.put(test, (bench.tests.get(test)).run());
 			
 			}
 
@@ -46,19 +46,25 @@ public class MongoDriver {
 			writer.write("=====");
 			writer.newLine();
 
-			for(MongoReport test_report : test_reports) {
+			List<MongoReport> reverse_test_r_vals = new ArrayList<MongoReport>(test_reports.values());
+			Collections.reverse(reverse_test_r_vals);
+			for(MongoReport test_report : reverse_test_r_vals) {
 				
-				//writer.write("TEST : " + test);
-				//writer.newLine();
-				
-				for(String op : test_report.report.keySet()) {
-					writer.write(op + " :");
+				writer.write("TEST : " + (DDBBTool.getKey(test_reports, test_report)).toString());
+				writer.newLine();
+
+				List<String> reverse_test_report_ops = new ArrayList<String>(test_report.report.keySet());
+				Collections.reverse(reverse_test_report_ops);
+				for(String op : reverse_test_report_ops) {
+					writer.write("    - " + op + " -");
 					writer.newLine();
 
-					for(String type : test_report.report.get(op).keySet()) {
-					writer.write("    " + type + " -");
+					List<String> reverse_t_r_o_types = new ArrayList<String>(test_report.report.get(op).keySet());
+					Collections.reverse(reverse_t_r_o_types);
+					for(String type : reverse_t_r_o_types) {
+					writer.write("        " + type + ": ");
 					writer.newLine();
-					writer.write("        " + (test_report.report.get(op)).get(type));
+					writer.write("            " + (test_report.report.get(op)).get(type));
 					writer.newLine();
 
 					}

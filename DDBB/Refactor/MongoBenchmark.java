@@ -33,18 +33,18 @@ public class MongoBenchmark {
 	}
 
 	// Method that executes all of the tests in a benchmark
-	public List<MongoReport> run(String uId){
+	public List<MongoReport> run(){
 
 		List<MongoReport> test_reports = new ArrayList<MongoReport>();
 
 		for(String test : this.tests.keySet()) {
 
-			test_reports.add((this.tests.get(test)).run(uId));
+			test_reports.add((this.tests.get(test)).run());
 
 		}
 
 		return test_reports;
 
 	}
-	
+
 }
