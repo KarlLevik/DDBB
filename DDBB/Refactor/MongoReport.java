@@ -3,6 +3,8 @@ import java.util.*;
 
 public class MongoReport {
 
+	// Variable holding the report of a test
+	// (operation, [type, [results]])
 	public Hashtable<String, Hashtable<String, ArrayList<String>>> report = 
 		new Hashtable<String, Hashtable<String, ArrayList<String>>>();
 

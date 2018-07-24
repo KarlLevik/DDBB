@@ -15,11 +15,14 @@ public class MongoTest {
 	public MongoReport report = new MongoReport();
 
 	MongoTest(String filename) throws Exception {
+		// Opens th cfg file for the test
 		BufferedReader cfg_reader = new BufferedReader(new FileReader(filename + ".txt"));
 
+		// Reads a key and value from the cfg
 		String key = cfg_reader.readLine();
 		String value = cfg_reader.readLine();
 
+		// Loads all of the configuration into the cfg for the test
 		while(key != null && value != null){
 			cfg.put(key, value);
 			key = cfg_reader.readLine();
@@ -28,6 +31,7 @@ public class MongoTest {
 
 	}
 
+	// Method to run the test
 	public MongoReport run(String uId){
 		Long start_time = System.currentTimeMillis();
 
@@ -48,6 +52,8 @@ public class MongoTest {
 		System.out.println("Collection " + cfg.get("collection") + " selected successfully");
 
 		// generate(collection, uId);
+
+		// Carries out the creation, reading, updating or deleletion of records
 		try {
 		create(collection);
 		read(collection);
@@ -64,6 +70,7 @@ public class MongoTest {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
+		// Generates records and stores them in a file or in RAM
 		if(cfg.containsKey("create_in_file") && cfg.get("create_in_file") == "1"){
 
 			/*
@@ -96,11 +103,13 @@ public class MongoTest {
 
 	}
 
+	// Creates the records in the database
 	private void create(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
 		while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
+			// Creates randomly generated documents
 			Document document = new Document("", 
 			DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 			collection.insertOne(document);
@@ -115,19 +124,25 @@ public class MongoTest {
 		}
 
 		System.out.println("Generated " + record_number + " records.");
+		// Saves the result for the test
+		this.report.save("create", "total_time", String.valueOf(DDBBTool.runtime(start_time)));
+		this.report.save("create", "total_amount", String.valueOf(record_number));
 
 	}
 
+	// Reads the records in the database
 	private void read(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 
 	}
 
+	// Updates the records in the database
 	private void update(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 
 	}
 
+	// Deletes the records in the database
 	private void delete(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 
