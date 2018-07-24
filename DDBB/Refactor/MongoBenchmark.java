@@ -15,12 +15,14 @@ public class MongoBenchmark {
 		String test_file;
 		String test_name;
 
+		// Loads all of the settings into the benchmark's cfg
 		while(key != null && value != null && key.equals("=====") == false){
 			cfg.put(key, value);
 			key = cfg_reader.readLine();
 			value = cfg_reader.readLine();
 		}
 
+		// Loads all of the test_files into the tests hashtable
 		test_name = value;
 		test_file = cfg_reader.readLine();
 		while(test_name != null && test_file != null && test_name.equals("-----") == false){

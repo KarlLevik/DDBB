@@ -88,7 +88,7 @@ public class MongoTest {
 			writer.close();
 			*/
 
-		} else {
+		} else {	// Otherwise saves the records inside RAM
 
 			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
 
