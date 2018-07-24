@@ -30,9 +30,11 @@ public class DDBBTool {
 	
 	}
 
+	// Returns the key of an object inside a hashtable
+	// presence of object inside hashtable should be checked before calling getKey
 	public static Object getKey(Hashtable hs, Object v){
 
-		Object result = "";
+		Object result = new Object();
 
 		if(hs.contains(v)){
 			for(Object key : hs.keySet()){
@@ -41,8 +43,6 @@ public class DDBBTool {
 				}
 			}
 
-		} else {
-			result = "";
 		}
 
 		return result;
