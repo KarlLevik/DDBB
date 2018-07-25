@@ -163,6 +163,27 @@ public class MongoTest {
 
 	}
 
+	// Creates the records in the database used for RUD tests
+	private void create_in_order(MongoCollection<Document> collection, Integer amount) throws Exception {
+		Long start_time = System.currentTimeMillis();
+		Integer record_number = 0;
+
+		while(record_number != Integer.parseInt(cfg.get("read_create_record_amount"))){
+			
+			// Creates randomly generated documents
+			Document document = new Document(record_number.toString(), 
+			DDBBTool.generateRandomString(Integer.parseInt(cfg.get("read_create_record_size")), false));
+			collection.insertOne(document);
+
+			record_number++;
+
+		}
+
+		// Saves the result for the test
+		this.report.save("read", "create_total_time", String.valueOf(DDBBTool.runtime(start_time)));
+
+	}
+
 	// Reads the records in the database
 	private void read(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
