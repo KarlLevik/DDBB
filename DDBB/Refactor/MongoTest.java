@@ -188,11 +188,11 @@ public class MongoTest {
 
 	// Reads the records in the database
 	private void read(MongoCollection<Document> collection) throws Exception {
-		Long start_time = System.currentTimeMillis();
-		Integer read_number = 0;
 
+		Integer read_number = 0;
 		create_in_order(collection, "read");
 
+		Long start_time = System.currentTimeMillis();
 		while(read_number != Integer.parseInt(cfg.get("read_total_amount"))){
 			collection.find(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("read_total_record_amount")) - 1)))));
 			read_number++;
@@ -205,11 +205,11 @@ public class MongoTest {
 
 	// Updates the records in the database
 	private void update(MongoCollection<Document> collection) throws Exception {
-		Long start_time = System.currentTimeMillis();
-		Integer update_number = 0;
 
+		Integer update_number = 0;
 		create_in_order(collection, "update");
 
+		Long start_time = System.currentTimeMillis();
 		while(update_number != Integer.parseInt(cfg.get("update_total_amount"))){
 			collection.updateOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1)))), 
 				Updates.set("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false)));
@@ -223,11 +223,11 @@ public class MongoTest {
 
 	// Deletes the records in the database
 	private void delete(MongoCollection<Document> collection) throws Exception {
-		Long start_time = System.currentTimeMillis();
-		Integer delete_number = 0;
 
+		Integer delete_number = 0;
 		create_in_order(collection, "delete");
 
+		Long start_time = System.currentTimeMillis();
 		while(delete_number != Integer.parseInt(cfg.get("delete_total_amount"))){
 			collection.deleteOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1)))));
 			delete_number++;
