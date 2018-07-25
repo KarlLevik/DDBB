@@ -10,7 +10,7 @@ interface DB {
 
 	void create_table();
 
-	void create(Object in);
+	void create(Hashtable<Object,Object> in);
 
 	void read(String key, String val);
 

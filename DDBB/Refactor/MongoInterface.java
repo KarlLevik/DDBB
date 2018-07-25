@@ -51,11 +51,20 @@ public class MongoInterface implements DB {
 		
 	}
 
-	public void create(Object in){
+	public void create(Hashtable<Object,Object> in){
 		
+		Document document = new Document();
+
+		for(Object key : in.keySet()){
+			document.append(key.toString(), in.get(key));
+		}
+
+		collection.insertOne(document);
+
 	}
 
 	public void read(String key, String val){
+
 		collection.find(Filters.eq(key, val));
 
 	}
