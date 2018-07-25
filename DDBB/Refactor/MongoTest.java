@@ -80,7 +80,6 @@ public class MongoTest {
 			cfg.get("generate_in_file").equals("True") || cfg.get("generate_in_file").equals("1") || 
 			cfg.get("generate_in_file").equals("yes") || cfg.get("generate_in_file").equals("Yes"))){
 
-			System.out.println("HIII1");
 			BufferedWriter writer = new BufferedWriter(new FileWriter("RCRD_" + this.uId + ".txt", true));
 
 			record_number = 0;
@@ -91,7 +90,6 @@ public class MongoTest {
 			}
 
 			writer.close();
-			System.out.println("HIIA1");
 
 			this.report.save("generate", "total_time", String.valueOf(DDBBTool.runtime(start_time)));
 			this.report.save("generate", "record_amount", String.valueOf(record_number));
@@ -104,34 +102,48 @@ public class MongoTest {
 	private void create(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
+		List<Long> single_time_taken = new ArrayList<Long>();
+		Long before = System.currentTimeMillis();
 
 		// If records are not to be generated in a file, do:
 		if(cfg.containsKey("generate_in_file") == false || cfg.get("generate_in_file").equals("false") || 
 			cfg.get("generate_in_file").equals("False") || cfg.get("generate_in_file").equals("0") || 
 			cfg.get("generate_in_file").equals("no") || cfg.get("generate_in_file").equals("No")){
-			System.out.println("HIII2");
+
 			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
-			// Creates randomly generated documents
-			Document document = new Document("", 
-			DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
-			collection.insertOne(document);
-			record_number++;
+				
+				before = System.currentTimeMillis();
+				
+				// Creates randomly generated documents
+				Document document = new Document("", 
+				DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
+				collection.insertOne(document);
+
+				if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
+					System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+					single_time_taken.add(DDBBTool.runtime(before));
+				}
+
+				record_number++;
 
 			}
 
 		} else { // OTherwise, if they were generated into a file, do:
 
 			try {
-				System.out.println("HIIA2");
-				System.out.println("CREATE : " + this.uId);
 				BufferedReader rng_reader = new BufferedReader(new FileReader("RCRD_" + this.uId + ".txt"));
 
 				while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
-				// Use randomly generated string file to create records
-				Document document = new Document("", rng_reader.readLine());
-				collection.insertOne(document);
-				record_number++;
 
+					before = System.currentTimeMillis();
+					// Use randomly generated string file to create records
+					Document document = new Document("", rng_reader.readLine());
+					collection.insertOne(document);
+
+					if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
+						single_time_taken.add(DDBBTool.runtime(before));
+					}
+					record_number++;
 				}
 
 				rng_reader.close();
@@ -145,6 +157,9 @@ public class MongoTest {
 		// Saves the result for the test
 		this.report.save("create", "total_time", String.valueOf(DDBBTool.runtime(start_time)));
 		this.report.save("create", "total_amount", String.valueOf(record_number));
+		if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
+			this.report.save("create", "single_time_taken", single_time_taken.toString());
+		}
 
 	}
 

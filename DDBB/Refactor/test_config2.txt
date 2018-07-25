@@ -1,9 +1,9 @@
 collection
 testCol5
 create_record_size
-3
+5
 create_record_amount
-2
+10
 db_type
 MongoDB
 b_name
@@ -19,4 +19,6 @@ sampleUser
 pwd
 password
 generate_in_file
+1
+single_time_taken
 1
