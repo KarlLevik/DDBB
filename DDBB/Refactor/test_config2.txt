@@ -36,3 +36,9 @@ update_total_record_amount
 100
 update_total_record_size
 1000
+delete_total_amount
+100
+delete_total_record_amount
+1000
+delete_total_record_size
+500

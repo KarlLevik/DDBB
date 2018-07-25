@@ -224,6 +224,17 @@ public class MongoTest {
 	// Deletes the records in the database
 	private void delete(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
+		Integer delete_number = 0;
+
+		create_in_order(collection, "delete");
+
+		while(delete_number != Integer.parseInt(cfg.get("delete_total_amount"))){
+			collection.deleteOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1)))));
+			delete_number++;
+		}
+
+		// Saves the result for the test
+		this.report.save("delete", "delete_total_time", String.valueOf(DDBBTool.runtime(start_time)));
 
 	}
 
