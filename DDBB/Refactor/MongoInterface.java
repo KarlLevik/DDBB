@@ -67,7 +67,9 @@ public class MongoInterface implements DB {
 	
 	}
 
-	public void delete(Object in){
+	public void delete(Object key, Object value){
+
+		collection.deleteOne(Filters.eq(key.toString(), value.toString()));
 
 	}
 
