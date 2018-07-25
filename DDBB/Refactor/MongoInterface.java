@@ -8,7 +8,7 @@ import com.mongodb.MongoCredential;
 
 import org.bson.Document;  
 
-public class MongoInterface implements DB {
+public class MongoInterface implements Db {
 	
 	public Hashtable<String,String> cfg = new Hashtable<String,String>();
 	public MongoClient client;
