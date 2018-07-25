@@ -14,7 +14,7 @@ interface DB {
 
 	void read(String key, String val);
 
-	void update(Object in, Object new_in);
+	void update(Object in_key, Object in_value, Object new_key, Object new_value);
 
 	void delete(Object in);
 	

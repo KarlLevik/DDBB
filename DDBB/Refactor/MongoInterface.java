@@ -60,8 +60,11 @@ public class MongoInterface implements DB {
 
 	}
 
-	public void update(Object in, Object new_in){
-		
+	public void update(Object in_key, Object in_value, Object new_key, Object new_value) {
+
+		collection.updateOne(Filters.eq(in_key.toString(), in_value.toString()), 
+			Updates.set(new_key.toString(), new_value.toString()));
+	
 	}
 
 	public void delete(Object in){
