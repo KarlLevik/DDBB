@@ -41,7 +41,7 @@ public class MongoBenchmark {
 
 		for(String test : this.tests.keySet()) {
 
-			test_reports.add((this.tests.get(test)).run());
+			test_reports.add((this.tests.get(test)).run(cfg.get("db_type")));
 
 		}
 

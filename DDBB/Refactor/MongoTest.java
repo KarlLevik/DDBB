@@ -20,7 +20,7 @@ public class MongoTest {
 	public MongoReport report = new MongoReport();
 	public String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
 			DDBBTool.generateRandomString(5, true);
-	public Db db = new MongoInterface(cfg);
+	public Db db;
 
 	MongoTest(String filename) throws Exception {
 		// Opens th cfg file for the test
@@ -40,8 +40,19 @@ public class MongoTest {
 	}
 
 	// Method to run the test
-	public MongoReport run(){
+	public MongoReport run(String db_type){
 		Long start_time = System.currentTimeMillis();
+
+		switch (db_type) {
+			case "MongoDB": db = new MongoInterface(cfg);
+				break;
+			//case "Elasticsearch": db = new MongoInterface(cfg);
+			////	break;
+			//case "Cassandra": db = new ElasticInterface(cfg);
+			////	break;
+			//case "Redis": db = new CassandraInterface(cfg);
+			////	break;
+		}
 
 		// Carries out the creation, reading, updating or deleletion of records
 		try {

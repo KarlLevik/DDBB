@@ -23,7 +23,7 @@ public class MongoDriver {
 			// Executes each test in order
 			for(String test : tests){
 
-				test_reports.put(test, (bench.tests.get(test)).run());
+				test_reports.put(test, (bench.tests.get(test)).run(bench.cfg.get("db_type")));
 			
 			}
 
