@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection; 
+import com.mongodb.client.model.*; 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 
@@ -120,8 +121,9 @@ public class MongoTest {
 				collection.insertOne(document);
 
 				if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
-					System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+
 					single_time_taken.add(DDBBTool.runtime(before));
+
 				}
 
 				record_number++;
@@ -164,15 +166,15 @@ public class MongoTest {
 	}
 
 	// Creates the records in the database used for RUD tests
-	private void create_in_order(MongoCollection<Document> collection, Integer amount) throws Exception {
+	private void create_in_order(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
-		while(record_number != Integer.parseInt(cfg.get("read_create_record_amount"))){
+		while(record_number != Integer.parseInt(cfg.get("read_total_record_amount"))){
 			
 			// Creates randomly generated documents
-			Document document = new Document(record_number.toString(), 
-			DDBBTool.generateRandomString(Integer.parseInt(cfg.get("read_create_record_size")), false));
+			Document document = new Document("",record_number.toString())
+				.append("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("read_total_record_size")), false));
 			collection.insertOne(document);
 
 			record_number++;
@@ -187,6 +189,17 @@ public class MongoTest {
 	// Reads the records in the database
 	private void read(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
+		Integer read_number = 0;
+
+		create_in_order(collection);
+
+		while(read_number != Integer.parseInt(cfg.get("read_total_amount"))){
+			collection.find(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("read_total_record_amount")) - 1)))));
+			read_number++;
+		}
+
+		// Saves the result for the test
+		this.report.save("read", "read_total_time", String.valueOf(DDBBTool.runtime(start_time)));
 
 	}
 

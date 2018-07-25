@@ -1,5 +1,5 @@
 collection
-testCol5
+testColTest
 create_record_size
 5
 create_record_amount
@@ -22,3 +22,9 @@ generate_in_file
 1
 single_time_taken
 1
+read_total_amount
+100
+read_total_record_amount
+1000
+read_total_record_size
+100
