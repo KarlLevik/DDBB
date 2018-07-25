@@ -1,0 +1,71 @@
+import java.util.Hashtable;
+
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection; 
+import com.mongodb.client.model.*; 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+
+import org.bson.Document;  
+
+public class MongoInterface implements DB {
+	
+	public Hashtable<String,String> cfg = new Hashtable<String,String>();
+	public MongoClient client;
+	public MongoCredential credential;
+	public MongoDatabase db;
+	public MongoCollection<Document> collection;
+
+	MongoInterface(Hashtable<String,String> cfg){
+		this.cfg = cfg;
+	}
+
+	public void connectDb(){
+
+		// Creating a Mongo client 
+		client = new MongoClient(this.cfg.get("ip"), Integer.parseInt(this.cfg.get("port")));
+			
+		// Creating Credentials 
+		credential = MongoCredential.createCredential(this.cfg.get("user"), this.cfg.get("db_name"), this.cfg.get("pwd").toCharArray());
+		System.out.println("Connected to the database successfully");
+		
+		// Accessing the database 
+		db = client.getDatabase(this.cfg.get("db_name"));
+		System.out.println("Credentials ::"+ credential);
+
+	}
+
+	public void disconnectDB(){
+		
+	}
+
+	public void table(){
+		
+		// Retrieving a collection
+		collection = db.getCollection(this.cfg.get("collection")); 
+		System.out.println("Collection " + this.cfg.get("collection") + " selected successfully");
+
+	}
+
+	public void create_table(){
+		
+	}
+
+	public void create(Object in){
+		
+	}
+
+	public void read(String key, String val){
+		collection.find(Filters.eq(key, val));
+
+	}
+
+	public void update(Object in, Object new_in){
+		
+	}
+
+	public void delete(Object in){
+
+	}
+
+}

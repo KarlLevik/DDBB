@@ -2,17 +2,17 @@ import java.util.Hashtable;
 
 interface DB {
 
-	void connectDb(Hashtable<String,Object> options);
+	void connectDb();
 
-	void disconnectDB(Object db);
+	void disconnectDB();
 
-	void table(Object pr, Object table);
+	void table();
 
-	void create_table(Object options);
+	void create_table();
 
 	void create(Object in);
 
-	Object read(Object in);
+	void read(String key, String val);
 
 	void update(Object in, Object new_in);
 
