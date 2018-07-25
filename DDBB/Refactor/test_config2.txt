@@ -28,3 +28,11 @@ read_total_record_amount
 1000
 read_total_record_size
 100
+update_total_amount
+100
+update_new_record_size
+150
+update_total_record_amount
+100
+update_total_record_size
+1000

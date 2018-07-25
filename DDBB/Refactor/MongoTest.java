@@ -166,15 +166,15 @@ public class MongoTest {
 	}
 
 	// Creates the records in the database used for RUD tests
-	private void create_in_order(MongoCollection<Document> collection) throws Exception {
+	private void create_in_order(MongoCollection<Document> collection, String op) throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
 
-		while(record_number != Integer.parseInt(cfg.get("read_total_record_amount"))){
+		while(record_number != Integer.parseInt(cfg.get(op + "_total_record_amount"))){
 			
 			// Creates randomly generated documents
 			Document document = new Document("",record_number.toString())
-				.append("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("read_total_record_size")), false));
+				.append("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get(op + "_total_record_size")), false));
 			collection.insertOne(document);
 
 			record_number++;
@@ -182,7 +182,7 @@ public class MongoTest {
 		}
 
 		// Saves the result for the test
-		this.report.save("read", "create_total_time", String.valueOf(DDBBTool.runtime(start_time)));
+		this.report.save(op, "create_total_time", String.valueOf(DDBBTool.runtime(start_time)));
 
 	}
 
@@ -191,7 +191,7 @@ public class MongoTest {
 		Long start_time = System.currentTimeMillis();
 		Integer read_number = 0;
 
-		create_in_order(collection);
+		create_in_order(collection, "read");
 
 		while(read_number != Integer.parseInt(cfg.get("read_total_amount"))){
 			collection.find(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("read_total_record_amount")) - 1)))));
@@ -206,6 +206,18 @@ public class MongoTest {
 	// Updates the records in the database
 	private void update(MongoCollection<Document> collection) throws Exception {
 		Long start_time = System.currentTimeMillis();
+		Integer update_number = 0;
+
+		create_in_order(collection, "update");
+
+		while(update_number != Integer.parseInt(cfg.get("update_total_amount"))){
+			collection.updateOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1)))), 
+				Updates.set("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false)));
+			update_number++;
+		}
+
+		// Saves the result for the test
+		this.report.save("update", "update_total_time", String.valueOf(DDBBTool.runtime(start_time)));
 
 	}
 
