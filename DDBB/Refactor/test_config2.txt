@@ -1,9 +1,5 @@
 collection
 testColTest2
-create_record_size
-50
-create_record_amount
-1000
 db_type
 MongoDB
 b_name
@@ -22,6 +18,10 @@ generate_in_file
 1
 single_time_taken
 1
+create_record_size
+50
+create_record_amount
+1000
 read_total_amount
 100
 read_total_record_amount
