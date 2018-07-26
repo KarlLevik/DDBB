@@ -1,14 +1,14 @@
 import java.io.*;
 import java.util.*;
 
-public class MongoReport {
+public class DdbbReport {
 
 	// Variable holding the report of a test
 	// (operation, [type, [results]])
 	public Hashtable<String, Hashtable<String, ArrayList<String>>> report = 
 		new Hashtable<String, Hashtable<String, ArrayList<String>>>();
 
-	MongoReport(){ }
+	DdbbReport(){ }
 
 	// Saves results in the report
 	public void save(String op, String type, String result){

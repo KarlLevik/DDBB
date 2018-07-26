@@ -4,11 +4,11 @@ interface Db {
 
 	void connectDb();
 
-	void disconnectDB();
+	void disconnectDb();
 
 	void table();
 
-	void create_table();
+	void createTable();
 
 	void create(Hashtable<Object,Object> in);
 

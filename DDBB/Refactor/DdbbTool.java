@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.Hashtable;
 
-public class DDBBTool {
+public class DdbbTool {
 
 	// Method to randomly generate a random string
 	public static String generateRandomString(Integer length, Boolean use_plain){		

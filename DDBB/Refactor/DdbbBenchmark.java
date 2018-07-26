@@ -1,13 +1,13 @@
 import java.util.*;
 import java.io.*;
 
-public class MongoBenchmark {
+public class DdbbBenchmark {
 
 	public Hashtable<String, String> cfg = new Hashtable<String, String>();
-	public Hashtable<String, MongoTest> tests = new Hashtable<String, MongoTest>();
-	//public List<MongoTest> tests = ArrayList<MongoTest>();
+	public Hashtable<String, DdbbTest> tests = new Hashtable<String, DdbbTest>();
+	//public List<DdbbTest> tests = ArrayList<DdbbTest>();
 
-	MongoBenchmark() throws Exception {
+	DdbbBenchmark() throws Exception {
 		BufferedReader cfg_reader = new BufferedReader(new FileReader("config.txt"));
 
 		String key = cfg_reader.readLine();
@@ -27,7 +27,7 @@ public class MongoBenchmark {
 		test_file = cfg_reader.readLine();
 		while(test_name != null && test_file != null && test_name.equals("-----") == false){
 			cfg.put(test_name, test_file);
-			tests.put(test_name, new MongoTest(test_file));
+			tests.put(test_name, new DdbbTest(test_file));
 			test_name = cfg_reader.readLine();
 			test_file = cfg_reader.readLine();
 		}
@@ -35,9 +35,9 @@ public class MongoBenchmark {
 	}
 
 	// Method that executes all of the tests in a benchmark
-	public List<MongoReport> run(){
+	public List<DdbbReport> run(){
 
-		List<MongoReport> test_reports = new ArrayList<MongoReport>();
+		List<DdbbReport> test_reports = new ArrayList<DdbbReport>();
 
 		for(String test : this.tests.keySet()) {
 

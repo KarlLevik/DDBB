@@ -13,16 +13,16 @@ import com.mongodb.MongoCredential;
 
 import org.bson.Document;  
 
-public class MongoTest {
+public class DdbbTest {
 
 	public Hashtable<String, String> cfg = new Hashtable<String, String>();
 	public List<String> generated = new ArrayList<String>();
-	public MongoReport report = new MongoReport();
+	public DdbbReport report = new DdbbReport();
 	public String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
-			DDBBTool.generateRandomString(5, true);
+			DdbbTool.generateRandomString(5, true);
 	public Db db;
 
-	MongoTest(String filename) throws Exception {
+	DdbbTest(String filename) throws Exception {
 		// Opens th cfg file for the test
 		BufferedReader cfg_reader = new BufferedReader(new FileReader(filename + ".txt"));
 
@@ -40,7 +40,7 @@ public class MongoTest {
 	}
 
 	// Method to run the test
-	public MongoReport run(String db_type){
+	public DdbbReport run(String db_type){
 		Long start_time = System.currentTimeMillis();
 
 		switch (db_type) {
@@ -54,13 +54,29 @@ public class MongoTest {
 			////	break;
 		}
 
+		db.connectDb();
+		db.createTable();
+		db.table();
+
 		// Carries out the creation, reading, updating or deleletion of records
 		try {
-			generate();
-			create();
-			read();
-			update();
-			delete();
+
+			if(cfg.containsKey("generate_in_file") && cfg.get("generate_in_file").equals("1")){
+				generate();
+			}
+			if(cfg.containsKey("create_record_amount")){
+				create();
+			}
+			if(cfg.containsKey("read_total_amount")){			
+				read();
+			}
+			if(cfg.containsKey("update_total_amount")){
+				update();
+			}
+			if(cfg.containsKey("delete_total_amount")){
+				delete();
+			}
+
 		} catch(Exception e){
 			System.out.println(e);
 		}
@@ -81,14 +97,14 @@ public class MongoTest {
 
 			record_number = 0;
 			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
-				writer.write(DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
+				writer.write(DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 				writer.newLine();
 				record_number++;
 			}
 
 			writer.close();
 
-			this.report.save("generate", "total_time", String.valueOf(DDBBTool.runtime(start_time)));
+			this.report.save("generate", "total_time", String.valueOf(DdbbTool.runtime(start_time)));
 			this.report.save("generate", "record_amount", String.valueOf(record_number));
 
 		} 
@@ -113,22 +129,21 @@ public class MongoTest {
 				
 				// Creates randomly generated documents
 				//Document document = new Document("", 
-				//DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
+				//DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 				//collection.insertOne(document);
 				Hashtable<String, String> doc = new Hashtable<String, String>();
-				doc.put("", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
+				doc.put("k", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 
 				if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
 
-					single_time_taken.add(DDBBTool.runtime(before));
+					single_time_taken.add(DdbbTool.runtime(before));
 
 				}
-
 				record_number++;
 
 			}
 
-		} else { // OTherwise, if they were generated into a file, do:
+		} else { // Otherwise, if they were generated into a file, do:
 
 			try {
 				BufferedReader rng_reader = new BufferedReader(new FileReader("RCRD_" + this.uId + ".txt"));
@@ -140,11 +155,11 @@ public class MongoTest {
 					//Document document = new Document("", rng_reader.readLine());
 					//collection.insertOne(document);
 					Hashtable<String, String> doc = new Hashtable<String, String>();
-					doc.put("", rng_reader.readLine());
+					doc.put("k", rng_reader.readLine());
 
 
 					if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
-						single_time_taken.add(DDBBTool.runtime(before));
+						single_time_taken.add(DdbbTool.runtime(before));
 					}
 					record_number++;
 				}
@@ -157,14 +172,13 @@ public class MongoTest {
 		}
 
 		System.out.println("Generated " + record_number + " records.");
+
 		// Saves the result for the test
-		this.report.save("create", "total_time", String.valueOf(DDBBTool.runtime(start_time)));
+		this.report.save("create", "total_time", String.valueOf(DdbbTool.runtime(start_time)));
 		this.report.save("create", "total_amount", String.valueOf(record_number));
 
 		if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
-		
 			this.report.save("create", "single_time_taken", single_time_taken.toString());
-		
 		}
 
 	}
@@ -178,18 +192,18 @@ public class MongoTest {
 			
 			// Creates randomly generated documents
 			//Document document = new Document("",record_number.toString())
-			//	.append("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get(op + "_total_record_size")), false));
+			//	.append("v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get(op + "_total_record_size")), false));
 			//collection.insertOne(document);
 			Hashtable<String, String> doc = new Hashtable<String, String>();
-			doc.put("", record_number.toString());
-			doc.put("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
+			doc.put("k", record_number.toString());
+			doc.put("v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
 
 			record_number++;
 
 		}
 
 		// Saves the result for the test
-		this.report.save(op, "create_total_time", String.valueOf(DDBBTool.runtime(start_time)));
+		this.report.save(op, "create_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 
 	}
 
@@ -201,14 +215,12 @@ public class MongoTest {
 
 		Long start_time = System.currentTimeMillis();
 		while(read_number != Integer.parseInt(cfg.get("read_total_amount"))){
-			this.db.read("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("read_total_record_amount")) - 1))));
-			//collection.find(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("read_total_record_amount")) - 1)))));
+			this.db.read("k", Integer.toString((int) Math.floor(Math.random() * (Integer.parseInt(cfg.get("read_total_record_amount")) - 1))));
 			read_number++;
 		}
 
 		// Saves the result for the test
-		this.report.save("read", "read_total_time", String.valueOf(DDBBTool.runtime(start_time)));
-
+		this.report.save("read", "read_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 	}
 
 	// Updates the records in the database
@@ -220,13 +232,13 @@ public class MongoTest {
 		Long start_time = System.currentTimeMillis();
 		while(update_number != Integer.parseInt(cfg.get("update_total_amount"))){
 			//collection.updateOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1)))), 
-			////	Updates.set("v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false)));
-			this.db.update("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1))), "v", DDBBTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false));
+			////	Updates.set("v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false)));
+			this.db.update("k", Integer.toString((int) Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1))), "v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false));
 			update_number++;
 		}
 
 		// Saves the result for the test
-		this.report.save("update", "update_total_time", String.valueOf(DDBBTool.runtime(start_time)));
+		this.report.save("update", "update_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 
 	}
 
@@ -239,13 +251,12 @@ public class MongoTest {
 		Long start_time = System.currentTimeMillis();
 		while(delete_number != Integer.parseInt(cfg.get("delete_total_amount"))){
 			//collection.deleteOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1)))));
-			this.db.delete("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1))));
+			this.db.delete("k", Integer.toString((int) Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1))));
 			delete_number++;
 		}
 
 		// Saves the result for the test
-		this.report.save("delete", "delete_total_time", String.valueOf(DDBBTool.runtime(start_time)));
-
+		this.report.save("delete", "delete_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 	}
 
 }

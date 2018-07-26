@@ -4,19 +4,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime; 
 import java.text.SimpleDateFormat;   
 
-public class MongoDriver {
+public class DdbbDriver {
 
 	public static void main(String args[]) {
 		
-		// Unique ID generated for each session of MongoDriver
+		// Unique ID generated for each session of DdbbDriver
 		String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
-			DDBBTool.generateRandomString(5, true);
+			DdbbTool.generateRandomString(5, true);
 
-		Hashtable<String, MongoReport> test_reports = new Hashtable<String, MongoReport>();
+		Hashtable<String, DdbbReport> test_reports = new Hashtable<String, DdbbReport>();
 		
 		try {
-			// Creates a new benchmark (each MongoBenchmark consistents of MongoTests)
-			MongoBenchmark bench = new MongoBenchmark();
+			// Creates a new benchmark (each DdbbBenchmark consistents of DdbbTests)
+			DdbbBenchmark bench = new DdbbBenchmark();
 			// Gets the set of test names
 			Set<String> tests = bench.tests.keySet();
 
@@ -46,11 +46,11 @@ public class MongoDriver {
 			writer.newLine();
 
 			// Puts the tests into the output file
-			List<MongoReport> reverse_test_r_vals = new ArrayList<MongoReport>(test_reports.values());
+			List<DdbbReport> reverse_test_r_vals = new ArrayList<DdbbReport>(test_reports.values());
 			Collections.reverse(reverse_test_r_vals);
-			for(MongoReport test_report : reverse_test_r_vals) {
+			for(DdbbReport test_report : reverse_test_r_vals) {
 				
-				writer.write("TEST : " + (DDBBTool.getKey(test_reports, test_report)).toString());
+				writer.write("TEST : " + (DdbbTool.getKey(test_reports, test_report)).toString());
 				writer.newLine();
 
 				// Puts the operation results of a test into the output file

@@ -35,7 +35,7 @@ public class MongoInterface implements Db {
 
 	}
 
-	public void disconnectDB(){
+	public void disconnectDb(){
 		
 	}
 
@@ -43,12 +43,11 @@ public class MongoInterface implements Db {
 		
 		// Retrieving a collection
 		collection = db.getCollection(this.cfg.get("collection")); 
-		System.out.println("Collection " + this.cfg.get("collection") + " selected successfully");
 
 	}
 
-	public void create_table(){
-		
+	public void createTable(){
+
 	}
 
 	public void create(Hashtable<Object,Object> in){
@@ -64,7 +63,6 @@ public class MongoInterface implements Db {
 	}
 
 	public void read(String key, String val){
-
 		collection.find(Filters.eq(key, val));
 
 	}
