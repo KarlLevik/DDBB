@@ -23,19 +23,8 @@ public class DdbbTest {
 	public Db db;
 
 	DdbbTest(String filename) throws Exception {
-		// Opens th cfg file for the test
-		BufferedReader cfg_reader = new BufferedReader(new FileReader(filename + ".txt"));
-
-		// Reads a key and value from the cfg
-		String key = cfg_reader.readLine();
-		String value = cfg_reader.readLine();
-
-		// Loads all of the configuration into the cfg for the test
-		while(key != null && value != null){
-			cfg.put(key, value);
-			key = cfg_reader.readLine();
-			value = cfg_reader.readLine();
-		}
+		
+		cfg = DdbbIO.in(filename);
 
 	}
 
