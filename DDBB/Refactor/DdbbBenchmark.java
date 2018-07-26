@@ -38,9 +38,7 @@ public class DdbbBenchmark {
 			test_reports.add((this.tests.get(test)).run(cfg.get("db_type")));
 
 		}
-
-		return test_reports;
-
+		
 	}
 
 }

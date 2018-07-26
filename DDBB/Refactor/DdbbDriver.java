@@ -23,10 +23,6 @@ public class DdbbDriver {
 			// Puts the cfg into the output file
 			DdbbIO.out("REPORT_" + uId, bench);
 
-			// Puts the tests into the output file
-			
-
-
 		} catch(Exception e) {
 
 			System.out.println(e);

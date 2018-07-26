@@ -19,17 +19,17 @@ public class DdbbIO {
 
 	}
 
-	public static void out(String filename, DdbbReport report ) throws Exception {
+	public static void out(String filename, DdbbBenchmark bench) throws Exception {
 		
 		Writer writer = new FileWriter(filename);
 		Gson g = new GsonBuilder().setPrettyPrinting().create();
 		
-		g.toJson(report, writer);
+		g.toJson(bench, writer);
 		
 		writer.close();
 
 	}
-
+	/*
 	public static void main(String[] args) {
 		try {
 			Hashtable<String, Hashtable<String, ArrayList<String>>> testa = 
@@ -52,5 +52,5 @@ public class DdbbIO {
 			System.out.println(e);
 		}
 	}
-
+	*/
 }
