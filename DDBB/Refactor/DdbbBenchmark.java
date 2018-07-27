@@ -9,12 +9,16 @@ public class DdbbBenchmark {
 	//public List<DdbbTest> tests = ArrayList<DdbbTest>();
 
 	DdbbBenchmark() throws Exception {
-
-		cfg = DdbbIO.in("config.txt");
+		System.out.println("0");
+		cfg = DdbbIO.in("config.json");
+		System.out.println("1");
 		Boolean testsRemain = true;
+		System.out.println("2");
 		Integer testNumber = 0;
+		System.out.println("3");
 		
 		while(testsRemain){
+			System.out.println("4");
 
 			if(cfg.containsKey("test" + testNumber)){
 			
@@ -38,7 +42,7 @@ public class DdbbBenchmark {
 			test_reports.add((this.tests.get(test)).run(cfg.get("db_type")));
 
 		}
-		
+
 	}
 
 }

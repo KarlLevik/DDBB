@@ -1,0 +1,32 @@
+{
+  "cfg": {
+    "22": "33443",
+    "aa22": "3aaa3443"
+  },
+  "tests": {
+    "test1": {
+      "cfg": {
+        "db_name": "myDbTest3",
+        "port": "27017",
+        "user": "sampleUser",
+        "collection": "testCol5",
+        "pwd": "password",
+        "ip": "localhost",
+        "db_type": "MongoDB",
+        "create_record_size": "3",
+        "create_record_amount": "2",
+        "b_name": "st1 ho!£% e"
+      },
+      "generated": [],
+      "report": {},
+      "uId": "27-07-2018_105959_TPmIU"
+    }
+  },
+  "test_reports": [
+    {
+      "op": {
+        "type": "[10,20]"
+      }
+    }
+  ]
+}

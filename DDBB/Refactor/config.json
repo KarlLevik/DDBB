@@ -1,0 +1,11 @@
+{
+	"db_type" : "MongoDB",
+	"b_name" : "st1 ho!£% e",
+	"db_name" : "myDbTest3",
+	"ip" : "localhost",
+	"port" : "27017",
+	"user" : "sampleUser",
+	"pwd" : "password",
+	"test0" : "test_config1.json",
+	"test1" : "test_config2.json"
+}

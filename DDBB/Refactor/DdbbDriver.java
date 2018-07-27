@@ -15,13 +15,16 @@ public class DdbbDriver {
 		Hashtable<String, DdbbReport> test_reports = new Hashtable<String, DdbbReport>();
 		
 		try {
+			System.out.println("5");
 			// Creates a new benchmark (each DdbbBenchmark consistents of DdbbTests)
 			DdbbBenchmark bench = new DdbbBenchmark();
 			bench.run();
+			System.out.println("6");
 
 			//Create output file
 			// Puts the cfg into the output file
 			DdbbIO.out("REPORT_" + uId, bench);
+			System.out.println("7");
 
 		} catch(Exception e) {
 

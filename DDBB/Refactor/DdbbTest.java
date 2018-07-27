@@ -220,8 +220,6 @@ public class DdbbTest {
 
 		Long start_time = System.currentTimeMillis();
 		while(update_number != Integer.parseInt(cfg.get("update_total_amount"))){
-			//collection.updateOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1)))), 
-			////	Updates.set("v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false)));
 			this.db.update("k", Integer.toString((int) Math.floor(Math.random() * (Integer.parseInt(cfg.get("update_total_record_amount")) - 1))), "v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("update_new_record_size")), false));
 			update_number++;
 		}
@@ -239,7 +237,6 @@ public class DdbbTest {
 
 		Long start_time = System.currentTimeMillis();
 		while(delete_number != Integer.parseInt(cfg.get("delete_total_amount"))){
-			//collection.deleteOne(Filters.eq("", Double.toString(Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1)))));
 			this.db.delete("k", Integer.toString((int) Math.floor(Math.random() * (Integer.parseInt(cfg.get("delete_total_record_amount")) - 1))));
 			delete_number++;
 		}
