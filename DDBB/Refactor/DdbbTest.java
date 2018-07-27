@@ -84,6 +84,7 @@ public class DdbbTest {
 
 			BufferedWriter writer = new BufferedWriter(new FileWriter("RCRD_" + this.uId + ".txt", true));
 
+			// Generates random strings into the RCRD file
 			record_number = 0;
 			while(record_number != Integer.parseInt(cfg.get("create_record_amount"))){
 				writer.write(DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
@@ -93,6 +94,7 @@ public class DdbbTest {
 
 			writer.close();
 
+			// Save performance statistics into the test report
 			this.report.save("generate", "total_time", String.valueOf(DdbbTool.runtime(start_time)));
 			this.report.save("generate", "record_amount", String.valueOf(record_number));
 
@@ -180,9 +182,6 @@ public class DdbbTest {
 		while(record_number != Integer.parseInt(cfg.get(op + "_total_record_amount"))){
 			
 			// Creates randomly generated documents
-			//Document document = new Document("",record_number.toString())
-			//	.append("v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get(op + "_total_record_size")), false));
-			//collection.insertOne(document);
 			Hashtable<String, String> doc = new Hashtable<String, String>();
 			doc.put("k", record_number.toString());
 			doc.put("v", DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
@@ -191,7 +190,7 @@ public class DdbbTest {
 
 		}
 
-		// Saves the result for the test
+		// Saves performance statistics
 		this.report.save(op, "create_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 
 	}

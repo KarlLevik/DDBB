@@ -17,6 +17,7 @@ public class DdbbBenchmark {
 		Integer testNumber = 0;
 		System.out.println("3");
 		
+		// Add each test and it's name into "tests"
 		while(testsRemain){
 			System.out.println("4");
 
@@ -37,6 +38,7 @@ public class DdbbBenchmark {
 	// Method that executes all of the tests in a benchmark
 	public void run(){
 
+		// Add each test to "test_reports"
 		for(String test : this.tests.keySet()) {
 
 			test_reports.add((this.tests.get(test)).run(cfg.get("db_type")));

@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 public class DdbbDriver {
 
 	public static void main(String args[]) {
+		//Gets list of threads
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
 		System.out.println("Threads BEFORE TESTS = " + threadSet.size() + " = " + threadArray);
@@ -20,13 +21,16 @@ public class DdbbDriver {
 		String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
 			DdbbTool.generateRandomString(5, true);
 
-		Hashtable<String, DdbbReport> test_reports = new Hashtable<String, DdbbReport>();
-		
 		try {
 			System.out.println("5");
+
 			// Creates a new benchmark (each DdbbBenchmark consistents of DdbbTests)
+			// Loads tests automatically in constructor
 			DdbbBenchmark bench = new DdbbBenchmark();
+			// Benchmark tests executed
 			bench.run();
+
+			// Gets list of threads
 			threadSet = Thread.getAllStackTraces().keySet();
 			threadArray = threadSet.toArray(new Thread[threadSet.size()]);
 			System.out.println("Threads AFTER TESTS = " + threadSet.size() + " = " + threadArray);
@@ -36,9 +40,9 @@ public class DdbbDriver {
 				i++;
 			}
 			System.out.println("6");
-			//Create output file
-			// Puts the cfg into the output file
-			DdbbIO.out("REPORT_" + uId, bench);
+
+			// Outputs benchmark into a report file
+			DdbbIO.out("REPORT_" + uId + ".json", bench);
 			System.out.println("7");
 
 		} catch(Exception e) {
