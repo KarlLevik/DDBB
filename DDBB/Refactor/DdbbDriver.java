@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
-import java.time.format.DateTimeFormatter;  
-import java.time.LocalDateTime; 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.text.SimpleDateFormat;   
 
 public class DdbbDriver {
@@ -37,8 +37,22 @@ public class DdbbDriver {
 			i = 0;
 			for(Thread t : threadArray){
 				System.out.println("t" + i + " = " + threadArray[i].getName());
+				if(threadArray[i].getName() != "Finalizer" && threadArray[i].getName() != "main" && threadArray[i].getName() != "Reference Handler" && threadArray[i].getName() != "Signal Dispatcher"){
+					//threadArray[i].interrupt();
+				}
 				i++;
 			}
+			threadSet = Thread.getAllStackTraces().keySet();
+			threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+			/*
+			System.out.println("Threads AFTER THREAD DESTROY = " + threadSet.size() + " = " + threadArray);
+			i = 0;
+			for(Thread t : threadArray){
+				System.out.println("t" + i + " = " + threadArray[i].getName());
+				i++;
+			}
+			*/
+
 			System.out.println("6");
 
 			// Outputs benchmark into a report file

@@ -65,6 +65,7 @@ public class DdbbTest {
 			if(cfg.containsKey("delete_total_amount")){
 				delete();
 			}
+			db.disconnectDb();
 
 		} catch(Exception e){
 			System.out.println(e);
@@ -106,7 +107,7 @@ public class DdbbTest {
 	private void create() throws Exception {
 		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
-		List<Long> single_time_taken = new ArrayList<Long>();
+		List<String> single_time_taken = new ArrayList<String>();
 		Long before = System.currentTimeMillis();
 
 		// If records are not to be generated in a file, do:
@@ -127,7 +128,7 @@ public class DdbbTest {
 
 				if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
 
-					single_time_taken.add(DdbbTool.runtime(before));
+					single_time_taken.add(String.valueOf(DdbbTool.runtime(before)));
 
 				}
 				record_number++;
@@ -150,7 +151,7 @@ public class DdbbTest {
 
 
 					if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
-						single_time_taken.add(DdbbTool.runtime(before));
+						single_time_taken.add(String.valueOf(DdbbTool.runtime(before)));
 					}
 					record_number++;
 				}
@@ -169,7 +170,7 @@ public class DdbbTest {
 		this.report.save("create", "total_amount", String.valueOf(record_number));
 
 		if(this.cfg.containsKey("single_time_taken") && this.cfg.get("single_time_taken").equals("1")) {
-			this.report.save("create", "single_time_taken", single_time_taken.toString());
+			this.report.saveList("create", "single_time_taken", single_time_taken);
 		}
 
 	}

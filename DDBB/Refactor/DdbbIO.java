@@ -51,7 +51,7 @@ public class DdbbIO {
 		
 		System.out.println("8");
 		Writer writer = new FileWriter(filename);
-		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbReport.class, new DdbbReportAdapter()).registerTypeAdapter(Double.class, new DdbbDoubleAdapter()).create();
+		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbBenchmark.class, new DdbbBenchmarkAdapter()).create();
 
 		System.out.println("9");
 		/*

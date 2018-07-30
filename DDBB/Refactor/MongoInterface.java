@@ -36,7 +36,7 @@ public class MongoInterface implements Db {
 	}
 
 	public void disconnectDb(){
-		
+		client.close();
 	}
 
 	public void table(){

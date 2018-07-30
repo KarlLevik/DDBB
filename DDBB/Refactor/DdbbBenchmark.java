@@ -8,31 +8,39 @@ public class DdbbBenchmark {
 	public List<DdbbReport> test_reports = new ArrayList<DdbbReport>();
 	//public List<DdbbTest> tests = ArrayList<DdbbTest>();
 
-	DdbbBenchmark() throws Exception {
+	DdbbBenchmark() {
 		System.out.println("0");
-		cfg = DdbbIO.in("config.json");
+		try {
+			cfg = DdbbIO.in("config.json");
+		} catch(Exception e){
+			System.out.println(e);
+		}
 		System.out.println("1");
 		Boolean testsRemain = true;
 		System.out.println("2");
 		Integer testNumber = 0;
 		System.out.println("3");
-		
+
 		// Add each test and it's name into "tests"
 		while(testsRemain){
 			System.out.println("4");
 
 			if(cfg.containsKey("test" + testNumber)){
-			
-				tests.put("test" + testNumber, new DdbbTest (cfg.get("test" + testNumber)));
+
+				try {
+					tests.put("test" + testNumber, new DdbbTest (cfg.get("test" + testNumber)));
+				} catch(Exception e){
+					System.out.println(e);
+				}
 				testNumber++;
-			
+
 			} else {
-			
+
 				testsRemain = false;
-			
+
 			}
 		}
-		
+
 	}
 
 	// Method that executes all of the tests in a benchmark

@@ -35,4 +35,31 @@ public class DdbbReport {
 	
 	}
 
+	// Saves results in the report
+	public void saveList(String op, String type, List<String> results){
+
+		if(report.containsKey(op)) {
+
+			if((report.get(op)).containsKey(type)) {
+
+				for(Object result : results) {
+					((report.get(op)).get(type)).add(result.toString());
+				}
+
+			} else {
+
+				(report.get(op)).put(type, (new ArrayList<String>()));
+				saveList(op, type, results);
+
+			}
+
+		} else {
+
+			report.put(op, new Hashtable<String, ArrayList<String>>());
+			saveList(op, type, results);
+
+		}
+
+	}
+
 }
