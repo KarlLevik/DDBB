@@ -354,13 +354,13 @@ public class DdbbIO {
 
 	}
 
-	public static void out(String filename, DdbbBenchmark bench) throws Exception {
+	public static void out(String filename, DdbbReport report) throws Exception {
 
 		System.out.println("8");
 		Writer writer = new FileWriter(filename);
-		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbBenchmark.class, new DdbbBenchmarkAdapter()).create();
+		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbReport.class, new DdbbReportAdapter()).create();
 
-		g.toJson(bench, writer);
+		g.toJson(report, writer);
 
 		writer.close();
 

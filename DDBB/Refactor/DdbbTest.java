@@ -18,7 +18,7 @@ public class DdbbTest {
 	public DdbbConfig cfg;
 	public List<String> generated = new ArrayList<String>();
 	public DdbbReport report = new DdbbReport();
-	public String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" + 
+	private String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" +
 			DdbbTool.generateRandomString(5, true);
 	public Db db;
 
@@ -29,10 +29,10 @@ public class DdbbTest {
 	}
 
 	// Method to run the test
-	public DdbbReport run(String db_type){
+	public DdbbReport run(){
 		Long start_time = System.currentTimeMillis();
 
-		switch (db_type) {
+		switch ((String) cfg.settings.get("db_type")) {
 			case "MongoDB": db = new MongoInterface(cfg);
 				break;
 			//case "Elasticsearch": db = new MongoInterface(cfg);
