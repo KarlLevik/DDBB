@@ -10,27 +10,27 @@ import org.bson.Document;
 
 public class MongoInterface implements Db {
 	
-	public Hashtable<String,String> cfg = new Hashtable<String,String>();
+	public DdbbConfig cfg;
 	public MongoClient client;
 	public MongoCredential credential;
 	public MongoDatabase db;
 	public MongoCollection<Document> collection;
 
-	MongoInterface(Hashtable<String,String> cfg){
+	MongoInterface(DdbbConfig cfg){
 		this.cfg = cfg;
 	}
 
 	public void connectDb(){
 
 		// Creating a Mongo client 
-		client = new MongoClient(this.cfg.get("ip"), Integer.parseInt(this.cfg.get("port")));
-			
+		client = new MongoClient((String) this.cfg.settings.get("ip"), (int) (this.cfg.settings.get("port")));
+
 		// Creating Credentials 
-		credential = MongoCredential.createCredential(this.cfg.get("user"), this.cfg.get("db_name"), this.cfg.get("pwd").toCharArray());
+		credential = MongoCredential.createCredential((String) this.cfg.settings.get("user"), (String) this.cfg.settings.get("db_name"), ((String) this.cfg.settings.get("pwd")).toCharArray());
 		System.out.println("Connected to the database successfully");
 		
 		// Accessing the database 
-		db = client.getDatabase(this.cfg.get("db_name"));
+		db = client.getDatabase((String) this.cfg.settings.get("db_name"));
 		System.out.println("Credentials ::"+ credential);
 
 	}
@@ -42,7 +42,7 @@ public class MongoInterface implements Db {
 	public void table(){
 		
 		// Retrieving a collection
-		collection = db.getCollection(this.cfg.get("collection")); 
+		collection = db.getCollection((String) this.cfg.settings.get("collection"));
 
 	}
 

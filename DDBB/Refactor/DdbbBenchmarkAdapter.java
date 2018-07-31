@@ -30,6 +30,7 @@ public class DdbbBenchmarkAdapter extends TypeAdapter<DdbbBenchmark> {
         for(String test_s : bench.tests.keySet()) {
             writer.name(test_s);
             writer.beginObject();
+            /*
             writer.name("Test Configuration");
             writer.beginObject();
             for(String test_cfg_s : bench.tests.get(test_s).cfg.keySet()){
@@ -37,6 +38,7 @@ public class DdbbBenchmarkAdapter extends TypeAdapter<DdbbBenchmark> {
                 writer.value(bench.tests.get(test_s).cfg.get(test_cfg_s));
             }
             writer.endObject();
+            */
             writer.name("Test Report");
             writer.beginObject();
 

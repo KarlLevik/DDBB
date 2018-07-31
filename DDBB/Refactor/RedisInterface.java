@@ -1,17 +1,18 @@
 import java.util.Hashtable;
-import redis.clients.jedis.Jedis;
+//import redis.clients.jedis.Jedis;
 
 public class RedisInterface implements Db {
 
-    public Jedis jedis;
-    public Hashtable<String,String> cfg = new Hashtable<String,String>();
+    //public Jedis jedis;
+    //public Hashtable<String,String> cfg = new Hashtable<String,String>();
 
-    RedisInterface(Hashtable<String,String> cfg){
-        this.cfg = cfg;
-    }
+    //RedisInterface(Hashtable<String,String> cfg){
+        //this.cfg = cfg;
+    //}
 
     public void connectDb(){
-        jedis = new Jedis(this.cfg.get("ip"),this.cfg.get("port"));
+
+        //jedis = new Jedis(this.cfg.get("ip"),this.cfg.get("port"));
     }
 
     public void disconnectDb(){

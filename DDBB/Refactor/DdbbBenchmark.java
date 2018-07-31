@@ -10,7 +10,7 @@ public class DdbbBenchmark {
 	DdbbBenchmark() {
 		System.out.println("0");
 		try {
-			cfg = DdbbIO.in("config.json");
+			cfg = DdbbIO.in2("config.json");
 		} catch(Exception e){
 			System.out.println(e);
 		}
