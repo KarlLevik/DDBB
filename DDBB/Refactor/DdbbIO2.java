@@ -57,11 +57,11 @@ public class DdbbIO2 {
                     name = reader.nextName();
                     if(reader.peek() == JsonToken.STRING){
                         String val = reader.nextString();
-                        cfg.settings.meta.put(name, val);
+                        cfg.settings.put(name, val);
                     } else if(reader.peek() == JsonToken.NUMBER){
-                        cfg.settings.meta.put(name, reader.nextDouble());
+                        cfg.settings.put(name, reader.nextDouble());
                     } else if(reader.peek() == JsonToken.BOOLEAN){
-                        cfg.settings.meta.put(name, reader.nextBoolean());
+                        cfg.settings.put(name, reader.nextBoolean());
                     } else {
                         reader.skipValue();
                         System.out.println("SKIPPED META OF INVALID TYPE!");
@@ -391,8 +391,8 @@ public class DdbbIO2 {
             System.out.println("test2 = " + test2);
             //System.out.println("testB = " + test2.get("generate").get("meta").get("save"));
             */
-            DdbbConfig test3 = in("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
-            System.out.println("test3 = " + test3);
+            DdbbConfig test = in("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
+            System.out.println("test3 = " + test);
 
         } catch(Exception e){
             System.out.println(e);

@@ -1,6 +1,8 @@
+import java.util.*;
+
 public class DdbbConfig {
 
-    public DdbbProperty settings;
+    public Hashtable<String,Object> settings;
     public DdbbProperty generate;
     public DdbbProperty create;
     public DdbbProperty read;
@@ -8,7 +10,7 @@ public class DdbbConfig {
     public DdbbProperty delete;
 
     DdbbConfig(){
-        this.settings = new DdbbProperty();
+        this.settings = new Hashtable<String,Object>();
         this.generate = new DdbbProperty();
         this.create = new DdbbProperty();
         this.read = new DdbbProperty();
