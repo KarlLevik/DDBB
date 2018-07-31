@@ -1,0 +1,55 @@
+{
+	"settings" : {
+		"collection": "testCol2",
+		"db_type": "MongoDB",
+		"b_name": "st1 ho!£% e",
+		"db_name": "myDbTest3",
+		"ip": "localhost",
+		"port": "27017",
+		"user": "sampleUser",
+		"pwd": "password",
+		"total_time": true
+	},
+	"generate" : {
+		"meta" : {
+			"save" : true,
+			"total" : true,
+			"step" : true,
+			"step_size" : 10,
+			"response" : false,
+			"throughput" : false,
+			"time" : true,
+			"amount" : 1000
+		},
+		"data" : {
+			"name" : ["id", "name", "results"],
+			"kv" : ["KEY", "VALUE", "VALUE"],
+			"val" : ["INT", "STRING", "FLOAT"],
+			"length" : [4, 10, 5],
+			"length_up_to" : [true, true, false],
+			"size" : [1, 1, 10],
+			"size_up_to" : [false, false, true]
+		}
+	},
+	"create" : {
+		"meta" : {
+			"save" : true,
+			"total" : true,
+			"step" : true,
+			"step_size" : 10,
+			"response" : false,
+			"throughput" : false,
+			"time" : true,
+			"amount" : 1000
+		},
+		"data" : {
+			"name" : ["id", "name", "results"],
+			"kv" : ["KEY", "VALUE", "VALUE"],
+			"val" : ["INT", "STRING", "FLOAT"],
+			"length" : [4, 10, 5],
+			"length_up_to" : [true, true, false],
+			"size" : [1, 1, 10],
+			"size_up_to" : [false, false, true]
+		}
+	}
+}

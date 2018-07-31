@@ -16,34 +16,6 @@ public class DdbbIO {
 		reader.close();
 		
 		return settings;
-		/*
-
-		DdbbReport report = new DdbbReport();
-		
-		GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapter(DdbbReport.class, new DdbbReportAdapter());
-		gb.setPrettyPrinting();
-		Gson g = gb.create();
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-		
-		report = g.fromJson(reader, DdbbReport.class);
-		
-		reader.close();
-		return report;
-
-		*/
-		/*
-		Hashtable<String,String> settings = new Hashtable<String,String>();
-		
-		Gson g = new Gson();
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-		
-		settings = g.fromJson(reader, Hashtable.class);
-		
-		reader.close();
-		
-		return settings;
-		*/
 
 	}
 
@@ -54,16 +26,6 @@ public class DdbbIO {
 		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbBenchmark.class, new DdbbBenchmarkAdapter()).create();
 
 		System.out.println("9");
-		/*
-		System.out.println("cfg = " + bench.cfg);
-		System.out.println("tests = " + bench.tests);
-		System.out.println("test1 cfg = " + bench.tests.get("test1").cfg);
-		System.out.println("test1 gen = " + bench.tests.get("test1").generated);
-		System.out.println("test1 uId = " + bench.tests.get("test1").uId);
-		System.out.println("test1 r.r = " + bench.tests.get("test1").report.report);
-		System.out.println("test_reports" + bench.test_reports);
-		System.out.println("test_reports1 = " + bench.test_reports.get(1).report);
-		*/
 		g.toJson(bench, writer);
 		System.out.println("10");
 		

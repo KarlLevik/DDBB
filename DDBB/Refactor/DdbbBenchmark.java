@@ -6,7 +6,6 @@ public class DdbbBenchmark {
 	public Hashtable<String, String> cfg = new Hashtable<String, String>();
 	public Hashtable<String, DdbbTest> tests = new Hashtable<String, DdbbTest>();
 	public List<DdbbReport> test_reports = new ArrayList<DdbbReport>();
-	//public List<DdbbTest> tests = ArrayList<DdbbTest>();
 
 	DdbbBenchmark() {
 		System.out.println("0");
