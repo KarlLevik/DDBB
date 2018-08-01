@@ -8,7 +8,7 @@ public class DdbbIO {
 
 	public static Hashtable<String,String> in2(String filename) throws Exception {
 
-		Hashtable<String,String> settings = new Hashtable<String,String>();
+		Hashtable<String,String> settings;
 
 		Gson g = new Gson();
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
@@ -54,7 +54,7 @@ public class DdbbIO {
 
 				reader.endObject();
 
-			} else if (name.equals("generate")) {
+			} else if (name.equals("setup")) {
 
 				reader.beginObject();
 
@@ -69,11 +69,11 @@ public class DdbbIO {
 						while (reader.hasNext()) {
 							name = reader.nextName();
 							if(reader.peek() == JsonToken.STRING){
-								cfg.generate.meta.put(name, reader.nextString());
+								cfg.setup.meta.put(name, reader.nextString());
 							} else if(reader.peek() == JsonToken.NUMBER){
-								cfg.generate.meta.put(name, reader.nextDouble());
+								cfg.setup.meta.put(name, reader.nextDouble());
 							} else if(reader.peek() == JsonToken.BOOLEAN){
-								cfg.generate.meta.put(name, reader.nextBoolean());
+								cfg.setup.meta.put(name, reader.nextBoolean());
 							} else {
 								reader.skipValue();
 								System.out.println("SKIPPED META OF INVALID TYPE!");
@@ -103,7 +103,7 @@ public class DdbbIO {
 								}
 							}
 							reader.endArray();
-							cfg.generate.data.put(name, list);
+							cfg.setup.data.put(name, list);
 						}
 
 						reader.endObject();
@@ -372,7 +372,7 @@ public class DdbbIO {
             System.out.println("test = " + test);
             Hashtable<String,ArrayList<String>> test2 = in2("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
             System.out.println("test2 = " + test2);
-            //System.out.println("testB = " + test2.get("generate").get("meta").get("save"));
+            //System.out.println("testB = " + test2.get("setup").get("meta").get("save"));
             */
 			DdbbConfig test = in("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
 			System.out.println("test3 = " + test);

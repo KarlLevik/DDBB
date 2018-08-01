@@ -23,6 +23,49 @@ public class DdbbTool {
 	
 	}
 
+	// Method to randomly generate a random string
+	public static boolean generateRandomBoolean(){
+
+		Random r = new Random();
+		Boolean rng_val;
+
+
+		rng_val = r.nextBoolean();
+
+		return rng_val;
+
+	}
+
+	// Method to randomly generate a random string
+	public static Integer generateRandomInteger(Integer size, boolean size_up_to){
+
+		Random r = new Random();
+		Integer rng_val;
+
+		Integer roof = size;
+		Integer floor = size_up_to ? 10 ^ (size.toString().length()-1) : 0;
+
+		rng_val = floor + r.nextInt(roof - floor);
+
+		return rng_val;
+
+	}
+
+	// Method to randomly generate a random string
+	public static Double generateRandomDouble(Double size, Boolean size_up_to){
+
+		Random r = new Random();
+		Double rng_val;
+
+		Double roof = size;
+		Integer floor = size_up_to ? 10 ^ (size.toString().length()-1) : 0;
+
+		rng_val = floor + r.nextDouble() * roof - floor;
+
+		return rng_val;
+
+	}
+
 	// Returns the runtime, often of a test, a benchmark or a session
 	public static long runtime(Long start_time){
 
@@ -43,6 +86,8 @@ public class DdbbTool {
 				}
 			}
 
+		} else {
+			result = null;
 		}
 
 		return result;

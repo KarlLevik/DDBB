@@ -10,4 +10,8 @@ public class DdbbProperty {
         this.data = new Hashtable<>();
     }
 
+    public boolean isEmpty(){
+        return (this.meta.isEmpty() && this.data.isEmpty());
+    }
+
 }
