@@ -13,12 +13,16 @@ public class DdbbDriver {
 					if(test.validate()){
 
 						DdbbIO.out(test_name + "_RESULT.json", test.run());
-						System.out.println("test");
+
 					}
 
 				}
 
 			}
+
+		} catch(NullPointerException e) {
+
+			System.out.println("FINISH");
 
 		} catch(Exception e) {
 

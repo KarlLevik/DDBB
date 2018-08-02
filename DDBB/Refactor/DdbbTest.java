@@ -74,7 +74,7 @@ public class DdbbTest {
 		Hashtable<String, Object> meta = property.meta;
 		Hashtable<String, ArrayList<Object>> data = property.data;
 		Integer counter = 0;
-		ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
+		//ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
 
 		// 0 - From file
 		// 1 - To file
@@ -85,8 +85,8 @@ public class DdbbTest {
 
 			Integer field_amount = data.get("name").size();
 			Integer field_counter = 0;
+			Hashtable<String,ArrayList<Object>> generated = new Hashtable<>();
 			while(field_counter < field_amount){
-				Hashtable<String,ArrayList<Object>> generated = new Hashtable<>();
 
 				String field_name = (String) data.get("name").get(field_counter);
 				Integer length = 		((Number) data.get("length").get(field_counter)).intValue();
@@ -99,7 +99,7 @@ public class DdbbTest {
 					// if record for field is found in generated hs-
 					if (generated.containsKey(field_name)) {
 						// if the length of record to be generated is up to length specified, generate random length
-						if(length_up_to){
+						if(!length_up_to){
 
 							length = (new Random()).nextInt(length);
 
@@ -118,7 +118,7 @@ public class DdbbTest {
 									// generates random val
 									Object gen_val = generate_value(data, field_counter);
 									// checks whether generated value was unique
-									if(DdbbTool.getKey(generated, gen_val) != null){
+									if(DdbbTool.getKey(generated, gen_val) == null){
 
 										unique_val = true;
 
@@ -137,22 +137,21 @@ public class DdbbTest {
 					}
 				}
 
-				generated_set.add(generated);
 				field_counter++;
 			}
 
-
+			generated_set.add(generated);
 			counter++;
 
 		}
 
-		if((int) meta.get("generate_method") == 0){
+		/*if((int) meta.get("generate_method") == 0){
 
 		} else if((int) meta.get("generate_method") == 1){
 
 		} else {
 
-		}
+		}*/
 
 	}
 
@@ -180,8 +179,8 @@ public class DdbbTest {
 	// Creates the records in the database
 	private void create() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.create.meta.get("amount")){
-			Integer record_step = (((int) cfg.create.meta.get("step_generate") > ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
+		while(record_number < (int) cfg.create.meta.get("amount")){
+			Integer record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 			generate(cfg.create, record_step);
 			for(int i = 0; i < record_step; i++){
 				db.create(generated_set.get(i));
