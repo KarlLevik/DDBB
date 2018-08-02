@@ -1,4 +1,5 @@
 import java.util.Hashtable;
+import java.util.ArrayList;
 //import redis.clients.jedis.Jedis;
 
 public class RedisInterface implements Db {
@@ -27,20 +28,20 @@ public class RedisInterface implements Db {
 
     }
 
-    public void create(Hashtable<Object,Object> in){
-
+    public void create(Hashtable<String,ArrayList<Object>> in){
+        System.out.println("RedisInterface");
     }
 
-    public void read(String key, String val){
-
+    public void read(Hashtable<String,ArrayList<Object>> in, String field){
+        System.out.println("RedisInterface");
     }
 
-    public void update(Object in_key, Object in_value, Object new_key, Object new_value) {
-
+    public void update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
+        System.out.println("RedisInterface");
     }
 
-    public void delete(Object key, Object value) {
-
+    public void delete(Hashtable<String,ArrayList<Object>> in, String field){
+        System.out.println("RedisInterface");
     }
 
     public static void main(String[] args){
