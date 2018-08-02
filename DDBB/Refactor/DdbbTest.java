@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 public class DdbbTest {
 
 	public DdbbConfig cfg;
-	public Hashtable<String,ArrayList<Object>> generated = new Hashtable<>();
+	public ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
 	public DdbbReport report = new DdbbReport();
 	private String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" +
 			DdbbTool.generateRandomString(5, true);
@@ -69,13 +69,12 @@ public class DdbbTest {
 
 	private void setup(){	}
 
-	private void generate(DdbbProperty property) throws Exception {
+	private void generate(DdbbProperty property, Integer amount) throws Exception {
 
 		Hashtable<String, Object> meta = property.meta;
 		Hashtable<String, ArrayList<Object>> data = property.data;
 		Integer counter = 0;
-		generated = new Hashtable<>();
-		Integer amount = (int) meta.get("step_generate");
+		ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
 
 		// 0 - From file
 		// 1 - To file
@@ -87,8 +86,9 @@ public class DdbbTest {
 			Integer field_amount = data.get("name").size();
 			Integer field_counter = 0;
 			while(field_counter < field_amount){
+				Hashtable<String,ArrayList<Object>> generated = new Hashtable<>();
 
-				String field_name = (String) data.get("name").get(field_counter);Hashtable<String,ArrayList<Object>>
+				String field_name = (String) data.get("name").get(field_counter);
 				Integer length = 		(int) data.get("length").get(field_counter);
 				boolean length_up_to = 	(boolean) data.get("length_up_to").get(field_counter);
 				boolean in_order = 		(boolean) data.get("in_order").get(field_counter);
@@ -137,8 +137,11 @@ public class DdbbTest {
 					}
 				}
 
+				generated_set.add(generated);
 				field_counter++;
 			}
+
+
 			counter++;
 
 		}
@@ -176,142 +179,61 @@ public class DdbbTest {
 
 	// Creates the records in the database
 	private void create() throws Exception {
-		Long start_time = System.currentTimeMillis();
 		Integer record_number = 0;
-		List<String> single_time_taken = new ArrayList<String>();
-		Long before;
-
-		// If records are not to be generated in a file, do:
-		if(cfg.generate.meta.containsKey("generate_in_file") && (boolean) cfg.generate.meta.get("generate_in_file")){
-
-			while(record_number != cfg.create.meta.get("create_record_amount")){
-
-				before = System.currentTimeMillis();
-				
-				// Creates randomly generated documents
-				//Document document = new Document("", 
-				//DdbbTool.generateRandomString(Integer.parseInt(cfg.get("create_record_size")), false));
-				//collection.insertOne(document);
-				Hashtable<String, String> doc = new Hashtable<>();
-				doc.put("k", DdbbTool.generateRandomString((int) cfg.create.meta.get("create_record_size"), false));
-
-				if(this.cfg.create.meta.containsKey("single_time_taken") && (boolean) this.cfg.create.meta.get("single_time_taken")) {
-
-					single_time_taken.add(String.valueOf(DdbbTool.runtime(before)));
-
-				}
+		while(record_number != cfg.create.meta.get("step_generate")){
+			Integer record_step = (((int) cfg.create.meta.get("step_generate") > ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
+			generate(cfg.create, record_step);
+			for(int i = 0; i < record_step; i++){
+				db.create(generated_set.get(i));
 				record_number++;
-
-			}
-
-		} else { // Otherwise, if they were generated into a file, do:
-
-			try {
-				BufferedReader rng_reader = new BufferedReader(new FileReader("RCRD_" + this.uId + ".txt"));
-
-				while(record_number != cfg.create.meta.get("create_record_amount")){
-
-					before = System.currentTimeMillis();
-					// Use randomly generated string file to create records
-					//Document document = new Document("", rng_reader.readLine());
-					//collection.insertOne(document);
-					Hashtable<String, String> doc = new Hashtable<String, String>();
-					doc.put("k", rng_reader.readLine());
-
-
-					if(this.cfg.create.meta.containsKey("single_time_taken") && (boolean) this.cfg.create.meta.get("single_time_taken")) {
-						single_time_taken.add(String.valueOf(DdbbTool.runtime(before)));
-					}
-					record_number++;
-				}
-
-				rng_reader.close();
-			} catch(Exception e){
-				System.out.println(e);
 			}
 
 		}
-
-		System.out.println("Generated " + record_number + " records.");
-
-		// Saves the result for the test
-		this.report.save("create", "total_time", String.valueOf(DdbbTool.runtime(start_time)));
-		this.report.save("create", "total_amount", String.valueOf(record_number));
-
-		if(this.cfg.create.meta.containsKey("single_time_taken") && (boolean) this.cfg.create.meta.get("single_time_taken")) {
-			this.report.saveList("create", "single_time_taken", single_time_taken);
-		}
-
-	}
-
-	// Creates the records in the database used for RUD tests
-	private void create_in_order(String op) throws Exception {
-		Long start_time = System.currentTimeMillis();
-		Integer record_number = 0;
-
-		while(record_number != cfg.generate.meta.get(op + "_total_record_amount")){
-			
-			// Creates randomly generated documents
-			Hashtable<String, String> doc = new Hashtable<String, String>();
-			doc.put("k", record_number.toString());
-			doc.put("v", DdbbTool.generateRandomString((int) cfg.generate.meta.get("create_record_size"), false));
-
-			record_number++;
-
-		}
-
-		// Saves performance statistics
-		this.report.save(op, "create_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 
 	}
 
 	// Reads the records in the database
 	private void read() throws Exception {
+		Integer record_number = 0;
+		while(record_number != cfg.read.meta.get("step_generate")){
+			//Integer record_step = (((int) cfg.read.meta.get("step_generate") > ((int) cfg.read.meta.get("amount") - record_number)) ? (int) cfg.read.meta.get("step_generate") : ((int) cfg.read.meta.get("amount") - record_number));
+			Integer record_step = (int) cfg.read.meta.get("amount");
+			generate(cfg.read, record_step);
+			for(int i = 0; i < record_step; i++){
+				db.read(generated_set.get(i));
+				record_number++;
+			}
 
-		Integer read_number = 0;
-		create_in_order("read");
-
-		Long start_time = System.currentTimeMillis();
-		while(read_number != cfg.read.meta.get("read_total_amount")){
-			this.db.read("k", Integer.toString((int) Math.floor(Math.random() * ((int) cfg.read.meta.get("read_total_record_amount") - 1))));
-			read_number++;
 		}
-
-		// Saves the result for the test
-		this.report.save("read", "read_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 	}
 
 	// Updates the records in the database
 	private void update() throws Exception {
+		Integer record_number = 0;
+		while(record_number != cfg.update.meta.get("step_generate")){
+			Integer record_step = (((int) cfg.update.meta.get("step_generate") > ((int) cfg.update.meta.get("amount") - record_number)) ? (int) cfg.update.meta.get("step_generate") : ((int) cfg.update.meta.get("amount") - record_number));
+			generate(cfg.update, record_step);
+			for(int i = 0; i < record_step; i++){
+				//db.update(generated_set.get(i));
+				record_number++;
+			}
 
-		Integer update_number = 0;
-		create_in_order("update");
-
-		Long start_time = System.currentTimeMillis();
-		while(update_number != cfg.update.meta.get("update_total_amount")){
-			this.db.update("k", Integer.toString((int) Math.floor(Math.random() * ((int) cfg.update.meta.get("update_total_record_amount") - 1))), "v", DdbbTool.generateRandomString((int) cfg.update.meta.get("update_new_record_size"), false));
-			update_number++;
 		}
-
-		// Saves the result for the test
-		this.report.save("update", "update_total_time", String.valueOf(DdbbTool.runtime(start_time)));
-
 	}
 
 	// Deletes the records in the database
 	private void delete() throws Exception {
+		Integer record_number = 0;
+		while(record_number != cfg.delete.meta.get("step_generate")){
+			//Integer record_step = (((int) cfg.delete.meta.get("step_generate") > ((int) cfg.delete.meta.get("amount") - record_number)) ? (int) cfg.delete.meta.get("step_generate") : ((int) cfg.delete.meta.get("amount") - record_number));
+			Integer record_step = (int) cfg.delete.meta.get("amount");
+			generate(cfg.delete, record_step);
+			for(int i = 0; i < record_step; i++){
+				db.delete(generated_set.get(i));
+				record_number++;
+			}
 
-		Integer delete_number = 0;
-		create_in_order("delete");
-
-		Long start_time = System.currentTimeMillis();
-		while(delete_number != cfg.delete.meta.get("delete_total_amount")){
-			this.db.delete("k", Integer.toString((int) Math.floor(Math.random() * ((int) cfg.delete.meta.get("delete_total_record_amount") - 1))));
-			delete_number++;
 		}
-
-		// Saves the result for the test
-		this.report.save("delete", "delete_total_time", String.valueOf(DdbbTool.runtime(start_time)));
 	}
 
 }

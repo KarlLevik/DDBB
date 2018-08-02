@@ -1,4 +1,5 @@
 import java.util.Hashtable;
+import java.util.ArrayList;
 
 interface Db {
 
@@ -10,12 +11,12 @@ interface Db {
 
 	void createTable();
 
-	void create(Hashtable<Object,Object> in);
+	void create(Hashtable<String,ArrayList<Object>> in);
 
-	void read(String key, String val);
+	void read(Hashtable<String,ArrayList<Object>> in);
 
-	void update(Object in_key, Object in_value, Object new_key, Object new_value);
+	void update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up);
 
-	void delete(Object key, Object value);
+	void delete(Hashtable<String,ArrayList<Object>> in);
 	
 }

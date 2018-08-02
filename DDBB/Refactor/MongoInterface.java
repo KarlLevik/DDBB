@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import com.mongodb.client.MongoDatabase;
@@ -50,7 +51,7 @@ public class MongoInterface implements Db {
 
 	}
 
-	public void create(Hashtable<Object,Object> in){
+	public void create(Hashtable<String,ArrayList<Object>> in){
 		
 		Document document = new Document();
 
@@ -62,19 +63,19 @@ public class MongoInterface implements Db {
 
 	}
 
-	public void read(String key, String val){
+	public void read(Hashtable<String,ArrayList<Object>> in){
 		collection.find(Filters.eq(key, val));
 
 	}
 
-	public void update(Object in_key, Object in_value, Object new_key, Object new_value) {
+	public void update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up) {
 
-		collection.updateOne(Filters.eq(in_key.toString(), in_value.toString()), 
-			Updates.set(new_key.toString(), new_value.toString()));
+		//collection.updateOne(Filters.eq(in_key.toString(), in_value.toString()),
+		//	Updates.set(new_key.toString(), new_value.toString()));
 	
 	}
 
-	public void delete(Object key, Object value){
+	public void delete(Hashtable<String,ArrayList<Object>> in){
 
 		collection.deleteOne(Filters.eq(key.toString(), value.toString()));
 
