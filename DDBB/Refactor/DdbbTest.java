@@ -180,7 +180,7 @@ public class DdbbTest {
 	// Creates the records in the database
 	private void create() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.create.meta.get("step_generate")){
+		while(record_number != cfg.create.meta.get("amount")){
 			Integer record_step = (((int) cfg.create.meta.get("step_generate") > ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 			generate(cfg.create, record_step);
 			for(int i = 0; i < record_step; i++){
@@ -195,12 +195,18 @@ public class DdbbTest {
 	// Reads the records in the database
 	private void read() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.read.meta.get("step_generate")){
+		while(record_number != cfg.read.meta.get("amount")){
 			//Integer record_step = (((int) cfg.read.meta.get("step_generate") > ((int) cfg.read.meta.get("amount") - record_number)) ? (int) cfg.read.meta.get("step_generate") : ((int) cfg.read.meta.get("amount") - record_number));
 			Integer record_step = (int) cfg.read.meta.get("amount");
 			generate(cfg.read, record_step);
+			String field = "";
+			for(int c = 0; c < cfg.read.data.get("in_order").size();c++){
+				if((boolean) cfg.read.data.get("in_order").get(c)){
+					field = (String) cfg.read.data.get("name").get(c);
+				}
+			}
 			for(int i = 0; i < record_step; i++){
-				db.read(generated_set.get(i));
+				db.read(generated_set.get(i), field);
 				record_number++;
 			}
 
@@ -210,7 +216,7 @@ public class DdbbTest {
 	// Updates the records in the database
 	private void update() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.update.meta.get("step_generate")){
+		while(record_number != cfg.update.meta.get("amount")){
 			Integer record_step = (((int) cfg.update.meta.get("step_generate") > ((int) cfg.update.meta.get("amount") - record_number)) ? (int) cfg.update.meta.get("step_generate") : ((int) cfg.update.meta.get("amount") - record_number));
 			generate(cfg.update, record_step);
 			for(int i = 0; i < record_step; i++){
@@ -224,15 +230,20 @@ public class DdbbTest {
 	// Deletes the records in the database
 	private void delete() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.delete.meta.get("step_generate")){
+		while(record_number != cfg.delete.meta.get("amount")){
 			//Integer record_step = (((int) cfg.delete.meta.get("step_generate") > ((int) cfg.delete.meta.get("amount") - record_number)) ? (int) cfg.delete.meta.get("step_generate") : ((int) cfg.delete.meta.get("amount") - record_number));
 			Integer record_step = (int) cfg.delete.meta.get("amount");
 			generate(cfg.delete, record_step);
+			String field = "";
+			for(int c = 0; c < cfg.delete.data.get("in_order").size();c++){
+				if((boolean) cfg.delete.data.get("in_order").get(c)){
+					field = (String) cfg.delete.data.get("name").get(c);
+				}
+			}
 			for(int i = 0; i < record_step; i++){
-				db.delete(generated_set.get(i));
+				db.read(generated_set.get(i), field);
 				record_number++;
 			}
-
 		}
 	}
 

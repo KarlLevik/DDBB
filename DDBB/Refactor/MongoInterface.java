@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection; 
@@ -63,8 +64,10 @@ public class MongoInterface implements Db {
 
 	}
 
-	public void read(Hashtable<String,ArrayList<Object>> in){
-		collection.find(Filters.eq(key, val));
+	public void read(Hashtable<String,ArrayList<Object>> in, String field){
+		Integer amount = in.keySet().size();
+		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
+		collection.find(Filters.eq(rand_key, in.get(rand_key)));
 
 	}
 
@@ -75,9 +78,10 @@ public class MongoInterface implements Db {
 	
 	}
 
-	public void delete(Hashtable<String,ArrayList<Object>> in){
-
-		collection.deleteOne(Filters.eq(key.toString(), value.toString()));
+	public void delete(Hashtable<String,ArrayList<Object>> in, String field){
+		Integer amount = in.keySet().size();
+		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
+		collection.deleteOne(Filters.eq(rand_key, in.get(rand_key)));
 
 	}
 
