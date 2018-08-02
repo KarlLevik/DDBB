@@ -25,7 +25,7 @@ public class MongoInterface implements Db {
 	public void connectDb(){
 
 		// Creating a Mongo client 
-		client = new MongoClient((String) this.cfg.settings.get("ip"), (int) (this.cfg.settings.get("port")));
+		client = new MongoClient((String) this.cfg.settings.get("ip"), ((Number) this.cfg.settings.get("port")).intValue());
 
 		// Creating Credentials 
 		credential = MongoCredential.createCredential((String) this.cfg.settings.get("user"), (String) this.cfg.settings.get("db_name"), ((String) this.cfg.settings.get("pwd")).toCharArray());

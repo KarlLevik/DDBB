@@ -7,13 +7,13 @@ public class DdbbDriver {
 		try {
 
 			for(int i = 0; i<100; i++){
-				String test_name = "test_config" + i + ".json";
-				if((new File(test_name)).exists()){
-					DdbbTest test = new DdbbTest(test_name);
+				String test_name = "test_config" + i;
+				if((new File(test_name + ".json")).exists()){
+					DdbbTest test = new DdbbTest(test_name + ".json");
 					if(test.validate()){
 
-						DdbbIO.out(test_name, (new DdbbTest(test_name)).run());
-
+						DdbbIO.out(test_name + "_RESULT.json", test.run());
+						System.out.println("test");
 					}
 
 				}

@@ -1,12 +1,87 @@
 {
-	"collection" : "testCol5",
-	"create_record_size" : "3",
-	"create_record_amount" : "2",
-	"db_type" : "MongoDB",
-	"b_name" : "st1 ho!£% e",
-	"db_name" : "myDbTest3",
-	"ip" : "localhost",
-	"port" : "27017",
-	"user" : "sampleUser",
-	"pwd" : "password"
+  "settings" : {
+    "collection": "testCol2",
+    "db_type": "MongoDB",
+    "b_name": "st1 ho!£% e",
+    "db_name": "myDbTest3",
+    "ip": "localhost",
+    "port": 27017,
+    "user": "sampleUser",
+    "pwd": "password",
+    "total_time": true
+  },
+  "setup" : {
+    "meta" : {
+      "save" : true,
+      "total" : true,
+      "step" : true,
+      "step_generate" : 10,
+      "step_measurement" : 10,
+      "response" : false,
+      "throughput" : false,
+      "time" : true,
+      "amount" : 1000,
+      "size" : 1000,
+      "generate_method" : "in_file"
+    },
+    "data" : {
+      "name" : ["id", "name", "results"],
+      "kv" : ["KEY", "VALUE", "VALUE"],
+      "val" : ["INT", "STRING", "DOUBLE"],
+      "length" : [4, 10, 5],
+      "length_up_to" : [true, true, false],
+      "size" : [1, 1, 10],
+      "size_up_to" : [false, false, true],
+      "in_order" : [true, false, false],
+      "unique" : [true, true, false]
+    }
+  },
+  "create" : {
+    "meta" : {
+      "save" : true,
+      "total" : true,
+      "step" : true,
+      "step_measurement" : 10,
+      "response" : false,
+      "throughput" : false,
+      "time" : true,
+      "amount" : 1000,
+      "size" : 1000
+    },
+    "data" : {
+      "name" : ["id", "name", "results"],
+      "kv" : ["KEY", "VALUE", "VALUE"],
+      "val" : ["INT", "STRING", "DOUBLE"],
+      "length" : [4, 10, 5],
+      "length_up_to" : [true, true, false],
+      "size" : [1, 1, 10],
+      "size_up_to" : [false, false, true],
+      "in_order" : [true, false, false],
+      "unique" : [true, true, false]
+    }
+  },
+  "read" : {
+    "meta" : {
+      "save" : true,
+      "total" : true,
+      "step" : true,
+      "step_measurement" : 10,
+      "response" : false,
+      "throughput" : false,
+      "time" : true,
+      "amount" : 1000,
+      "size" : 1000
+    },
+    "data" : {
+      "name" : ["id", "name", "results"],
+      "kv" : ["KEY", "VALUE", "VALUE"],
+      "val" : ["INT", "STRING", "DOUBLE"],
+      "length" : [4, 10, 5],
+      "length_up_to" : [true, true, false],
+      "size" : [1, 1, 10],
+      "size_up_to" : [false, false, true],
+      "in_order" : [true, false, false],
+      "unique" : [true, true, false]
+    }
+  }
 }
