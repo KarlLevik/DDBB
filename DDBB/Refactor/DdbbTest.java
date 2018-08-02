@@ -89,7 +89,7 @@ public class DdbbTest {
 				Hashtable<String,ArrayList<Object>> generated = new Hashtable<>();
 
 				String field_name = (String) data.get("name").get(field_counter);
-				Integer length = 		(int) data.get("length").get(field_counter);
+				Integer length = 		((Number) data.get("length").get(field_counter)).intValue();
 				boolean length_up_to = 	(boolean) data.get("length_up_to").get(field_counter);
 				boolean in_order = 		(boolean) data.get("in_order").get(field_counter);
 				boolean unique = 		(boolean) data.get("unique").get(field_counter);
@@ -116,7 +116,7 @@ public class DdbbTest {
 								boolean unique_val = false;
 								while(!unique_val){ // loops until generated value is unique
 									// generates random val
-									Integer gen_val = (int) generate_value(data, field_counter);
+									Object gen_val = generate_value(data, field_counter);
 									// checks whether generated value was unique
 									if(DdbbTool.getKey(generated, gen_val) != null){
 
@@ -158,7 +158,7 @@ public class DdbbTest {
 
 	public Object generate_value(Hashtable<String, ArrayList<Object>> data, int field_counter){
 
-		Integer size = 			(int) data.get("size").get(field_counter);
+		Integer size = 			((Number) data.get("size").get(field_counter)).intValue();
 		boolean size_up_to = 	(boolean) data.get("size_up_to").get(field_counter);
 		Object value = new Object();
 

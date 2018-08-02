@@ -42,7 +42,7 @@ public class DdbbIO {
 						String val = reader.nextString();
 						cfg.settings.put(name, val);
 					} else if(reader.peek() == JsonToken.NUMBER){
-						cfg.settings.put(name, reader.nextDouble());
+						cfg.settings.put(name, reader.nextInt());
 					} else if(reader.peek() == JsonToken.BOOLEAN){
 						cfg.settings.put(name, reader.nextBoolean());
 					} else {
@@ -71,7 +71,7 @@ public class DdbbIO {
 							if(reader.peek() == JsonToken.STRING){
 								cfg.setup.meta.put(name, reader.nextString());
 							} else if(reader.peek() == JsonToken.NUMBER){
-								cfg.setup.meta.put(name, reader.nextDouble());
+								cfg.setup.meta.put(name, reader.nextInt());
 							} else if(reader.peek() == JsonToken.BOOLEAN){
 								cfg.setup.meta.put(name, reader.nextBoolean());
 							} else {
@@ -128,7 +128,7 @@ public class DdbbIO {
 							if(reader.peek() == JsonToken.STRING){
 								cfg.create.meta.put(name, reader.nextString());
 							} else if(reader.peek() == JsonToken.NUMBER){
-								cfg.create.meta.put(name, reader.nextDouble());
+								cfg.create.meta.put(name, reader.nextInt());
 							} else if(reader.peek() == JsonToken.BOOLEAN){
 								cfg.create.meta.put(name, reader.nextBoolean());
 							} else {
@@ -185,7 +185,7 @@ public class DdbbIO {
 							if (reader.peek() == JsonToken.STRING) {
 								cfg.read.meta.put(name, reader.nextString());
 							} else if (reader.peek() == JsonToken.NUMBER) {
-								cfg.read.meta.put(name, reader.nextDouble());
+								cfg.read.meta.put(name, reader.nextInt());
 							} else if (reader.peek() == JsonToken.BOOLEAN) {
 								cfg.read.meta.put(name, reader.nextBoolean());
 							} else {
@@ -242,7 +242,7 @@ public class DdbbIO {
 							if (reader.peek() == JsonToken.STRING) {
 								cfg.update.meta.put(name, reader.nextString());
 							} else if (reader.peek() == JsonToken.NUMBER) {
-								cfg.update.meta.put(name, reader.nextDouble());
+								cfg.update.meta.put(name, reader.nextInt());
 							} else if (reader.peek() == JsonToken.BOOLEAN) {
 								cfg.update.meta.put(name, reader.nextBoolean());
 							} else {
@@ -299,7 +299,7 @@ public class DdbbIO {
 							if (reader.peek() == JsonToken.STRING) {
 								cfg.delete.meta.put(name, reader.nextString());
 							} else if (reader.peek() == JsonToken.NUMBER) {
-								cfg.delete.meta.put(name, reader.nextDouble());
+								cfg.delete.meta.put(name, reader.nextInt());
 							} else if (reader.peek() == JsonToken.BOOLEAN) {
 								cfg.delete.meta.put(name, reader.nextBoolean());
 							} else {
