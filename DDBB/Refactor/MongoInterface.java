@@ -52,36 +52,62 @@ public class MongoInterface implements Db {
 
 	}
 
-	public void create(Hashtable<String,ArrayList<Object>> in){
-		
+	public long create(Hashtable<String,ArrayList<Object>> in){
+		Long time_before;
+		Long time_after;
+
 		Document document = new Document();
 
 		for(Object key : in.keySet()){
 			document.append(key.toString(), in.get(key));
 		}
 
+		time_before = System.nanoTime();
 		collection.insertOne(document);
+		time_after = System.nanoTime();
+
+		return time_after - time_before;
 
 	}
 
-	public void read(Hashtable<String,ArrayList<Object>> in, String field){
+	public long read(Hashtable<String,ArrayList<Object>> in, String field){
+		Long time_before;
+		Long time_after;
+
 		Integer amount = in.keySet().size();
 		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
+
+		time_before = System.nanoTime();
 		collection.find(Filters.eq(rand_key, in.get(rand_key)));
+		time_after = System.nanoTime();
+
+		return time_after - time_before;
 
 	}
 
-	public void update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up) {
+	public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up) {
+		Long time_before;
+		Long time_after;
 
 		//collection.updateOne(Filters.eq(in_key.toString(), in_value.toString()),
 		//	Updates.set(new_key.toString(), new_value.toString()));
+
+		return Long.parseLong("0");
 	
 	}
 
-	public void delete(Hashtable<String,ArrayList<Object>> in, String field){
+	public long delete(Hashtable<String,ArrayList<Object>> in, String field){
+		Long time_before;
+		Long time_after;
+
 		Integer amount = in.keySet().size();
 		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
+
+		time_before = System.nanoTime();
 		collection.deleteOne(Filters.eq(rand_key, in.get(rand_key)));
+		time_after = System.nanoTime();
+
+		return time_after - time_before;
 
 	}
 

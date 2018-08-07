@@ -11,12 +11,12 @@ interface Db {
 
 	void createTable();
 
-	void create(Hashtable<String,ArrayList<Object>> in);
+	long create(Hashtable<String,ArrayList<Object>> in);
 
-	void read(Hashtable<String,ArrayList<Object>> in, String field);
+	long read(Hashtable<String,ArrayList<Object>> in, String field);
 
-	void update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up);
+	long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up);
 
-	void delete(Hashtable<String,ArrayList<Object>> in, String field);
+	long delete(Hashtable<String,ArrayList<Object>> in, String field);
 	
 }

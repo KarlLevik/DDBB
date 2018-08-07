@@ -6,21 +6,6 @@ import java.io.*;
 
 public class DdbbIO {
 
-	public static Hashtable<String,String> in2(String filename) throws Exception {
-
-		Hashtable<String,String> settings;
-
-		Gson g = new Gson();
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-
-		settings = g.fromJson(reader, Hashtable.class);
-
-		reader.close();
-
-		return settings;
-
-	}
-
 	public static DdbbConfig in(String filename) throws Exception {
 
 		DdbbConfig cfg = new DdbbConfig();
@@ -32,317 +17,326 @@ public class DdbbIO {
 
 			String name = reader.nextName();
 
-			if (name.equals("settings")) {
+			switch (name) {
+				case "settings":
 
-				reader.beginObject();
+					reader.beginObject();
 
-				while (reader.hasNext()) {
-					name = reader.nextName();
-					if(reader.peek() == JsonToken.STRING){
-						String val = reader.nextString();
-						cfg.settings.put(name, val);
-					} else if(reader.peek() == JsonToken.NUMBER){
-						cfg.settings.put(name, reader.nextInt());
-					} else if(reader.peek() == JsonToken.BOOLEAN){
-						cfg.settings.put(name, reader.nextBoolean());
-					} else {
-						reader.skipValue();
-						System.out.println("SKIPPED META OF INVALID TYPE!");
+					while (reader.hasNext()) {
+						name = reader.nextName();
+						if (reader.peek() == JsonToken.STRING) {
+							String val = reader.nextString();
+							cfg.settings.put(name, val);
+						} else if (reader.peek() == JsonToken.NUMBER) {
+							cfg.settings.put(name, reader.nextInt());
+						} else if (reader.peek() == JsonToken.BOOLEAN) {
+							cfg.settings.put(name, reader.nextBoolean());
+						} else {
+							reader.skipValue();
+							System.out.println("SKIPPED META OF INVALID TYPE!");
+						}
 					}
-				}
 
 
-				reader.endObject();
+					reader.endObject();
 
-			} else if (name.equals("setup")) {
+					break;
+				case "setup":
 
-				reader.beginObject();
+					reader.beginObject();
 
-				while(reader.hasNext()){
+					while (reader.hasNext()) {
 
-					name = reader.nextName();
+						name = reader.nextName();
 
-					if (name.equals("meta")) {
+						if (name.equals("meta")) {
 
-						reader.beginObject();
+							reader.beginObject();
 
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							if(reader.peek() == JsonToken.STRING){
-								cfg.setup.meta.put(name, reader.nextString());
-							} else if(reader.peek() == JsonToken.NUMBER){
-								cfg.setup.meta.put(name, reader.nextInt());
-							} else if(reader.peek() == JsonToken.BOOLEAN){
-								cfg.setup.meta.put(name, reader.nextBoolean());
-							} else {
-								reader.skipValue();
-								System.out.println("SKIPPED META OF INVALID TYPE!");
-							}
-						}
-
-						reader.endObject();
-
-					} else if(name.equals("data")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							ArrayList<Object> list = new ArrayList<Object>();
-							reader.beginArray();
-							while(reader.hasNext()){
-								if(reader.peek() == JsonToken.STRING){
-									list.add(reader.nextString());
-								} else if(reader.peek() == JsonToken.NUMBER){
-									list.add(reader.nextDouble());
-								} else if(reader.peek() == JsonToken.BOOLEAN){
-									list.add(reader.nextBoolean());
-								} else {
-									reader.skipValue();
-									System.out.println("SKIPPED VALUE OF INVALID TYPE!");
-								}
-							}
-							reader.endArray();
-							cfg.setup.data.put(name, list);
-						}
-
-						reader.endObject();
-					}
-				}
-
-				reader.endObject();
-
-			} else if (name.equals("create")) {
-
-				reader.beginObject();
-				while(reader.hasNext()) {
-
-					name = reader.nextName();
-
-					if (name.equals("meta")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							if(reader.peek() == JsonToken.STRING){
-								cfg.create.meta.put(name, reader.nextString());
-							} else if(reader.peek() == JsonToken.NUMBER){
-								cfg.create.meta.put(name, reader.nextInt());
-							} else if(reader.peek() == JsonToken.BOOLEAN){
-								cfg.create.meta.put(name, reader.nextBoolean());
-							} else {
-								reader.skipValue();
-								System.out.println("SKIPPED META OF INVALID TYPE!");
-							}
-						}
-
-						reader.endObject();
-
-					} else if(name.equals("data")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							ArrayList<Object> list = new ArrayList<Object>();
-							reader.beginArray();
-							while(reader.hasNext()){
-								if(reader.peek() == JsonToken.STRING){
-									list.add(reader.nextString());
-								} else if(reader.peek() == JsonToken.NUMBER){
-									list.add(reader.nextDouble());
-								} else if(reader.peek() == JsonToken.BOOLEAN){
-									list.add(reader.nextBoolean());
-								} else {
-									reader.skipValue();
-									System.out.println("SKIPPED VALUE OF INVALID TYPE!");
-								}
-							}
-							reader.endArray();
-							cfg.create.data.put(name, list);
-						}
-
-						reader.endObject();
-					}
-				}
-
-				reader.endObject();
-
-			} else if (name.equals("read")) {
-
-				reader.beginObject();
-				while(reader.hasNext()) {
-
-					name = reader.nextName();
-
-					if (name.equals("meta")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							if (reader.peek() == JsonToken.STRING) {
-								cfg.read.meta.put(name, reader.nextString());
-							} else if (reader.peek() == JsonToken.NUMBER) {
-								cfg.read.meta.put(name, reader.nextInt());
-							} else if (reader.peek() == JsonToken.BOOLEAN) {
-								cfg.read.meta.put(name, reader.nextBoolean());
-							} else {
-								reader.skipValue();
-								System.out.println("SKIPPED META OF INVALID TYPE!");
-							}
-						}
-
-						reader.endObject();
-
-					} else if (name.equals("data")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							ArrayList<Object> list = new ArrayList<Object>();
-							reader.beginArray();
 							while (reader.hasNext()) {
+								name = reader.nextName();
 								if (reader.peek() == JsonToken.STRING) {
-									list.add(reader.nextString());
+									cfg.setup.meta.put(name, reader.nextString());
 								} else if (reader.peek() == JsonToken.NUMBER) {
-									list.add(reader.nextDouble());
+									cfg.setup.meta.put(name, reader.nextInt());
 								} else if (reader.peek() == JsonToken.BOOLEAN) {
-									list.add(reader.nextBoolean());
+									cfg.setup.meta.put(name, reader.nextBoolean());
 								} else {
 									reader.skipValue();
-									System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									System.out.println("SKIPPED META OF INVALID TYPE!");
 								}
 							}
-							reader.endArray();
-							cfg.read.data.put(name, list);
-						}
 
-						reader.endObject();
-					}
-				}
+							reader.endObject();
 
-				reader.endObject();
+						} else if (name.equals("data")) {
 
-			} else if (name.equals("update")) {
+							reader.beginObject();
 
-				reader.beginObject();
-				while(reader.hasNext()) {
-
-					name = reader.nextName();
-
-					if (name.equals("meta")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							if (reader.peek() == JsonToken.STRING) {
-								cfg.update.meta.put(name, reader.nextString());
-							} else if (reader.peek() == JsonToken.NUMBER) {
-								cfg.update.meta.put(name, reader.nextInt());
-							} else if (reader.peek() == JsonToken.BOOLEAN) {
-								cfg.update.meta.put(name, reader.nextBoolean());
-							} else {
-								reader.skipValue();
-								System.out.println("SKIPPED META OF INVALID TYPE!");
-							}
-						}
-
-						reader.endObject();
-
-					} else if (name.equals("data")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							ArrayList<Object> list = new ArrayList<Object>();
-							reader.beginArray();
 							while (reader.hasNext()) {
-								if (reader.peek() == JsonToken.STRING) {
-									list.add(reader.nextString());
-								} else if (reader.peek() == JsonToken.NUMBER) {
-									list.add(reader.nextDouble());
-								} else if (reader.peek() == JsonToken.BOOLEAN) {
-									list.add(reader.nextBoolean());
-								} else {
-									reader.skipValue();
-									System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+								name = reader.nextName();
+								ArrayList<Object> list = new ArrayList<>();
+								reader.beginArray();
+								while (reader.hasNext()) {
+									if (reader.peek() == JsonToken.STRING) {
+										list.add(reader.nextString());
+									} else if (reader.peek() == JsonToken.NUMBER) {
+										list.add(reader.nextDouble());
+									} else if (reader.peek() == JsonToken.BOOLEAN) {
+										list.add(reader.nextBoolean());
+									} else {
+										reader.skipValue();
+										System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									}
 								}
+								reader.endArray();
+								cfg.setup.data.put(name, list);
 							}
-							reader.endArray();
-							cfg.update.data.put(name, list);
-						}
 
-						reader.endObject();
+							reader.endObject();
+						}
 					}
-				}
 
-				reader.endObject();
+					reader.endObject();
 
-			} else if (name.equals("delete")) {
+					break;
+				case "create":
 
-				reader.beginObject();
-				while(reader.hasNext()) {
+					reader.beginObject();
+					while (reader.hasNext()) {
 
-					name = reader.nextName();
+						name = reader.nextName();
 
-					if (name.equals("meta")) {
+						if (name.equals("meta")) {
 
-						reader.beginObject();
+							reader.beginObject();
 
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							if (reader.peek() == JsonToken.STRING) {
-								cfg.delete.meta.put(name, reader.nextString());
-							} else if (reader.peek() == JsonToken.NUMBER) {
-								cfg.delete.meta.put(name, reader.nextInt());
-							} else if (reader.peek() == JsonToken.BOOLEAN) {
-								cfg.delete.meta.put(name, reader.nextBoolean());
-							} else {
-								reader.skipValue();
-								System.out.println("SKIPPED META OF INVALID TYPE!");
-							}
-						}
-
-						reader.endObject();
-
-					} else if (name.equals("data")) {
-
-						reader.beginObject();
-
-						while (reader.hasNext()) {
-							name = reader.nextName();
-							ArrayList<Object> list = new ArrayList<Object>();
-							reader.beginArray();
 							while (reader.hasNext()) {
+								name = reader.nextName();
 								if (reader.peek() == JsonToken.STRING) {
-									list.add(reader.nextString());
+									cfg.create.meta.put(name, reader.nextString());
 								} else if (reader.peek() == JsonToken.NUMBER) {
-									list.add(reader.nextDouble());
+									cfg.create.meta.put(name, reader.nextInt());
 								} else if (reader.peek() == JsonToken.BOOLEAN) {
-									list.add(reader.nextBoolean());
+									cfg.create.meta.put(name, reader.nextBoolean());
 								} else {
 									reader.skipValue();
-									System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									System.out.println("SKIPPED META OF INVALID TYPE!");
 								}
 							}
-							reader.endArray();
-							cfg.delete.data.put(name, list);
+
+							reader.endObject();
+
+						} else if (name.equals("data")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								ArrayList<Object> list = new ArrayList<>();
+								reader.beginArray();
+								while (reader.hasNext()) {
+									if (reader.peek() == JsonToken.STRING) {
+										list.add(reader.nextString());
+									} else if (reader.peek() == JsonToken.NUMBER) {
+										list.add(reader.nextDouble());
+									} else if (reader.peek() == JsonToken.BOOLEAN) {
+										list.add(reader.nextBoolean());
+									} else {
+										reader.skipValue();
+										System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									}
+								}
+								reader.endArray();
+								cfg.create.data.put(name, list);
+							}
+
+							reader.endObject();
 						}
-
-						reader.endObject();
 					}
-				}
 
-				reader.endObject();
+					reader.endObject();
 
-			} else {
-				reader.skipValue(); //avoid some unhandle events
-				System.out.println("SKIPPED DATA WITH INVALID TAG!");
+					break;
+				case "read":
+
+					reader.beginObject();
+					while (reader.hasNext()) {
+
+						name = reader.nextName();
+
+						if (name.equals("meta")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								if (reader.peek() == JsonToken.STRING) {
+									cfg.read.meta.put(name, reader.nextString());
+								} else if (reader.peek() == JsonToken.NUMBER) {
+									cfg.read.meta.put(name, reader.nextInt());
+								} else if (reader.peek() == JsonToken.BOOLEAN) {
+									cfg.read.meta.put(name, reader.nextBoolean());
+								} else {
+									reader.skipValue();
+									System.out.println("SKIPPED META OF INVALID TYPE!");
+								}
+							}
+
+							reader.endObject();
+
+						} else if (name.equals("data")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								ArrayList<Object> list = new ArrayList<>();
+								reader.beginArray();
+								while (reader.hasNext()) {
+									if (reader.peek() == JsonToken.STRING) {
+										list.add(reader.nextString());
+									} else if (reader.peek() == JsonToken.NUMBER) {
+										list.add(reader.nextDouble());
+									} else if (reader.peek() == JsonToken.BOOLEAN) {
+										list.add(reader.nextBoolean());
+									} else {
+										reader.skipValue();
+										System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									}
+								}
+								reader.endArray();
+								cfg.read.data.put(name, list);
+							}
+
+							reader.endObject();
+						}
+					}
+
+					reader.endObject();
+
+					break;
+				case "update":
+
+					reader.beginObject();
+					while (reader.hasNext()) {
+
+						name = reader.nextName();
+
+						if (name.equals("meta")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								if (reader.peek() == JsonToken.STRING) {
+									cfg.update.meta.put(name, reader.nextString());
+								} else if (reader.peek() == JsonToken.NUMBER) {
+									cfg.update.meta.put(name, reader.nextInt());
+								} else if (reader.peek() == JsonToken.BOOLEAN) {
+									cfg.update.meta.put(name, reader.nextBoolean());
+								} else {
+									reader.skipValue();
+									System.out.println("SKIPPED META OF INVALID TYPE!");
+								}
+							}
+
+							reader.endObject();
+
+						} else if (name.equals("data")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								ArrayList<Object> list = new ArrayList<>();
+								reader.beginArray();
+								while (reader.hasNext()) {
+									if (reader.peek() == JsonToken.STRING) {
+										list.add(reader.nextString());
+									} else if (reader.peek() == JsonToken.NUMBER) {
+										list.add(reader.nextDouble());
+									} else if (reader.peek() == JsonToken.BOOLEAN) {
+										list.add(reader.nextBoolean());
+									} else {
+										reader.skipValue();
+										System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									}
+								}
+								reader.endArray();
+								cfg.update.data.put(name, list);
+							}
+
+							reader.endObject();
+						}
+					}
+
+					reader.endObject();
+
+					break;
+				case "delete":
+
+					reader.beginObject();
+					while (reader.hasNext()) {
+
+						name = reader.nextName();
+
+						if (name.equals("meta")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								if (reader.peek() == JsonToken.STRING) {
+									cfg.delete.meta.put(name, reader.nextString());
+								} else if (reader.peek() == JsonToken.NUMBER) {
+									cfg.delete.meta.put(name, reader.nextInt());
+								} else if (reader.peek() == JsonToken.BOOLEAN) {
+									cfg.delete.meta.put(name, reader.nextBoolean());
+								} else {
+									reader.skipValue();
+									System.out.println("SKIPPED META OF INVALID TYPE!");
+								}
+							}
+
+							reader.endObject();
+
+						} else if (name.equals("data")) {
+
+							reader.beginObject();
+
+							while (reader.hasNext()) {
+								name = reader.nextName();
+								ArrayList<Object> list = new ArrayList<>();
+								reader.beginArray();
+								while (reader.hasNext()) {
+									if (reader.peek() == JsonToken.STRING) {
+										list.add(reader.nextString());
+									} else if (reader.peek() == JsonToken.NUMBER) {
+										list.add(reader.nextDouble());
+									} else if (reader.peek() == JsonToken.BOOLEAN) {
+										list.add(reader.nextBoolean());
+									} else {
+										reader.skipValue();
+										System.out.println("SKIPPED VALUE OF INVALID TYPE!");
+									}
+								}
+								reader.endArray();
+								cfg.delete.data.put(name, list);
+							}
+
+							reader.endObject();
+						}
+					}
+
+					reader.endObject();
+
+					break;
+				default:
+					reader.skipValue(); //avoid some unhandle events
+
+					System.out.println("SKIPPED DATA WITH INVALID TAG!");
+					break;
 			}
 		}
 

@@ -19,7 +19,7 @@ public class DdbbTest {
 
 	// Method to run the test
 	public DdbbReport run(){
-		Long start_time = System.currentTimeMillis();
+		Long start_time = System.nanoTime();
 
 		switch ((String) cfg.settings.get("db_type")) {
 			case "MongoDB": db = new MongoInterface(cfg);
@@ -179,13 +179,20 @@ public class DdbbTest {
 	// Creates the records in the database
 	private void create() throws Exception {
 		Integer record_number = 0;
+		List<Long> results;
 		while(record_number < (int) cfg.create.meta.get("amount")){
 			Integer record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 			generate(cfg.create, record_step);
+			results = new ArrayList<>();
 			for(int i = 0; i < record_step; i++){
-				db.create(generated_set.get(i));
+				results.add(db.create(generated_set.get(i)));
 				record_number++;
 			}
+			long total_result = 0;
+			for(int a = 0; a < results.size(); a++){
+				total_result = total_result + results.get(a);
+			}
+			report.save("create", "step_average", Long.toString(total_result / results.size()));
 
 		}
 

@@ -28,21 +28,15 @@ public class RedisInterface implements Db {
 
     }
 
-    public void create(Hashtable<String,ArrayList<Object>> in){
-        System.out.println("RedisInterface");
+    public long create(Hashtable<String,ArrayList<Object>> in){
+        return Long.parseLong("0");
     }
 
-    public void read(Hashtable<String,ArrayList<Object>> in, String field){
-        System.out.println("RedisInterface");
-    }
+    public long read(Hashtable<String,ArrayList<Object>> in, String field){ return Long.parseLong("0"); }
 
-    public void update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
-        System.out.println("RedisInterface");
-    }
+    public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){ return Long.parseLong("0"); }
 
-    public void delete(Hashtable<String,ArrayList<Object>> in, String field){
-        System.out.println("RedisInterface");
-    }
+    public long delete(Hashtable<String,ArrayList<Object>> in, String field){ return Long.parseLong("0"); }
 
     public static void main(String[] args){
         System.out.println("test");
