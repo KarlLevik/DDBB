@@ -44,7 +44,7 @@ public class MongoInterface implements Db {
 	public void table(){
 		
 		// Retrieving a collection
-		collection = db.getCollection((String) this.cfg.settings.get("collection"));
+		collection = db.getCollection((String) this.cfg.settings.get("table"));
 
 	}
 
@@ -78,7 +78,7 @@ public class MongoInterface implements Db {
 		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
 
 		time_before = System.nanoTime();
-		collection.find(Filters.eq(rand_key, in.get(rand_key)));
+		//collection.find(Filters.eq(rand_key, in.get(rand_key)));
 		time_after = System.nanoTime();
 
 		return time_after - time_before;

@@ -1,6 +1,6 @@
 {
   "settings" : {
-    "collection": "testCol5",
+    "table": "testCol5",
     "db_type": "MongoDB",
     "b_name": "st1 ho!£% e",
     "db_name": "myDbTest5",
@@ -41,12 +41,12 @@
       "save" : true,
       "total" : true,
       "step" : true,
-      "step_generate" : 10,
+      "step_generate" : 1,
       "step_measurement" : 10,
       "response" : false,
       "throughput" : false,
       "time" : true,
-      "amount" : 100,
+      "amount" : 1000,
       "size" : 100
     },
     "data" : {

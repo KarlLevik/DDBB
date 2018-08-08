@@ -28,8 +28,8 @@ public class DdbbTest {
 			////	break;
 			//case "Cassandra": db = new CassandraInterface(cfg);
 			////	break;
-			//case "Redis": db = new RedisInterface(cfg);
-			////	break;
+			case "Redis": db = new RedisInterface(cfg);
+				break;
 		}
 
 		db.connectDb();
