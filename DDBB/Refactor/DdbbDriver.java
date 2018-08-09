@@ -12,7 +12,8 @@ public class DdbbDriver {
 					DdbbTest test = new DdbbTest(test_name + ".json");
 					if(test.validate()){
 
-						DdbbIO.out(test_name + "_RESULT.json", test.run());
+						test.start();
+						DdbbIO.out(test_name + "_RESULT.json", test.report);
 
 						System.out.println("Finished test number " + i + " with the name \"" + test.cfg.settings.get("b_name") + "\".");
 

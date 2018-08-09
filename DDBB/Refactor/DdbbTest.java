@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 
-public class DdbbTest {
+public class DdbbTest implements Runnable {
 
 	public DdbbConfig cfg;
 	public ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
@@ -10,15 +10,26 @@ public class DdbbTest {
 	private String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" +
 			DdbbTool.generateRandomString(5, true);
 	public Db db;
+	private Thread t;
+	private String thread_name;
 
 	DdbbTest(String filename) throws Exception {
 
 		cfg = DdbbIO.in(filename);
+		thread_name = "Thread_" + cfg.settings.get("b_name").toString();
 
 	}
 
+	public void start() {
+		System.out.println("Starting " +  thread_name );
+		if (t == null) {
+			t = new Thread (this, thread_name);
+			t.start();
+		}
+	}
+
 	// Method to run the test
-	public DdbbReport run(){
+	public void run(){
 		Long start_time = System.nanoTime();
 
 		switch ((String) cfg.settings.get("db_type")) {
@@ -39,7 +50,7 @@ public class DdbbTest {
 		// Carries out the creation, reading, updating or deleletion of records
 		try {
 
-			//warmup();
+			warmup();
 			if(!cfg.setup.isEmpty()){
 				setup();
 			}
@@ -60,8 +71,6 @@ public class DdbbTest {
 		} catch(Exception e){
 			System.out.println(e);
 		}
-
-		return report;
 	}
 
 	public boolean validate(){

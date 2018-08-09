@@ -1,9 +1,9 @@
 {
   "settings" : {
-    "table": "testCol00",
+    "table": "testCol1",
     "db_type": "MongoDB",
     "b_name": "st1 ho!£% e",
-    "db_name": "myDbTest5",
+    "db_name": "myDbTestThread1000",
     "ip": "localhost",
     "port": 27017,
     "user": "sampleUser",

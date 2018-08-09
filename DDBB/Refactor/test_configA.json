@@ -1,0 +1,54 @@
+{
+	"settings" : {
+		"table": "testCol5",
+		"db_type": "MongoDB",
+		"b_name": "test2",
+		"db_name": "myDbTest5",
+		"ip": "localhost",
+		"port": 27017,
+		"user": "sampleUser",
+		"pwd": "password",
+		"total_time": true
+	},
+	"create" : {
+		"meta" : {
+			"save" : true,
+			"total" : true,
+			"step" : true,
+			"step_generate" : 1,
+			"step_measurement" : 10,
+			"response" : false,
+			"throughput" : false,
+			"time" : true,
+			"amount" : 100,
+			"size" : 100
+		},
+		"data" : {
+			"name" : ["id", "name", "results"],
+			"kv" : ["KEY", "VALUE", "VALUE"],
+			"val" : ["INT", "STRING", "DOUBLE"],
+			"length" : [1, 1, 5],
+			"length_up_to" : [true, true, false],
+			"size" : [2000, 2000, 10],
+			"size_up_to" : [false, false, true],
+			"in_order" : [true, false, false],
+			"unique" : [true, true, false]
+		}
+	},
+	"delete" : {
+		"meta" : {
+			"save" : true,
+			"total" : true,
+			"step" : true,
+			"step_generate" : 10,
+			"step_measurement" : 10,
+			"response" : false,
+			"throughput" : false,
+			"time" : true,
+			"amount" : 10,
+		},
+		"data" : {
+			"fields" : ["results"]
+		}
+	}
+}
