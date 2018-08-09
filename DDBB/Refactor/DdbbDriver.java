@@ -14,6 +14,8 @@ public class DdbbDriver {
 
 						DdbbIO.out(test_name + "_RESULT.json", test.run());
 
+						System.out.println("Finished test number " + i + " with the name \"" + test.cfg.settings.get("b_name") + "\".");
+
 					}
 
 				}

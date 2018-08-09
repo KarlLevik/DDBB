@@ -360,20 +360,4 @@ public class DdbbIO {
 
 	}
 
-	public static void main(String[] args) {
-		try {
-            /*DdbbProperty test = in("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
-            System.out.println("test = " + test);
-            Hashtable<String,ArrayList<String>> test2 = in2("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
-            System.out.println("test2 = " + test2);
-            //System.out.println("testB = " + test2.get("setup").get("meta").get("save"));
-            */
-			DdbbConfig test = in("/home/skace/IdeaProjects/DDBB/src/test_config3.json");
-			System.out.println("test3 = " + test);
-
-		} catch(Exception e){
-			System.out.println(e);
-		}
-	}
-
 }

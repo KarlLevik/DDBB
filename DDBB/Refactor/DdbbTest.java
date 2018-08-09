@@ -39,7 +39,7 @@ public class DdbbTest {
 		// Carries out the creation, reading, updating or deleletion of records
 		try {
 
-			warmup();
+			//warmup();
 			if(!cfg.setup.isEmpty()){
 				setup();
 			}
@@ -92,7 +92,7 @@ public class DdbbTest {
 		Hashtable<String, Object> meta = property.meta;
 		Hashtable<String, ArrayList<Object>> data = property.data;
 		Integer counter = 0;
-		//ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
+		generated_set = new ArrayList<>();
 
 		// 0 - From file
 		// 1 - To file
@@ -202,14 +202,19 @@ public class DdbbTest {
 			Integer record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 			generate(cfg.create, record_step);
 			results = new ArrayList<>();
+
 			for(int i = 0; i < record_step; i++){
 				results.add(db.create(generated_set.get(i)));
 				record_number++;
+
 			}
+
 			long total_result = 0;
+
 			for(int a = 0; a < results.size(); a++){
 				total_result = total_result + results.get(a);
 			}
+
 			report.save("create", "step_average", Long.toString(total_result / results.size()));
 
 		}
@@ -278,7 +283,7 @@ public class DdbbTest {
 					for (int j = 0; j < random_record_index - 1; j++) {
 						br.readLine();
 					}
-					list = new ArrayList<String>(Arrays.asList(br.readLine().split(",")));
+					list = new ArrayList<>(Arrays.asList(br.readLine().split(",")));
 
 				} catch(Exception e){
 					System.out.println(e);

@@ -6,7 +6,7 @@ public class DdbbTool {
 	// Method to randomly generate a random string
 	public static String generateRandomString(Integer length, Boolean use_plain){		
 
-		Random r = new Random();
+		Random r = new Random(System.nanoTime());
 		String rng_val = "";
 		// Allows you to change which symbols are in the alphabet for the random string generation
 		String alphabet = use_plain ? "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" : 
@@ -26,7 +26,7 @@ public class DdbbTool {
 	// Method to randomly generate a random string
 	public static boolean generateRandomBoolean(){
 
-		Random r = new Random();
+		Random r = new Random(System.nanoTime());
 		Boolean rng_val;
 
 
@@ -39,7 +39,7 @@ public class DdbbTool {
 	// Method to randomly generate a random string
 	public static Integer generateRandomInteger(Integer size, boolean size_up_to){
 
-		Random r = new Random();
+		Random r = new Random(System.nanoTime());
 		Integer rng_val;
 
 		Integer roof = size;
@@ -54,7 +54,7 @@ public class DdbbTool {
 	// Method to randomly generate a random string
 	public static Double generateRandomDouble(Double size, Boolean size_up_to){
 
-		Random r = new Random();
+		Random r = new Random(System.nanoTime());
 		Double rng_val;
 
 		Double roof = size;
