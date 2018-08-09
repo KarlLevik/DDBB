@@ -6,14 +6,13 @@ public class DdbbDriver {
 
 		try {
 
-			for(int i = 0; i<100; i++){
+			for(int i = 0; i<2; i++){
 				String test_name = "test_config" + i;
 				if((new File(test_name + ".json")).exists()){
-					DdbbTest test = new DdbbTest(test_name + ".json");
+					DdbbTest test = new DdbbTest(test_name);
 					if(test.validate()){
 
 						test.start();
-						DdbbIO.out(test_name + "_RESULT.json", test.report);
 
 						System.out.println("Finished test number " + i + " with the name \"" + test.cfg.settings.get("b_name") + "\".");
 

@@ -12,10 +12,11 @@ public class DdbbTest implements Runnable {
 	public Db db;
 	private Thread t;
 	private String thread_name;
+	private String file_name;
 
-	DdbbTest(String filename) throws Exception {
-
-		cfg = DdbbIO.in(filename);
+	DdbbTest(String f) throws Exception {
+		file_name = f;
+		cfg = DdbbIO.in(file_name + ".json");
 		thread_name = "Thread_" + cfg.settings.get("b_name").toString();
 
 	}
@@ -67,6 +68,8 @@ public class DdbbTest implements Runnable {
 				delete();
 			}
 			db.disconnectDb();
+
+			DdbbIO.out(file_name + "_RESULT.json", report);
 
 		} catch(Exception e){
 			System.out.println(e);
@@ -305,6 +308,7 @@ public class DdbbTest implements Runnable {
 			for(int a = 0; a < results.size(); a++){
 				total_result = total_result + results.get(a);
 			}
+
 			report.save("delete", "step_average", Long.toString(total_result / results.size()));
 
 		}
