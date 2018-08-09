@@ -17,6 +17,6 @@ interface Db {
 
 	long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up);
 
-	long delete(Hashtable<String,ArrayList<Object>> in, String field);
+	long delete(String key, String value);
 	
 }

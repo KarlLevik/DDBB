@@ -35,7 +35,7 @@ public class CassandraInterface implements Db {
 
     public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){ return Long.parseLong("0"); }
 
-    public long delete(Hashtable<String,ArrayList<Object>> in, String field){ return Long.parseLong("0"); }
+    public long delete(String key, String value){ return Long.parseLong("0"); }
 
     public static void main(String[] args){
         System.out.println("test");

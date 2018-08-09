@@ -96,15 +96,12 @@ public class MongoInterface implements Db {
 	
 	}
 
-	public long delete(Hashtable<String,ArrayList<Object>> in, String field){
+	public long delete(String key, String value){
 		Long time_before;
 		Long time_after;
 
-		Integer amount = in.keySet().size();
-		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
-
 		time_before = System.nanoTime();
-		collection.deleteOne(Filters.eq(rand_key, in.get(rand_key)));
+		collection.deleteOne(Filters.eq(key, value));
 		time_after = System.nanoTime();
 
 		return time_after - time_before;

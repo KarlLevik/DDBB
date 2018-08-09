@@ -39,6 +39,7 @@ public class DdbbTest {
 		// Carries out the creation, reading, updating or deleletion of records
 		try {
 
+			warmup();
 			if(!cfg.setup.isEmpty()){
 				setup();
 			}
@@ -67,7 +68,24 @@ public class DdbbTest {
 		return true;
 	}
 
-	private void setup(){	}
+	private void setup(){
+		System.out.println("Set-up finished");
+	}
+
+	private void warmup(){
+		Hashtable<String,ArrayList<Object>> plain_object;
+
+		for(int i = 0; i < 11000; i++){
+			plain_object = new Hashtable<>();
+			String plain_string = DdbbTool.generateRandomString(2, false);
+			ArrayList<Object> plain_array = new ArrayList<>();
+			plain_array.add(plain_string);
+			plain_object.put(String.valueOf(i), plain_array);
+			db.create(plain_object);
+			db.delete(String.valueOf(i), plain_string);
+		}
+		System.out.println("Warm-up finished");
+	}
 
 	private void generate(DdbbProperty property, Integer amount) throws Exception {
 
@@ -196,6 +214,8 @@ public class DdbbTest {
 
 		}
 
+		System.out.println("Create test finished");
+
 	}
 
 	// Reads the records in the database
@@ -217,6 +237,8 @@ public class DdbbTest {
 			}
 
 		}
+
+		System.out.println("Read test finished");
 	}
 
 	// Updates the records in the database
@@ -231,26 +253,52 @@ public class DdbbTest {
 			}
 
 		}
+
+		System.out.println("Update finished");
+
 	}
 
 	// Deletes the records in the database
 	private void delete() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.delete.meta.get("amount")){
+
+		while(record_number < (int) cfg.delete.meta.get("amount")){
 			//Integer record_step = (((int) cfg.delete.meta.get("step_generate") > ((int) cfg.delete.meta.get("amount") - record_number)) ? (int) cfg.delete.meta.get("step_generate") : ((int) cfg.delete.meta.get("amount") - record_number));
-			Integer record_step = (int) cfg.delete.meta.get("amount");
-			generate(cfg.delete, record_step);
-			String field = "";
-			for(int c = 0; c < cfg.delete.data.get("in_order").size();c++){
-				if((boolean) cfg.delete.data.get("in_order").get(c)){
-					field = (String) cfg.delete.data.get("name").get(c);
-				}
-			}
+			Integer record_step = (int) cfg.delete.meta.get("step_generate");
+
+			List<Long> results = new ArrayList<>();
+
 			for(int i = 0; i < record_step; i++){
-				db.read(generated_set.get(i), field);
+				Integer random_field_index = (new Random()).nextInt(cfg.delete.data.get("fields").size() - 1);
+				String random_field = cfg.delete.data.get("fields").get(random_field_index).toString();
+				Integer random_record_index = (new Random()).nextInt((int) cfg.setup.meta.get("amount") + (int) cfg.create.meta.get("amount"));
+
+				ArrayList<String> list = new ArrayList<>();
+				try (BufferedReader br = new BufferedReader(new FileReader("del.dat"))) {
+					for (int j = 0; j < random_record_index - 1; j++) {
+						br.readLine();
+					}
+					list = new ArrayList<String>(Arrays.asList(br.readLine().split(",")));
+
+				} catch(Exception e){
+					System.out.println(e);
+				}
+
+				results.add(db.delete(random_field, list.get(random_field_index)));
 				record_number++;
+
 			}
+
+			long total_result = 0;
+			for(int a = 0; a < results.size(); a++){
+				total_result = total_result + results.get(a);
+			}
+			report.save("delete", "step_average", Long.toString(total_result / results.size()));
+
 		}
+
+		System.out.println("Delete test finished");
+
 	}
 
 }
