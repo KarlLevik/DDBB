@@ -66,9 +66,7 @@ public class DdbbTest {
 
 	public boolean validate(){
 		return true;
-	}
-
-	private void setup(){
+	}private void setup(){
 		System.out.println("Set-up finished");
 	}
 
@@ -85,6 +83,14 @@ public class DdbbTest {
 			db.delete(String.valueOf(i), plain_string);
 		}
 		System.out.println("Warm-up finished");
+
+		System.out.println("Sleeping for 9 seconds as part of cool-down");
+		try {
+			Thread.sleep(9000);
+		} catch(Exception e){
+			System.out.println(e);
+		}
+		System.out.println("Cool-down finished.");
 	}
 
 	private void generate(DdbbProperty property, Integer amount) throws Exception {
@@ -162,14 +168,6 @@ public class DdbbTest {
 			counter++;
 
 		}
-
-		/*if((int) meta.get("generate_method") == 0){
-
-		} else if((int) meta.get("generate_method") == 1){
-
-		} else {
-
-		}*/
 
 	}
 
