@@ -1,3 +1,9 @@
 /mongo-benchmark-db
 /DDBB/MongoDriver.class
 /DDBB/*.txt
+/mongo-java-driver-3.2.1.jar
+/.gitignore.swp
+/DDBB/Refactor/.idea/
+/DDBB/Refactor/Refactor.iml
+/DDBB/Refactor/out/
+/mongo-benchmarking-db/
