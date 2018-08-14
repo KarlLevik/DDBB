@@ -19,7 +19,13 @@ public class DdbbTest implements Runnable {
 		cfg = DdbbIO.in(file_name + ".json");
 		thread_name = "Thread_" + cfg.settings.get("b_name").toString();
 
-		File file = new File(file_name + "_GNR8.txt");
+		File file = new File(file_name + "_CRTE_GNR8.txt");
+		file.delete();
+		file.createNewFile();
+		file = new File(file_name + "_READ_GNR8.txt");
+		file.delete();
+		file.createNewFile();
+		file = new File(file_name + "_STUP_GNR8.txt");
 		file.delete();
 		file.createNewFile();
 
@@ -82,8 +88,17 @@ public class DdbbTest implements Runnable {
 
 	public boolean validate(){
 		return true;
-	}private void setup(){
+	}
+
+	private void setup(){
+
 		System.out.println("Set-up finished");
+
+		/*
+		if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+			DdbbIO.out_generated(file_name + "_STUP_GNR8.txt", generated_set);
+		}
+		*/
 	}
 
 	private void warmup(){
@@ -181,9 +196,7 @@ public class DdbbTest implements Runnable {
 			}
 
 			generated_set.add(generated);
-			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-				DdbbIO.out_generated(file_name + "_GNR8.txt", generated_set);
-			}
+
 			counter++;
 
 		}
@@ -218,6 +231,11 @@ public class DdbbTest implements Runnable {
 		while(record_number < (int) cfg.create.meta.get("amount")){
 			Integer record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 			generate(cfg.create, record_step);
+
+			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+				DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
+			}
+
 			results = new ArrayList<>();
 
 			for(int i = 0; i < record_step; i++){
@@ -247,6 +265,11 @@ public class DdbbTest implements Runnable {
 			//Integer record_step = (((int) cfg.read.meta.get("step_generate") > ((int) cfg.read.meta.get("amount") - record_number)) ? (int) cfg.read.meta.get("step_generate") : ((int) cfg.read.meta.get("amount") - record_number));
 			Integer record_step = (int) cfg.read.meta.get("amount");
 			generate(cfg.read, record_step);
+
+			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
+			}
+
 			String field = "";
 			for(int c = 0; c < cfg.read.data.get("in_order").size();c++){
 				if((boolean) cfg.read.data.get("in_order").get(c)){
