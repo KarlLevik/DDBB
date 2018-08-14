@@ -19,6 +19,10 @@ public class DdbbTest implements Runnable {
 		cfg = DdbbIO.in(file_name + ".json");
 		thread_name = "Thread_" + cfg.settings.get("b_name").toString();
 
+		File file = new File(file_name + "_GNR8.txt");
+		file.delete();
+		file.createNewFile();
+
 	}
 
 	public void start() {
@@ -51,7 +55,7 @@ public class DdbbTest implements Runnable {
 		// Carries out the creation, reading, updating or deleletion of records
 		try {
 
-			warmup();
+			//warmup();
 			if(!cfg.setup.isEmpty()){
 				setup();
 			}
@@ -96,9 +100,9 @@ public class DdbbTest implements Runnable {
 		}
 		System.out.println("Warm-up finished");
 
-		System.out.println("Sleeping for 9 seconds as part of cool-down");
+		System.out.println("Sleeping for 10 seconds as part of cool-down");
 		try {
-			Thread.sleep(9000);
+			Thread.sleep(10000);
 		} catch(Exception e){
 			System.out.println(e);
 		}
@@ -112,7 +116,7 @@ public class DdbbTest implements Runnable {
 		Integer counter = 0;
 		generated_set = new ArrayList<>();
 
-		// 0 - From file
+		// 0 - From filefilename
 		// 1 - To file
 		// 2 - To RAM
 		// 3 - On the go
@@ -177,6 +181,9 @@ public class DdbbTest implements Runnable {
 			}
 
 			generated_set.add(generated);
+			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+				DdbbIO.out_generated(file_name + "_GNR8.txt", generated_set);
+			}
 			counter++;
 
 		}

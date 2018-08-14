@@ -8,7 +8,8 @@
     "port": 27017,
     "user": "sampleUser",
     "pwd": "password",
-    "total_time": true
+    "total_time": true,
+    "save_generated": true
   },
   "create" : {
     "meta" : {
@@ -20,8 +21,8 @@
       "response" : false,
       "throughput" : false,
       "time" : true,
-      "amount" : 10,
-      "size" : 100
+      "amount" : 1000,
+      "size" : 10
     },
     "data" : {
       "name" : ["id", "name", "results"],

@@ -360,4 +360,20 @@ public class DdbbIO {
 
 	}
 
+	public static void out_generated(String filename, ArrayList<Hashtable<String, ArrayList<Object>>> set) throws Exception {
+		File file = new File(filename);
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+		for(Hashtable<String, ArrayList<Object>> record : set){
+			for(String key : record.keySet()){
+				System.out.println("Array = " + record.get(key));
+				writer.write(key + "," + record.get(key));
+				writer.newLine();
+			}
+		}
+
+		writer.close();
+
+	}
+
 }

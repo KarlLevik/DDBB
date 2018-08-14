@@ -58,8 +58,8 @@ public class MongoInterface implements Db {
 
 		Document document = new Document();
 
-		for(Object key : in.keySet()){
-			document.append(key.toString(), in.get(key));
+		for(String key : in.keySet()){
+			document.append(key, in.get(key));
 		}
 
 		time_before = System.nanoTime();
