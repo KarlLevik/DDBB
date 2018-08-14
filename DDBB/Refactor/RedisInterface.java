@@ -81,7 +81,7 @@ public class RedisInterface implements Db {
         return time;
     }
 
-    public long read(Hashtable<String,ArrayList<Object>> in, String field){
+    public long read(Hashtable<String,ArrayList<Object>> in){
         return Long.parseLong("0");
     }
 

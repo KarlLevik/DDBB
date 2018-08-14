@@ -31,7 +31,7 @@ public class CassandraInterface implements Db {
         return Long.parseLong("0");
     }
 
-    public long read(Hashtable<String,ArrayList<Object>> in, String field){ return Long.parseLong("0"); }
+    public long read(Hashtable<String,ArrayList<Object>> in){ return Long.parseLong("0"); }
 
     public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){ return Long.parseLong("0"); }
 

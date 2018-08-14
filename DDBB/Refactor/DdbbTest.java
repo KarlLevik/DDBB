@@ -273,25 +273,71 @@ public class DdbbTest implements Runnable {
 	// Reads the records in the database
 	private void read() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.read.meta.get("amount")){
+		List<Long> results;
+
+		while(record_number < (int) cfg.read.meta.get("amount")){
 			//Integer record_step = (((int) cfg.read.meta.get("step_generate") > ((int) cfg.read.meta.get("amount") - record_number)) ? (int) cfg.read.meta.get("step_generate") : ((int) cfg.read.meta.get("amount") - record_number));
-			Integer record_step = (int) cfg.read.meta.get("amount");
-			generate(cfg.read, record_step);
+			Integer record_step = (int) cfg.read.meta.get("step_generate");
 
-			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
-			}
 
-			String field = "";
-			for(int c = 0; c < cfg.read.data.get("in_order").size();c++){
-				if((boolean) cfg.read.data.get("in_order").get(c)){
-					field = (String) cfg.read.data.get("name").get(c);
+
+
+			if(!this.cfg.read.meta.containsKey("load_file")){
+
+				generate(cfg.read, record_step);
+
+				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+					DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
 				}
+
+			} else {
+
+				generated_set = DdbbIO.in_generated((String) this.cfg.read.meta.get("load_file"), record_number, record_step);
+
+				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+					DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
+				}
+
 			}
+
+			if(this.cfg.read.meta.containsKey("fields")){
+
+				for(Hashtable<String, ArrayList<Object>> record : generated_set){
+					if(cfg.read.data.containsKey("fields")){
+						for(String old_field : record.keySet()){
+							if(!(cfg.read.data.get("fields").contains(old_field))){
+								record.remove(old_field);
+							}
+						}
+					}
+				}
+
+			}
+
+
+
+
+
+
+
+
+
+
+			results = new ArrayList<>();
+
 			for(int i = 0; i < record_step; i++){
-				db.read(generated_set.get(i), field);
+				results.add(db.read(generated_set.get(i)));
 				record_number++;
+
 			}
+
+			long total_result = 0;
+
+			for(int a = 0; a < results.size(); a++){
+				total_result = total_result + results.get(a);
+			}
+
+			report.save("read", "step_average", Long.toString(total_result / results.size()));
 
 		}
 
@@ -301,7 +347,7 @@ public class DdbbTest implements Runnable {
 	// Updates the records in the database
 	private void update() throws Exception {
 		Integer record_number = 0;
-		while(record_number != cfg.update.meta.get("amount")){
+		while(record_number < (int) cfg.update.meta.get("amount")){
 			Integer record_step = (((int) cfg.update.meta.get("step_generate") > ((int) cfg.update.meta.get("amount") - record_number)) ? (int) cfg.update.meta.get("step_generate") : ((int) cfg.update.meta.get("amount") - record_number));
 			generate(cfg.update, record_step);
 			for(int i = 0; i < record_step; i++){

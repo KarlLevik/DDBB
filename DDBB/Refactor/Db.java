@@ -13,7 +13,7 @@ interface Db {
 
 	long create(Hashtable<String,ArrayList<Object>> in);
 
-	long read(Hashtable<String,ArrayList<Object>> in, String field);
+	long read(Hashtable<String,ArrayList<Object>> in);
 
 	long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up);
 

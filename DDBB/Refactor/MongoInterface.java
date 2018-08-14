@@ -4,11 +4,13 @@ import java.util.Random;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection; 
-import com.mongodb.client.model.*; 
+import com.mongodb.client.model.*;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 
-import org.bson.Document;  
+import org.bson.Document;
+
+import static com.mongodb.client.model.Filters.*;
 
 public class MongoInterface implements Db {
 	
@@ -70,15 +72,18 @@ public class MongoInterface implements Db {
 
 	}
 
-	public long read(Hashtable<String,ArrayList<Object>> in, String field){
+	public long read(Hashtable<String,ArrayList<Object>> in){
 		Long time_before;
 		Long time_after;
 
-		Integer amount = in.keySet().size();
-		String rand_key = (String) in.keySet().toArray()[(new Random()).nextInt(amount)];
+		Document document = new Document();
+
+		for(String key : in.keySet()){
+			document.append(key, in.get(key));
+		}
 
 		time_before = System.nanoTime();
-		//collection.find(Filters.eq(rand_key, in.get(rand_key)));
+		collection.find(document);
 		time_after = System.nanoTime();
 
 		return time_after - time_before;
