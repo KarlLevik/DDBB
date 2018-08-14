@@ -1,9 +1,9 @@
 {
   "settings" : {
-    "table": "testCol1",
+    "table": "testColB",
     "db_type": "MongoDB",
     "b_name": "st1 ho!£% e",
-    "db_name": "myDbTestThread1000",
+    "db_name": "myDbTestThreadLoad",
     "ip": "localhost",
     "port": 27017,
     "user": "sampleUser",
@@ -22,7 +22,8 @@
       "throughput" : false,
       "time" : true,
       "amount" : 1000,
-      "size" : 10
+      "size" : 10,
+      "load_file": "test_config1_CRTE_GNR8_1.txt"
     },
     "data" : {
       "name" : ["id", "name", "results"],

@@ -230,10 +230,22 @@ public class DdbbTest implements Runnable {
 		List<Long> results;
 		while(record_number < (int) cfg.create.meta.get("amount")){
 			Integer record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
-			generate(cfg.create, record_step);
 
-			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-				DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
+			if(!this.cfg.create.meta.containsKey("load_file")){
+				generate(cfg.create, record_step);
+
+				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+					DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
+				}
+
+			} else {
+
+				generated_set = DdbbIO.in_generated((String) this.cfg.create.meta.get("load_file"), record_number, record_step);
+
+				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+					DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
+				}
+
 			}
 
 			results = new ArrayList<>();

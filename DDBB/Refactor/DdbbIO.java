@@ -370,9 +370,50 @@ public class DdbbIO {
 				writer.write(key + "," + record.get(key));
 				writer.newLine();
 			}
+
+			writer.write("-----");
+			writer.newLine();
+
 		}
 
 		writer.close();
+
+	}
+
+	public static ArrayList<Hashtable<String, ArrayList<Object>>> in_generated(String filename, int record_number, int record_step) throws Exception {
+
+		ArrayList<Hashtable<String, ArrayList<Object>>> input_array = new ArrayList<>();
+		Hashtable<String, ArrayList<Object>> input_record = new Hashtable<>();
+
+		File file = new File(filename);
+
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String input = reader.readLine();
+
+		for(int i = 0; i < record_number; i++){
+			reader.readLine();
+		}
+
+		while(input != null && input_array.size() < record_step){
+
+			input_record = new Hashtable<>();
+
+			while(!input.equals("-----")){
+
+				ArrayList<Object> v = new ArrayList<>(Arrays.asList(input.split(",", 2)[1].split(",")));
+				input_record.put(input.split(",", 2)[0], v);
+				System.out.println("TEST = " + input_record);
+				input = reader.readLine();
+
+			}
+
+			input_array.add(input_record);
+
+		}
+
+		reader.close();
+
+		return input_array;
 
 	}
 
