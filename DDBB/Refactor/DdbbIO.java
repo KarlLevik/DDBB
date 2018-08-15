@@ -366,6 +366,7 @@ public class DdbbIO {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 		for(Hashtable<String, ArrayList<Object>> record : set){
 			for(String key : record.keySet()){
+				System.out.println("key = " + key);
 				System.out.println("Array = " + record.get(key));
 				writer.write(key + "," + record.get(key));
 				writer.newLine();
@@ -381,22 +382,36 @@ public class DdbbIO {
 	}
 
 	public static ArrayList<Hashtable<String, ArrayList<Object>>> in_generated(String filename, int record_number, int record_step) throws Exception {
-
+		System.out.println("record_number = " + record_number);
 		ArrayList<Hashtable<String, ArrayList<Object>>> input_array = new ArrayList<>();
 		Hashtable<String, ArrayList<Object>> input_record = new Hashtable<>();
+		boolean initial = true;
 
 		File file = new File(filename);
 
 		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String input = reader.readLine();
+
+		String input = "";
 
 		for(int i = 0; i < record_number; i++){
-			reader.readLine();
+			while(input != null && !input.equals("-----")) {
+
+				input = reader.readLine();
+
+			}
+
+			input = reader.readLine();
+
 		}
 
 		while(input != null && input_array.size() < record_step){
 
 			input_record = new Hashtable<>();
+			System.out.println("input = " + input);
+			if(initial && record_number == 0){
+				input = reader.readLine();
+				initial = false;
+			}
 
 			while(!input.equals("-----")){
 
@@ -408,7 +423,7 @@ public class DdbbIO {
 			}
 
 			input_array.add(input_record);
-
+			input = reader.readLine();
 		}
 
 		reader.close();

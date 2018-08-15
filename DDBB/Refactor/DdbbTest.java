@@ -300,6 +300,8 @@ public class DdbbTest implements Runnable {
 
 			}
 
+			System.out.println("generated_set = " + generated_set);
+
 			if(this.cfg.read.meta.containsKey("fields")){
 
 				for(Hashtable<String, ArrayList<Object>> record : generated_set){
@@ -313,15 +315,6 @@ public class DdbbTest implements Runnable {
 				}
 
 			}
-
-
-
-
-
-
-
-
-
 
 			results = new ArrayList<>();
 
@@ -338,7 +331,7 @@ public class DdbbTest implements Runnable {
 			}
 
 			report.save("read", "step_average", Long.toString(total_result / results.size()));
-
+			System.out.println("record_number = " + record_number);
 		}
 
 		System.out.println("Read test finished");

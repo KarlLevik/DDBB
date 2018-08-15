@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection; 
 import com.mongodb.client.model.*;
@@ -83,8 +84,11 @@ public class MongoInterface implements Db {
 		}
 
 		time_before = System.nanoTime();
-		collection.find(document);
+		FindIterable it = (collection.find(document));
 		time_after = System.nanoTime();
+		System.out.println("---------------------------------------------");
+		System.out.println(in.keySet());
+		System.out.println(it.iterator().next());
 
 		return time_after - time_before;
 
