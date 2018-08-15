@@ -350,7 +350,6 @@ public class DdbbIO {
 
 	public static void out(String filename, DdbbReport report) throws Exception {
 
-		System.out.println("8");
 		Writer writer = new FileWriter(filename);
 		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbReport.class, new DdbbReportAdapter()).create();
 
@@ -366,8 +365,6 @@ public class DdbbIO {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 		for(Hashtable<String, ArrayList<Object>> record : set){
 			for(String key : record.keySet()){
-				System.out.println("key = " + key);
-				System.out.println("Array = " + record.get(key));
 				writer.write(key + "," + record.get(key));
 				writer.newLine();
 			}
@@ -382,9 +379,8 @@ public class DdbbIO {
 	}
 
 	public static ArrayList<Hashtable<String, ArrayList<Object>>> in_generated(String filename, int record_number, int record_step) throws Exception {
-		System.out.println("record_number = " + record_number);
 		ArrayList<Hashtable<String, ArrayList<Object>>> input_array = new ArrayList<>();
-		Hashtable<String, ArrayList<Object>> input_record = new Hashtable<>();
+		Hashtable<String, ArrayList<Object>> input_record;
 		boolean initial = true;
 
 		File file = new File(filename);
@@ -407,7 +403,6 @@ public class DdbbIO {
 		while(input != null && input_array.size() < record_step){
 
 			input_record = new Hashtable<>();
-			System.out.println("input = " + input);
 			if(initial && record_number == 0){
 				input = reader.readLine();
 				initial = false;
@@ -416,7 +411,6 @@ public class DdbbIO {
 			while(!input.equals("-----")){
 				ArrayList<Object> v = new ArrayList<>(Arrays.asList(input.split(",", 2)[1].substring(1, input.split(",", 2)[1].length() - 1).split(", ")));
 				input_record.put(input.split(",", 2)[0], v);
-				System.out.println("TEST = " + input_record);
 				input = reader.readLine();
 
 			}

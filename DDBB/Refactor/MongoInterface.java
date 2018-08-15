@@ -86,8 +86,6 @@ public class MongoInterface implements Db {
 		time_before = System.nanoTime();
 		FindIterable it = (collection.find(document));
 		time_after = System.nanoTime();
-		System.out.println("---------------------------------------------");
-		System.out.println(in.keySet());
 
 		return time_after - time_before;
 

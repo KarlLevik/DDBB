@@ -286,34 +286,34 @@ public class DdbbTest implements Runnable {
 
 				generate(cfg.read, record_step);
 
-				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-					DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
-				}
-
 			} else {
 
 				generated_set = DdbbIO.in_generated((String) this.cfg.read.meta.get("load_file"), record_number, record_step);
 
-				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-					DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
-				}
-
 			}
 
-			System.out.println("generated_set = " + generated_set);
+			ArrayList<Hashtable<String,ArrayList<Object>>> new_generated_set = new ArrayList<>();
+			for(Hashtable<String,ArrayList<Object>> record : generated_set) {
 
-			if(this.cfg.read.meta.containsKey("fields")){
+				new_generated_set.add((Hashtable<String,ArrayList<Object>>) record.clone());
+			}
 
-				for(Hashtable<String, ArrayList<Object>> record : generated_set){
-					if(cfg.read.data.containsKey("fields")){
-						for(String old_field : record.keySet()){
-							if(!(cfg.read.data.get("fields").contains(old_field))){
-								record.remove(old_field);
-							}
+			if(this.cfg.read.data.containsKey("fields")){
+
+				for(int record_index = 0; record_index < generated_set.size(); record_index++){
+					for(String old_field : generated_set.get(record_index).keySet()) {
+						if (!(cfg.read.data.get("fields").contains(old_field))) {
+							new_generated_set.get(record_index).remove(old_field);
 						}
 					}
 				}
 
+			}
+
+			generated_set = new_generated_set;
+
+			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
 			}
 
 			results = new ArrayList<>();
@@ -331,7 +331,6 @@ public class DdbbTest implements Runnable {
 			}
 
 			report.save("read", "step_average", Long.toString(total_result / results.size()));
-			System.out.println("record_number = " + record_number);
 		}
 
 		System.out.println("Read test finished");
