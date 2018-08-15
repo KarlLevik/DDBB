@@ -414,8 +414,7 @@ public class DdbbIO {
 			}
 
 			while(!input.equals("-----")){
-
-				ArrayList<Object> v = new ArrayList<>(Arrays.asList(input.split(",", 2)[1].split(",")));
+				ArrayList<Object> v = new ArrayList<>(Arrays.asList(input.split(",", 2)[1].substring(1, input.split(",", 2)[1].length() - 1).split(", ")));
 				input_record.put(input.split(",", 2)[0], v);
 				System.out.println("TEST = " + input_record);
 				input = reader.readLine();

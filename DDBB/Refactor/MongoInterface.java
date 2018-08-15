@@ -88,7 +88,6 @@ public class MongoInterface implements Db {
 		time_after = System.nanoTime();
 		System.out.println("---------------------------------------------");
 		System.out.println(in.keySet());
-		System.out.println(it.iterator().next());
 
 		return time_after - time_before;
 
