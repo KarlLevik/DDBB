@@ -1,29 +1,32 @@
 {
   "settings" : {
-    "table": "testCol2",
+    "table": "testColDEL",
     "db_type": "MongoDB",
     "b_name": "st1 ho!£% e",
-    "db_name": "myDbTestThread1000",
+    "db_name": "myDbTestDEL",
     "ip": "localhost",
     "port": 27017,
     "user": "sampleUser",
     "pwd": "password",
-    "total_time": true
+    "total_time": true,
+    "save_generated": true
   },
-  "create" : {
+  "read" : {
     "meta" : {
       "save" : true,
       "total" : true,
       "step" : true,
-      "step_generate" : 1,
+      "step_generate" : 10,
       "step_measurement" : 1,
       "response" : false,
       "throughput" : false,
       "time" : true,
-      "amount" : 10,
-      "size" : 100
+      "amount" : 10000,
+      "size" : 10,
+      "load_file": "test_config1_CRTE_GNR8_1.txt"
     },
     "data" : {
+      "fields" : ["name"],
       "name" : ["id", "name", "results"],
       "kv" : ["KEY", "VALUE", "VALUE"],
       "val" : ["INT", "STRING", "DOUBLE"],

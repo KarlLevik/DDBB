@@ -1,0 +1,85 @@
+{
+  "settings" : {
+    "table": "testColB",
+    "db_type": "MongoDB",
+    "b_name": "st1 ho!£% e",
+    "db_name": "myDbTestRead2",
+    "ip": "localhost",
+    "port": 27017,
+    "user": "sampleUser",
+    "pwd": "password",
+    "total_time": true,
+    "save_generated": true
+  },
+  "create" : {
+    "meta" : {
+      "save" : true,
+      "total" : true,
+      "step" : true,
+      "step_generate" : 1,
+      "step_measurement" : 1,
+      "response" : false,
+      "throughput" : false,
+      "time" : true,
+      "amount" : 1000,
+      "size" : 10,
+      "load_file": "test_config1_CRTE_GNR8_1.txt"
+    },
+    "data" : {
+      "name" : ["id", "name", "results"],
+      "kv" : ["KEY", "VALUE", "VALUE"],
+      "val" : ["INT", "STRING", "DOUBLE"],
+      "length" : [1, 1, 5],
+      "length_up_to" : [true, true, false],
+      "size" : [5, 5, 10],
+      "size_up_to" : [false, false, true],
+      "in_order" : [true, false, false],
+      "unique" : [true, true, false]
+    }
+  }
+}
+
+
+
+
+{
+  "settings" : {
+    "table": "testColB",
+    "db_type": "MongoDB",
+    "b_name": "st1 ho!£% e",
+    "db_name": "myDbTestRead2",
+    "ip": "localhost",
+    "port": 27017,
+    "user": "sampleUser",
+    "pwd": "password",
+    "total_time": true,
+    "save_generated": true
+  },
+  "read" : {
+    "meta" : {
+      "save" : true,
+      "total" : true,
+      "step" : true,
+      "step_generate" : 10,
+      "step_measurement" : 1,
+      "response" : false,
+      "throughput" : false,
+      "time" : true,
+      "amount" : 1000,
+      "size" : 10,
+      "load_file": "test_config1_CRTE_GNR8_1.txt"
+    },
+    "data" : {
+      "fields" : ["name"],
+      "name" : ["id", "name", "results"],
+      "kv" : ["KEY", "VALUE", "VALUE"],
+      "val" : ["INT", "STRING", "DOUBLE"],
+      "length" : [1, 1, 5],
+      "length_up_to" : [true, true, false],
+      "size" : [5, 5, 10],
+      "size_up_to" : [false, false, true],
+      "in_order" : [true, false, false],
+      "unique" : [true, true, false]
+    }
+  }
+}

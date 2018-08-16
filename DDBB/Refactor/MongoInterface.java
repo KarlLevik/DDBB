@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Random;
 
 import com.mongodb.client.FindIterable;
@@ -82,10 +83,12 @@ public class MongoInterface implements Db {
 		for(String key : in.keySet()){
 			document.append(key, in.get(key));
 		}
-
+		//System.out.println("dc = " + document);
 		time_before = System.nanoTime();
-		FindIterable it = (collection.find(document));
+		Document it = (collection.find(document).batchSize(1).iterator().next());
 		time_after = System.nanoTime();
+		//Document it1 = collection.find(document).first();
+		//System.out.println("it = " + it1);
 
 		return time_after - time_before;
 

@@ -43,6 +43,8 @@ public class DdbbTest implements Runnable {
 	public void run(){
 		Long start_time = System.nanoTime();
 
+		System.out.println("Starting Test");
+
 		switch ((String) cfg.settings.get("db_type")) {
 			case "MongoDB": db = new MongoInterface(cfg);
 				break;
@@ -59,9 +61,17 @@ public class DdbbTest implements Runnable {
 		db.table();
 
 		// Carries out the creation, reading, updating or deleletion of records
+
 		try {
 
-			//warmup();
+			if(file_name.equals("test_config1")){
+				this.warmup();
+			}
+
+			while(!DdbbDriver.warmup_finished.get()){
+				Thread.sleep(1);
+			}
+
 			if(!cfg.setup.isEmpty()){
 				setup();
 			}
@@ -84,6 +94,9 @@ public class DdbbTest implements Runnable {
 		} catch(Exception e){
 			System.out.println(e);
 		}
+
+		System.out.println("Ending Test");
+
 	}
 
 	public boolean validate(){
@@ -101,7 +114,10 @@ public class DdbbTest implements Runnable {
 		*/
 	}
 
-	private void warmup(){
+	public void warmup(){
+
+		System.out.println("Starting DDBB warm-up, please be patient.");
+
 		Hashtable<String,ArrayList<Object>> plain_object;
 
 		for(int i = 0; i < 11000; i++){
@@ -111,6 +127,7 @@ public class DdbbTest implements Runnable {
 			plain_array.add(plain_string);
 			plain_object.put(String.valueOf(i), plain_array);
 			db.create(plain_object);
+			db.read(plain_object);
 			db.delete(String.valueOf(i), plain_string);
 		}
 		System.out.println("Warm-up finished");
@@ -122,6 +139,7 @@ public class DdbbTest implements Runnable {
 			System.out.println(e);
 		}
 		System.out.println("Cool-down finished.");
+		DdbbDriver.warmup_finished.set(true);
 	}
 
 	private void generate(DdbbProperty property, Integer amount) throws Exception {
