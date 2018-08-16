@@ -50,8 +50,8 @@ public class DdbbTest implements Runnable {
 				break;
 			//case "Elasticsearch": db = new ElasticInterface(cfg);
 			////	break;
-			//case "Cassandra": db = new CassandraInterface(cfg);
-			////	break;
+			case "Cassandra": db = new CassandraInterface(cfg);
+				break;
 			case "Redis": db = new RedisInterface(cfg);
 				break;
 		}
