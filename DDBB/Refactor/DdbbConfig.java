@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Hashtable;
 
 public class DdbbConfig {
 

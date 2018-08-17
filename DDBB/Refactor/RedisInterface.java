@@ -1,5 +1,6 @@
-import java.util.*;
 import redis.clients.jedis.Jedis;
+
+import java.util.*;
 
 public class RedisInterface implements Db {
 

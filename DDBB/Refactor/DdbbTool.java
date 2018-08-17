@@ -1,17 +1,17 @@
-import java.util.Random;
 import java.util.Hashtable;
+import java.util.Random;
 
 public class DdbbTool {
 
 	// Method to randomly generate a random string
-	public static String generateRandomString(Integer length, Boolean use_plain){		
+	public static String generateRandomString(Integer length, Boolean use_plain){
 
 		Random r = new Random(System.nanoTime());
 		String rng_val = "";
 		// Allows you to change which symbols are in the alphabet for the random string generation
-		String alphabet = use_plain ? "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" : 
+		String alphabet = use_plain ? "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" :
 			"1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			+ "`,./;'#[]-=¬!£$%^&*()<>?:@~{}_+";
+			+ "`,./;#[]-=¬!£$%^&*()<>?:@~{}_+";
 
 		while(rng_val.length() != length){
 
@@ -91,6 +91,30 @@ public class DdbbTool {
 		}
 
 		return result;
+
+	}
+
+	// Returns the key of an object inside a hashtable
+	// presence of object inside hashtable should be checked before calling getKey
+	public static int getIndex(Hashtable hs, String k){
+
+		int index = 0;
+
+		int i = 0;
+		if(hs.containsKey(k)){
+			for(Object key : hs.keySet()){
+				System.out.println("key = " + key + ", k = " + k + ", i = " + i);
+				if(key == k){
+					index = i;
+					System.out.println("key " + key + " = string " + k + " at index " + i);
+				}
+				i++;
+			}
+
+		} else {
+			index = -1;
+		}
+		return index;
 
 	}
 

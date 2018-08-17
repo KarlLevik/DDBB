@@ -1,4 +1,4 @@
-import java.io.*;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DdbbDriver {
@@ -12,6 +12,7 @@ public class DdbbDriver {
 			for(int i = 1; i<2; i++){
 
 				String test_name = "test_config" + i;
+				System.out.println((new File(test_name + ".json")).exists());
 				if((new File(test_name + ".json")).exists()){
 					DdbbTest test = new DdbbTest(test_name);
 					if(test.validate()){
@@ -33,6 +34,7 @@ public class DdbbDriver {
 		} catch(Exception e) {
 
 			System.out.println(e);
+			System.out.println("ERROR");
 
 		}
 

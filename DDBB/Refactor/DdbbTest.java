@@ -1,11 +1,13 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class DdbbTest implements Runnable {
 
 	public DdbbConfig cfg;
-	public ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<>();
+	public ArrayList<Hashtable<String,ArrayList<Object>>> generated_set = new ArrayList<Hashtable<String, ArrayList<Object>>>();
 	public DdbbReport report = new DdbbReport();
 	private String uId = (new SimpleDateFormat("dd-MM-yyyy_HHmmss").format(new Date())) + "_" +
 			DdbbTool.generateRandomString(5, true);
@@ -34,7 +36,7 @@ public class DdbbTest implements Runnable {
 	public void start() {
 		System.out.println("Starting " +  thread_name );
 		if (t == null) {
-			t = new Thread (this, thread_name);
+			t = new Thread(this, thread_name);
 			t.start();
 		}
 	}
@@ -65,7 +67,10 @@ public class DdbbTest implements Runnable {
 		try {
 
 			if(file_name.equals("test_config1")){
-				this.warmup();
+
+				//this.warmup();
+				DdbbDriver.warmup_finished.set(true);
+
 			}
 
 			while(!DdbbDriver.warmup_finished.get()){
@@ -114,7 +119,7 @@ public class DdbbTest implements Runnable {
 		*/
 	}
 
-	public void warmup(){
+	private void warmup(){
 
 		System.out.println("Starting DDBB warm-up, please be patient.");
 
@@ -139,7 +144,6 @@ public class DdbbTest implements Runnable {
 			System.out.println(e);
 		}
 		System.out.println("Cool-down finished.");
-		DdbbDriver.warmup_finished.set(true);
 	}
 
 	private void generate(DdbbProperty property, Integer amount) throws Exception {

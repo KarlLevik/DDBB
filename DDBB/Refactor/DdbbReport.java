@@ -1,11 +1,12 @@
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 public class DdbbReport {
 
 	// Variable holding the report of a test
 	// (operation, [type, [results]])
-	public Hashtable<String, Hashtable<String, ArrayList<String>>> report = 
+	public Hashtable<String, Hashtable<String, ArrayList<String>>> report =
 		new Hashtable<String, Hashtable<String, ArrayList<String>>>();
 
 	DdbbReport(){ }

@@ -1,4 +1,5 @@
 import com.datastax.driver.core.*;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -22,7 +23,9 @@ public class CassandraInterface implements Db {
         }
         cluster = b.build();
 
+        System.out.println("session = " + cfg.settings.get("db_name"));
         session = cluster.connect((String) cfg.settings.get("db_name"));
+        System.out.println("here");
 
     }
 
@@ -42,7 +45,13 @@ public class CassandraInterface implements Db {
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + cfg.settings.get("table"));
 
-        sb.append("(");
+        sb.append(" (");
+
+        Iterator<String> it = in.keySet().iterator();
+        String last_key = "";
+        while(it.hasNext()){
+            last_key = it.next();
+        }
 
         int i = 0;
         for(String key : in.keySet()){
@@ -50,11 +59,6 @@ public class CassandraInterface implements Db {
             if(in.get(key).size() > 0) {
                 sb.append(key);
 
-                String last_key = "";
-                Iterator<String> it = in.keySet().iterator();
-                while(it.hasNext()){
-                    last_key = it.next();
-                }
                 if(i != in.keySet().size() - 1 || (i == in.keySet().size() - 2 && in.get(last_key).size() > 0)){
                     sb.append(", ");
                 }
@@ -71,29 +75,77 @@ public class CassandraInterface implements Db {
         i = 0;
         for(String k : in.keySet()){
 
-            if(in.get(k).size() > 1){
+            int cfg_field_list_index = cfg.create.data.get("name").indexOf(k);
+
+            System.out.println("1");
+            System.out.println("size = " + in.get(k).size());
+            if(in.get(k).size() == 1 && (boolean) cfg.create.data.get("length_up_to").get(cfg_field_list_index)){
+
+                System.out.println("2");
+
+                if(cfg.create.data.get("val").get(cfg_field_list_index).equals("STRING")){
+                    sb.append("'");
+
+                    System.out.println("3");
+                }
+                System.out.println("out = " + in.get(k));
+                sb.append(String.valueOf(in.get(k).get(0)));
+                if(cfg.create.data.get("val").get(cfg_field_list_index).equals("STRING")){
+                    sb.append("'");
+                }
+
+                if(i != in.keySet().size() - 1){
+                    sb.append(", ");
+                }
+            } else if(in.get(k).size() > 0){
                 sb.append("[");
                 for(int v = 0; v < in.get(k).size(); v++){
 
-                    if(cfg.create.data.get("type").get(i) == "STRING"){
-                        sb.append("'");
-                    }
-                    sb.append(String.valueOf(in.get(v)));
-                    if(cfg.create.data.get("type").get(i) == "STRING"){
-                        sb.append("'");
-                    }
+                    if(in.get(k).get(v) != null && !in.get(k).get(v).equals("null") && v != in.get(k).size() - 1){
+                        if(cfg.create.data.get("val").get(cfg_field_list_index).equals("STRING")){
 
-                    if(i != in.keySet().size() - 1){
-                        sb.append(", ");
+                            sb.append("'");
+                            sb.append(String.valueOf(in.get(k).get(v)));
+                            sb.append("', ");
+
+                        } else {
+                            sb.append(String.valueOf(in.get(k).get(v)));
+                            sb.append(", ");
+                        }
+
+                    } else if(in.get(k).get(v) != null && !in.get(k).get(v).equals("null")){
+                        if(cfg.create.data.get("val").get(cfg_field_list_index).equals("STRING")){
+
+                            sb.append("'");
+                            sb.append(String.valueOf(in.get(k).get(v)));
+                            sb.append("'");
+
+                        } else {
+                            sb.append(String.valueOf(in.get(k).get(v)));
+                        }
+                    } else {
+                        if(cfg.create.data.get("val").get(cfg_field_list_index).equals("STRING")){
+
+                            sb.append("''");
+
+                        }
                     }
 
                 }
+
                 sb.append("]");
+
+                if(i != in.keySet().size() - 1){
+                    sb.append(", ");
+                }
+
             }
 
             i++;
 
         }
+
+        sb.append(");");
 
         String query = sb.toString();
         System.out.println("query = " + query);

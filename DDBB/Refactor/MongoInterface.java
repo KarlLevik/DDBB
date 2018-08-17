@@ -1,18 +1,12 @@
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Random;
-
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection; 
-import com.mongodb.client.model.*;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
-
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
-import static com.mongodb.client.model.Filters.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class MongoInterface implements Db {
 	
