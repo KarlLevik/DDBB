@@ -118,4 +118,13 @@ public class DdbbTool {
 
 	}
 
+	public static Db getInterface(DdbbConfig cfg){
+		switch ((String) cfg.settings.get("db_type")) {
+			case "MongoDB": return new MongoInterface(cfg);
+			case "Cassandra": return new CassandraInterface(cfg);
+			case "Redis": return new RedisInterface(cfg);
+			default: return null;
+		}
+	}
+
 }

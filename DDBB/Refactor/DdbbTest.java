@@ -19,7 +19,9 @@ public class DdbbTest implements Runnable {
 	DdbbTest(String f) throws Exception {
 		file_name = f;
 		cfg = DdbbIO.in(file_name + ".json");
+		System.out.println("aaa");
 		thread_name = "Thread_" + cfg.settings.get("b_name").toString();
+		System.out.println("bbb");
 
 		File file = new File(file_name + "_CRTE_GNR8.txt");
 		file.delete();
@@ -47,16 +49,7 @@ public class DdbbTest implements Runnable {
 
 		System.out.println("Starting Test");
 
-		switch ((String) cfg.settings.get("db_type")) {
-			case "MongoDB": db = new MongoInterface(cfg);
-				break;
-			//case "Elasticsearch": db = new ElasticInterface(cfg);
-			////	break;
-			case "Cassandra": db = new CassandraInterface(cfg);
-				break;
-			case "Redis": db = new RedisInterface(cfg);
-				break;
-		}
+		db = DdbbTool.getInterface(cfg);
 
 		db.connectDb();
 		db.createTable();
@@ -68,7 +61,7 @@ public class DdbbTest implements Runnable {
 
 			if(file_name.equals("test_config1")){
 
-				//this.warmup();
+				this.warmup();
 				DdbbDriver.warmup_finished.set(true);
 
 			}
@@ -125,16 +118,31 @@ public class DdbbTest implements Runnable {
 
 		Hashtable<String,ArrayList<Object>> plain_object;
 
+		DdbbConfig cfgw = new DdbbConfig(cfg);
+		cfgw.create = new DdbbProperty();
+		cfgw.read = new DdbbProperty();
+		cfgw.update = new DdbbProperty();
+		cfgw.delete = new DdbbProperty();
+		cfgw.settings.replace("table", "testWarmup");
+		Db dbw = DdbbTool.getInterface(cfgw);
+
+		dbw.connectDb();
+		dbw.createTable();
+		dbw.table();
+
 		for(int i = 0; i < 11000; i++){
 			plain_object = new Hashtable<>();
-			String plain_string = DdbbTool.generateRandomString(2, false);
+			int plain_int = DdbbTool.generateRandomInteger(999, true);
 			ArrayList<Object> plain_array = new ArrayList<>();
-			plain_array.add(plain_string);
-			plain_object.put(String.valueOf(i), plain_array);
-			db.create(plain_object);
-			db.read(plain_object);
-			db.delete(String.valueOf(i), plain_string);
+			plain_array.add(plain_int);
+			plain_object.put("a", plain_array);
+			dbw.create(plain_object);
+			dbw.read(plain_object);
+			dbw.delete("a", String.valueOf(plain_int));
 		}
+
+		dbw.disconnectDb();
+
 		System.out.println("Warm-up finished");
 
 		System.out.println("Sleeping for 10 seconds as part of cool-down");
