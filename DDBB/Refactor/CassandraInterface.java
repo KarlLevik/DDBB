@@ -1,5 +1,4 @@
 import com.datastax.driver.core.*;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
