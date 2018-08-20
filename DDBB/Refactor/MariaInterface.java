@@ -292,11 +292,11 @@ public class MariaInterface implements Db {
         StringBuilder sb;
         if(cfg_field_list_index != -1 && cfg.delete.data.get("val").get(cfg.delete.data.get("name").indexOf(key)).equals("STRING")) {
             sb = new StringBuilder(
-                    "SELECT * from " + cfg.settings.get("table") +
+                    "DELETE from " + cfg.settings.get("table") +
                             " where " + key + " = '" + value + "';");
         } else {
             sb = new StringBuilder(
-                    "SELECT * from " + cfg.settings.get("table") +
+                    "DELETE from " + cfg.settings.get("table") +
                             " where " + key + " = " + value + ";");
         }
 
