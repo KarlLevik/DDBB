@@ -124,6 +124,7 @@ public class DdbbTool {
 			case "Cassandra": return new CassandraInterface(cfg);
 			case "MariaDB": return new MariaInterface(cfg);
 			case "Redis": return new RedisInterface(cfg);
+            case "Elasticsearch": return new ElasticInterface(cfg);
 			default: return null;
 		}
 	}
