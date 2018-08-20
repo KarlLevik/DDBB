@@ -122,6 +122,7 @@ public class DdbbTool {
 		switch ((String) cfg.settings.get("db_type")) {
 			case "MongoDB": return new MongoInterface(cfg);
 			case "Cassandra": return new CassandraInterface(cfg);
+			case "MariaDB": return new MariaInterface(cfg);
 			case "Redis": return new RedisInterface(cfg);
 			default: return null;
 		}
