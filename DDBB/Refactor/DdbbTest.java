@@ -15,6 +15,8 @@ public class DdbbTest implements Runnable {
 	private Thread t;
 	private String thread_name;
 	private String file_name;
+	private long query_delay = 0;
+	private long test_time_delay = 0;
 
 	DdbbTest(String f) throws Exception {
 		file_name = f;
@@ -22,6 +24,14 @@ public class DdbbTest implements Runnable {
 		System.out.println("aaa");
 		thread_name = "Thread_" + cfg.settings.get("b_name").toString();
 		System.out.println("bbb");
+
+		if(cfg.settings.containsKey("query_delay")){
+			query_delay = Long.valueOf(String.valueOf(cfg.settings.get("query_delay")));
+		}
+
+		if(cfg.settings.containsKey("test_time_delay")){
+			test_time_delay = Long.valueOf(String.valueOf(cfg.settings.get("test_time_delay")));
+		}
 
 		File file = new File(file_name + "_CRTE_GNR8.txt");
 		file.delete();
@@ -45,9 +55,33 @@ public class DdbbTest implements Runnable {
 
 	// Method to run the test
 	public void run(){
+
+		try {
+			if (cfg.settings.containsKey("test_order_delay")) {
+				System.out.println("Waiting for : " + String.valueOf(cfg.settings.get("test_order_delay")));
+				String earlier_test = String.valueOf(cfg.settings.get("test_order_delay"));
+
+				if (DdbbDriver.status.containsKey(earlier_test)) {
+
+					while (!DdbbDriver.status.get(earlier_test)) {
+						Thread.sleep(1000);
+					}
+
+				}
+
+			}
+
+			System.out.println("Waiting for : " + test_time_delay);
+			Thread.sleep(test_time_delay);
+
+		} catch(Exception e){
+			System.out.println(e);
+			Thread.currentThread().stop();
+		}
+
 		Long start_time = System.nanoTime();
 
-		System.out.println("Starting Test");
+		System.out.println("Starting Test " + file_name);
 
 		db = DdbbTool.getInterface(cfg);
 
@@ -259,7 +293,10 @@ public class DdbbTest implements Runnable {
 		Integer record_number = 0;
 		List<Long> results;
 		while(record_number < (int) cfg.create.meta.get("amount")){
-			Integer record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
+
+			Thread.sleep(query_delay);
+
+			int record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 
 			if(!this.cfg.create.meta.containsKey("load_file")){
 				generate(cfg.create, record_step);
@@ -306,11 +343,11 @@ public class DdbbTest implements Runnable {
 		List<Long> results;
 
 		while(record_number < (int) cfg.read.meta.get("amount")){
+
+			Thread.sleep(query_delay);
+
 			//Integer record_step = (((int) cfg.read.meta.get("step_generate") > ((int) cfg.read.meta.get("amount") - record_number)) ? (int) cfg.read.meta.get("step_generate") : ((int) cfg.read.meta.get("amount") - record_number));
 			Integer record_step = (int) cfg.read.meta.get("step_generate");
-
-
-
 
 			if(!this.cfg.read.meta.containsKey("load_file")){
 
@@ -370,6 +407,9 @@ public class DdbbTest implements Runnable {
 	private void update() throws Exception {
 		Integer record_number = 0;
 		while(record_number < (int) cfg.update.meta.get("amount")){
+
+			Thread.sleep(query_delay);
+
 			Integer record_step = (((int) cfg.update.meta.get("step_generate") > ((int) cfg.update.meta.get("amount") - record_number)) ? (int) cfg.update.meta.get("step_generate") : ((int) cfg.update.meta.get("amount") - record_number));
 			generate(cfg.update, record_step);
 			for(int i = 0; i < record_step; i++){
@@ -388,6 +428,9 @@ public class DdbbTest implements Runnable {
 		Integer record_number = 0;
 
 		while(record_number < (int) cfg.delete.meta.get("amount")){
+
+			Thread.sleep(query_delay);
+
 			//Integer record_step = (((int) cfg.delete.meta.get("step_generate") > ((int) cfg.delete.meta.get("amount") - record_number)) ? (int) cfg.delete.meta.get("step_generate") : ((int) cfg.delete.meta.get("amount") - record_number));
 			Integer record_step = (int) cfg.delete.meta.get("step_generate");
 

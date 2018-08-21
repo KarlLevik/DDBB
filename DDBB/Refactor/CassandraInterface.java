@@ -19,10 +19,10 @@ public class CassandraInterface implements Db {
 
         b = Cluster.builder().addContactPoint((String) cfg.settings.get("ip"));
         if (cfg.settings.containsKey("port")) {
-            b.withPort((int) cfg.settings.get("port"));
+            b.withPort(Integer.valueOf(String.valueOf(cfg.settings.get("port"))));
         }
         cluster = b.build();
-        session = cluster.connect((String) cfg.settings.get("db_name"));
+        session = cluster.connect(String.valueOf(cfg.settings.get("db_name")));
 
     }
 

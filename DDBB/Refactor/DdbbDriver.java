@@ -1,9 +1,11 @@
 import java.io.File;
+import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DdbbDriver {
 
 	public static volatile AtomicBoolean warmup_finished = new AtomicBoolean(false);
+	public static Hashtable<String, Boolean> status = new Hashtable<>();
 
 	public static void main(String args[]) {
 
@@ -16,6 +18,8 @@ public class DdbbDriver {
 				if((new File(test_name + ".json")).exists()){
 					DdbbTest test = new DdbbTest(test_name);
 					if(test.validate()){
+
+						status.put(test_name, false);
 
 						test.start();
 
