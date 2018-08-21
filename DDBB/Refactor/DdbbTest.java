@@ -127,7 +127,9 @@ public class DdbbTest implements Runnable {
 			System.out.println(e);
 		}
 
-		System.out.println("Ending Test");
+		DdbbDriver.status.replace(file_name, true);
+
+		System.out.println("Ending Test : " + file_name);
 
 	}
 
