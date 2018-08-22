@@ -56,7 +56,7 @@ public class CassandraInterface implements Db {
         int i = 0;
         for(String key : in.keySet()){
 
-            if(in.get(key).size() > 0) {
+            if(in.get(key).size() > 0 || (cfg.create.data.containsKey("kv") && cfg.create.data.get("kv").get(cfg.create.data.get("name").indexOf(key)).equals("KEY"))) {
                 sb.append(key);
 
                 if(i != in.keySet().size() - 1 || (i == in.keySet().size() - 2 && in.get(last_key).size() > 0)){
@@ -76,12 +76,11 @@ public class CassandraInterface implements Db {
         for(String k : in.keySet()){
 
             int cfg_field_list_index = -1;
-
-            if(cfg.create.data.contains("name") && cfg.create.data.get("name").contains(k)){
+            if(cfg.create.data.containsKey("name") && cfg.create.data.get("name").contains(k)){
                 cfg_field_list_index = cfg.create.data.get("name").indexOf(k);
             }
 
-            if(in.get(k).size() == 1 && (cfg_field_list_index == -1 || (boolean) cfg.create.data.get("length_up_to").get(cfg_field_list_index))){
+            if(in.get(k).size() == 1 && (cfg_field_list_index == -1 || ((boolean) cfg.create.data.get("length_up_to").get(cfg_field_list_index)))){
 
                 if(cfg_field_list_index != -1 && cfg.create.data.get("val").get(cfg_field_list_index).equals("STRING")){
                     sb.append("'");
@@ -136,6 +135,19 @@ public class CassandraInterface implements Db {
                     sb.append(", ");
                 }
 
+            } else if(cfg.create.data.containsKey("kv") && cfg.create.data.get("kv").get(cfg_field_list_index).equals("KEY")){
+
+                if(cfg.create.data.containsKey("val") && cfg.create.data.get("val").get(cfg_field_list_index).equals("TIMEUUID")){
+
+                    sb.append("now()");
+
+                    if(i != in.keySet().size() - 1){
+                        sb.append(", ");
+                    }
+
+                } else if(cfg.create.data.containsKey("val") && cfg.create.data.get("val").get(cfg_field_list_index).equals("UUID")){
+
+                }
             }
 
             i++;

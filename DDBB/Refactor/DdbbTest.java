@@ -95,7 +95,7 @@ public class DdbbTest implements Runnable {
 
 			if(file_name.equals("test_config1")){
 
-				this.warmup();
+				//this.warmup();
 				DdbbDriver.warmup_finished.set(true);
 
 			}
@@ -219,37 +219,40 @@ public class DdbbTest implements Runnable {
 				for(int i = 0; i < 2; i++){
 					// if record for field is found in generated hs-
 					if (generated.containsKey(field_name)) {
-						// if the length of record to be generated is up to length specified, generate random length
-						if(!length_up_to){
+						if((!cfg.create.data.containsKey("kv") || cfg.create.data.get("kv").get(cfg.create.data.get("name").indexOf(field_name)).equals("VALUE"))){
+							// if the length of record to be generated is up to length specified, generate random length
+							if(!length_up_to){
 
-							length = (new Random()).nextInt(length);
+								length = (new Random()).nextInt(length);
 
-						}
+							}
 
-						// create "length" amount of values for a field so that it follows the configuration
-						for(int j = 0; j < length; j++){
-							// if the field is not supposed to be in order or unique, simply generate the val
-							if(!in_order && !unique){
-								generated.get(field_name).add(generate_value(data, field_counter));
-							} else if(in_order){ // if the field is supposed to be in order (and by definition unique)
-								generated.get(field_name).add(generate_value(data, field_counter));
-							} else if(unique){ // if the field is supposed to be unique
-								boolean unique_val = false;
-								while(!unique_val){ // loops until generated value is unique
-									// generates random val
-									Object gen_val = generate_value(data, field_counter);
-									// checks whether generated value was unique
-									if(DdbbTool.getKey(generated, gen_val) == null){
+							// create "length" amount of values for a field so that it follows the configuration
+							for(int j = 0; j < length; j++){
+								// if the field is not supposed to be in order or unique, simply generate the val
+								if(!in_order && !unique){
+									generated.get(field_name).add(generate_value(data, field_counter));
+								} else if(in_order){ // if the field is supposed to be in order (and by definition unique)
+									generated.get(field_name).add(generate_value(data, field_counter));
+								} else if(unique){ // if the field is supposed to be unique
+									boolean unique_val = false;
+									while(!unique_val){ // loops until generated value is unique
+										// generates random val
+										Object gen_val = generate_value(data, field_counter);
+										// checks whether generated value was unique
+										if(DdbbTool.getKey(generated, gen_val) == null){
 
-										unique_val = true;
+											unique_val = true;
+
+										}
+
+										generated.get(field_name).add(gen_val);
 
 									}
 
-									generated.get(field_name).add(gen_val);
-
 								}
-
 							}
+						} else {
 						}
 
 					} else {
@@ -282,6 +285,8 @@ public class DdbbTest implements Runnable {
 			case "STRING" : value = DdbbTool.generateRandomString(size, size_up_to);
 				break;
 			case "DOUBLE" : value = DdbbTool.generateRandomDouble((double) size, size_up_to);
+				break;
+			case "FLOAT" : value = DdbbTool.generateRandomFloat((float) size, size_up_to);
 				break;
 			case "BOOLEAN" : value = DdbbTool.generateRandomBoolean();
 				break;

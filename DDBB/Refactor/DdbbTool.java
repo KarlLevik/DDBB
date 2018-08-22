@@ -43,7 +43,7 @@ public class DdbbTool {
 		Integer rng_val;
 
 		Integer roof = size;
-		Integer floor = size_up_to ? 10 ^ (size.toString().length()-1) : 0;
+		Integer floor = size_up_to ? (int) Math.pow(10, (size.toString().length()-2)) : 1;
 
 		rng_val = floor + r.nextInt(roof - floor);
 
@@ -61,6 +61,22 @@ public class DdbbTool {
 		Integer floor = size_up_to ? 10 ^ (size.toString().length()-1) : 0;
 
 		rng_val = floor + r.nextDouble() * roof - floor;
+
+		return rng_val;
+
+	}
+
+
+	// Method to randomly generate a random string
+	public static Float generateRandomFloat(Float size, Boolean size_up_to){
+
+		Random r = new Random(System.nanoTime());
+		Float rng_val;
+
+		Float roof = size;
+		Integer floor = size_up_to ? 10 ^ (size.toString().length()-1) : 0;
+
+		rng_val = (float) (floor + r.nextDouble() * roof - floor);
 
 		return rng_val;
 
@@ -103,10 +119,8 @@ public class DdbbTool {
 		int i = 0;
 		if(hs.containsKey(k)){
 			for(Object key : hs.keySet()){
-				System.out.println("key = " + key + ", k = " + k + ", i = " + i);
 				if(key == k){
 					index = i;
-					System.out.println("key " + key + " = string " + k + " at index " + i);
 				}
 				i++;
 			}
@@ -124,7 +138,7 @@ public class DdbbTool {
 			case "Cassandra": return new CassandraInterface(cfg);
 			case "MariaDB": return new MariaInterface(cfg);
 			case "Redis": return new RedisInterface(cfg);
-            case "Elasticsearch": return new ElasticInterface(cfg);
+            //case "Elasticsearch": return new ElasticInterface(cfg);
 			default: return null;
 		}
 	}
