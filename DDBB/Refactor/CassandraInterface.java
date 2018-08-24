@@ -1,4 +1,5 @@
 import com.datastax.driver.core.*;
+import com.datastax.driver.core.exceptions.InvalidQueryException;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -196,10 +197,6 @@ public class CassandraInterface implements Db {
                     sb.append("'");
                 }
 
-                if(i != in.keySet().size() - 1){
-                    sb.append(", ");
-                }
-
             } else if(in.get(key).size() > 0){
 
                 sb.append("[");
@@ -211,11 +208,20 @@ public class CassandraInterface implements Db {
 
                             sb.append("'");
                             sb.append(String.valueOf(in.get(key).get(v)));
-                            sb.append("', ");
+                            sb.append("'");
+
+                            if(in.get(key).size() > 1 && v < in.get(key).size() - 1){
+                                sb.append(", ");
+                            }
+
 
                         } else {
                             sb.append(String.valueOf(in.get(key).get(v)));
                             sb.append(", ");
+
+                            if(in.get(key).size() > 1 && v < in.get(key).size() - 1){
+                                sb.append(", ");
+                            }
                         }
 
                     } else if(in.get(key).get(v) != null && !in.get(key).get(v).equals("null")){
@@ -240,31 +246,43 @@ public class CassandraInterface implements Db {
 
                 sb.append("]");
 
-                if(i != in.keySet().size() - 1){
-                    sb.append(", ");
-                }
-
             }
 
             if(in.keySet().size() > 1 && i < in.keySet().size() - 1){
-                sb.append(", ");
+                sb.append(" AND ");
             }
+            i++;
 
-        }
-
-        if(i == in.keySet().size() - 1 && cfg.read.meta.containsKey("allow_filtering")){
-            if((boolean) cfg.read.meta.get("allow_filtering")) {
-                sb.append(" ALLOW FILTERING");
-            }
         }
 
         sb.append(";");
 
         String query = sb.toString();
 
-        Long time_before = System.nanoTime();
-        session.execute(query);
-        Long time_after = System.nanoTime();
+        long time_before = 0;
+        long time_after = -1;
+
+        try {
+
+            time_before = System.nanoTime();
+            session.execute(query);
+            time_after = System.nanoTime();
+
+        } catch(InvalidQueryException e){
+
+            if(e.toString().equals("com.datastax.driver.core.exceptions.InvalidQueryException: Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING")){
+
+                sb.deleteCharAt(sb.toString().length() - 1);
+                sb.append(" ALLOW FILTERING;");
+                query = sb.toString();
+
+                time_before = System.nanoTime();
+                session.execute(query);
+                time_after = System.nanoTime();
+
+            }
+
+        }
 
         return time_after - time_before;
 

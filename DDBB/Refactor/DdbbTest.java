@@ -95,7 +95,7 @@ public class DdbbTest implements Runnable {
 
 			if(file_name.equals("test_config1")){
 
-				//this.warmup();
+				this.warmup();
 				DdbbDriver.warmup_finished.set(true);
 
 			}
@@ -301,8 +301,6 @@ public class DdbbTest implements Runnable {
 		List<Long> results;
 		while(record_number < (int) cfg.create.meta.get("amount")){
 
-			Thread.sleep(query_delay);
-
 			int record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
 
 			if(!this.cfg.create.meta.containsKey("load_file")){
@@ -326,6 +324,7 @@ public class DdbbTest implements Runnable {
 
 			for(int i = 0; i < record_step; i++){
 				results.add(db.create(generated_set.get(i)));
+				Thread.sleep(query_delay);
 				record_number++;
 
 			}
