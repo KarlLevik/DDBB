@@ -276,23 +276,32 @@ public class DdbbTest implements Runnable {
 
 		Integer size = 			((Number) data.get("size").get(field_counter)).intValue();
 		boolean size_up_to = 	(boolean) data.get("size_up_to").get(field_counter);
-		Object value = new Object();
+        boolean fixed_field = 	(boolean) data.get("fixed_fields").get(field_counter);
+        String fixed_value = 	String.valueOf(data.get("fixed_values").get(field_counter));
+		String value = 			String.valueOf(data.get("val").get(field_counter));
+
+		Object generated_value = new Object();
+
+		if(fixed_field){
+			return fixed_value;
+		}
 
 		// checks what type the current field is supposed to be
 		switch ((String) data.get("val").get(field_counter)) {
-			case "INT" : value = DdbbTool.generateRandomInteger(size, size_up_to);
+			case "INT" : generated_value = DdbbTool.generateRandomInteger(size, size_up_to);
 				break;
-			case "STRING" : value = DdbbTool.generateRandomString(size, size_up_to);
+			case "STRING" : generated_value = DdbbTool.generateRandomString(size, size_up_to);
 				break;
-			case "DOUBLE" : value = DdbbTool.generateRandomDouble((double) size, size_up_to);
+			case "DOUBLE" : generated_value = DdbbTool.generateRandomDouble((double) size, size_up_to);
 				break;
-			case "FLOAT" : value = DdbbTool.generateRandomFloat((float) size, size_up_to);
+			case "FLOAT" : generated_value = DdbbTool.generateRandomFloat((float) size, size_up_to);
 				break;
-			case "BOOLEAN" : value = DdbbTool.generateRandomBoolean();
+			case "BOOLEAN" : generated_value = DdbbTool.generateRandomBoolean();
 				break;
+			case "DATETIME" : generated_value = DdbbTool.generateTimeDate(fixed_value);
 		}
 
-		return value;
+		return generated_value;
 	}
 
 	// Creates the records in the database

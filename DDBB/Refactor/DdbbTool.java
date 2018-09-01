@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -80,6 +82,21 @@ public class DdbbTool {
 
 		return rng_val;
 
+	}
+
+	public static String generateTimeDate(String regex){
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(regex);
+		LocalDateTime now = LocalDateTime.now();
+
+		return dtf.format(now);
+
+	}
+
+	public static String generateRandomTimeDate(String regex){
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(regex);
+		LocalDateTime now = LocalDateTime.now();
+		return dtf.format(now);
 	}
 
 	// Returns the runtime, often of a test, a benchmark or a session
