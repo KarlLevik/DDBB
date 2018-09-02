@@ -1,3 +1,4 @@
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Hashtable;
@@ -157,6 +158,24 @@ public class DdbbTool {
 			case "Redis": return new RedisInterface(cfg);
             //case "Elasticsearch": return new ElasticInterface(cfg);
 			default: return null;
+		}
+	}
+
+	public static void copyFile(String copy_name, String paste_name) {
+		try {
+
+			FileInputStream is = new FileInputStream(copy_name);
+			FileOutputStream os = new FileOutputStream(paste_name);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+			is.close();
+			os.close();
+
+		} catch(Exception e){
+			System.out.println(e);
 		}
 	}
 

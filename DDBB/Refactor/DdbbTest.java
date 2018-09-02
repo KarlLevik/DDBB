@@ -14,7 +14,7 @@ public class DdbbTest implements Runnable {
 	public Db db;
 	private Thread t;
 	private String thread_name;
-	private String file_name;
+	public String file_name;
 	private long query_delay = 0;
 	private long test_time_delay = 0;
 
@@ -48,8 +48,10 @@ public class DdbbTest implements Runnable {
 	public void start() {
 		System.out.println("Starting " +  thread_name );
 		if (t == null) {
+
 			t = new Thread(this, thread_name);
 			t.start();
+
 		}
 	}
 
@@ -131,10 +133,6 @@ public class DdbbTest implements Runnable {
 
 		System.out.println("Ending Test : " + file_name);
 
-	}
-
-	public boolean validate(){
-		return true;
 	}
 
 	private void setup(){

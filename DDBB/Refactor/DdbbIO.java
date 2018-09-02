@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -363,6 +364,17 @@ public class DdbbIO {
 
 	}
 
+	public static void outCfg(String filename, DdbbConfig cfg) throws Exception {
+
+		Writer writer = new FileWriter(filename);
+		Gson g = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(DdbbConfig.class, new DdbbConfigAdapter()).create();
+
+		g.toJson(cfg, writer);
+
+		writer.close();
+
+	}
+
 	public static void out_generated(String filename, ArrayList<Hashtable<String, ArrayList<Object>>> set) throws Exception {
 		File file = new File(filename);
 
@@ -427,6 +439,34 @@ public class DdbbIO {
 
 		return input_array;
 
+	}
+
+	public static void writeObjectValue(JsonWriter writer, Object value){
+		try {
+			writer.value((int) value);
+		} catch(ClassCastException a){
+			try {
+				writer.value((double) value);
+			} catch(ClassCastException b){
+				try {
+					writer.value((boolean) value);
+				} catch(ClassCastException c){
+					try {
+						writer.value((String) value);
+					} catch(ClassCastException d){
+
+					} catch(Exception e){
+						System.out.println(e);
+					}
+				} catch(Exception f){
+					System.out.println(f);
+				}
+			} catch(Exception g){
+				System.out.println(g);
+			}
+		} catch(Exception h){
+			System.out.println(h);
+		}
 	}
 
 }
