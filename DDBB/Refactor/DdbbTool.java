@@ -1,4 +1,5 @@
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Hashtable;
@@ -101,7 +102,7 @@ public class DdbbTool {
 	}
 
 	// Returns the runtime, often of a test, a benchmark or a session
-	public static long runtime(Long start_time){
+	public static Long runtime(Long start_time){
 
 		return (System.nanoTime() - start_time);
 	

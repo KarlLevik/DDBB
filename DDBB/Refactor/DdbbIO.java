@@ -366,7 +366,6 @@ public class DdbbIO {
 
 	public static void out(String filename, DdbbReport report) throws Exception {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-		System.out.println("report = " + report);
 		for(String op : report.report.keySet()){
 		    writer.write(op + " = [");
             for(int i = 0; i < report.report.get(op).size() - 1; i++){

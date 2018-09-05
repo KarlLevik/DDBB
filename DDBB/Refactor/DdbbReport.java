@@ -1,17 +1,16 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 public class DdbbReport {
 
 	// Variable holding the report of a test
 	// (operation, [type, [results]])
-	public Hashtable<String, ArrayList<long[]>> report = new Hashtable<>();
+	public Hashtable<String, ArrayList<Long[]>> report = new Hashtable<>();
 
 	DdbbReport(){ }
 
 	// Saves results in the report
-	public void save(String op, long[] result){
+	public void save(String op, Long[] result){
 
 		if(report.containsKey(op)) {
 

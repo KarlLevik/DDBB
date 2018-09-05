@@ -97,7 +97,7 @@ public class DdbbTest implements Runnable {
 
 			if(file_name.equals("test_config1")){
 
-				//this.warmup();
+				this.warmup();
 				DdbbDriver.warmup_finished.set(true);
 
 			}
@@ -305,7 +305,7 @@ public class DdbbTest implements Runnable {
 	// Creates the records in the database
 	private void create() throws Exception {
 		Integer record_number = 0;
-		List<long[]> results;
+		List<Long[]> results;
 		while(record_number < (int) cfg.create.meta.get("amount")){
 
 			int record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
@@ -331,12 +331,14 @@ public class DdbbTest implements Runnable {
 
 			for(int i = 0; i < record_step; i++){
 				results.add(db.create(generated_set.get(i)));
-				Thread.sleep(query_delay);
+				if(query_delay > 0) {
+					Thread.sleep(query_delay);
+				}
 				record_number++;
 
 			}
 
-			long[] total_result = new long[2];
+			Long[] total_result = new Long[2];
 			total_result[0] = results.get(0)[0];
 			total_result[1] = results.get(results.size() - 1)[1];
 
@@ -351,7 +353,7 @@ public class DdbbTest implements Runnable {
 	// Reads the records in the database
 	private void read() throws Exception {
 		Integer record_number = 0;
-		List<long[]> results;
+		List<Long[]> results;
 
 		while(record_number < (int) cfg.read.meta.get("amount")){
 
@@ -402,7 +404,7 @@ public class DdbbTest implements Runnable {
 
 			}
 
-			long[] total_result = new long[2];
+			Long[] total_result = new Long[2];
 			total_result[0] = results.get(0)[0];
 			total_result[1] = results.get(results.size() - 1)[1];
 
@@ -443,7 +445,7 @@ public class DdbbTest implements Runnable {
 			//Integer record_step = (((int) cfg.delete.meta.get("step_generate") > ((int) cfg.delete.meta.get("amount") - record_number)) ? (int) cfg.delete.meta.get("step_generate") : ((int) cfg.delete.meta.get("amount") - record_number));
 			Integer record_step = (int) cfg.delete.meta.get("step_generate");
 
-			List<long[]> results = new ArrayList<>();
+			List<Long[]> results = new ArrayList<>();
 
 			for(int i = 0; i < record_step; i++){
 				Integer random_field_index = (new Random()).nextInt(cfg.delete.data.get("fields").size() - 1);
@@ -466,7 +468,7 @@ public class DdbbTest implements Runnable {
 
 			}
 
-			long[] total_result = new long[2];
+			Long[] total_result = new Long[2];
 			total_result[0] = results.get(0)[0];
 			total_result[1] = results.get(results.size() - 1)[1];
 

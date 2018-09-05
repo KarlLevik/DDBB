@@ -1,11 +1,5 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -48,7 +42,7 @@ public class MariaInterface implements Db {
 
     }
 
-    public long[] create(Hashtable<String,ArrayList<Object>> in){
+    public Long[] create(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + cfg.settings.get("table"));
 
@@ -153,8 +147,8 @@ public class MariaInterface implements Db {
 
         String query = sb.toString();
 
-        long time_before = 0;
-        long time_after = 0;
+        Long time_before = new Long(0);
+        Long time_after = new Long(0);
 
         try {
             time_before = System.nanoTime();
@@ -164,11 +158,11 @@ public class MariaInterface implements Db {
             System.out.println(e);
         }
 
-        return new long[]{ time_before, time_after };
+        return new Long[]{ time_before, time_after };
 
     }
 
-    public long[] read(Hashtable<String,ArrayList<Object>> in){
+    public Long[] read(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("SELECT * from " + cfg.settings.get("table") + " where ");
 
@@ -264,8 +258,8 @@ public class MariaInterface implements Db {
 
         String query = sb.toString();
 
-        long time_before = 0;
-        long time_after = 0;
+        Long time_before = new Long(0);
+        Long time_after = new Long(0);
 
         try {
             time_before = System.nanoTime();
@@ -275,16 +269,16 @@ public class MariaInterface implements Db {
             System.out.println(e);
         }
 
-        return new long[]{ time_before, time_after };
+        return new Long[]{ time_before, time_after };
 
     }
 
-    public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
+    public Long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
-        return new long[]{ 0, 0 };
+        return new Long[]{ new Long(0), new Long(0) };
     }
 
-    public long[] delete(String key, String value){
+    public Long[] delete(String key, String value){
 
         int cfg_field_list_index = -1;
 
@@ -305,8 +299,8 @@ public class MariaInterface implements Db {
 
         String query = sb.toString();
 
-        long time_before = 0;
-        long time_after = 0;
+        Long time_before = new Long(0);
+        Long time_after = new Long(0);
 
         try {
             time_before = System.nanoTime();
@@ -316,7 +310,7 @@ public class MariaInterface implements Db {
             System.out.println(e);
         }
 
-        return new long[]{ time_before, time_after };
+        return new Long[]{ time_before, time_after };
 
     }
 

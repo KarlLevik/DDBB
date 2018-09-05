@@ -26,27 +26,27 @@ public class ElasticInterface implements Db {
 
     }
 
-    public long[] create(Hashtable<String,ArrayList<Object>> in){
+    public Long[] create(Hashtable<String,ArrayList<Object>> in){
 
-        return new long[]{ 0, 0 };
-
-    }
-
-    public long[] read(Hashtable<String,ArrayList<Object>> in){
-
-        return new long[]{ 0, 0 };
+        return new Long[]{ new Long(0), new Long(0) };
 
     }
 
-    public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
+    public Long[] read(Hashtable<String,ArrayList<Object>> in){
 
-        return new long[]{ 0, 0 };
+        return new Long[]{ new Long(0), new Long(0) };
 
     }
 
-    public long[] delete(String key, String value){
+    public Long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
-        return new long[]{ 0, 0 };
+        return new Long[]{ new Long(0), new Long(0) };
+
+    }
+
+    public Long[] delete(String key, String value){
+
+        return new Long[]{ new Long(0), new Long(0) };
 
     }
 

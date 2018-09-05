@@ -42,7 +42,7 @@ public class CassandraInterface implements Db {
 
     }
 
-    public long[] create(Hashtable<String,ArrayList<Object>> in){
+    public Long[] create(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + cfg.settings.get("table"));
 
@@ -159,15 +159,15 @@ public class CassandraInterface implements Db {
 
         String query = sb.toString();
 
-        long time_before = System.nanoTime();
+        Long time_before = System.nanoTime();
         session.execute(query);
-        long time_after = System.nanoTime();
+        Long time_after = System.nanoTime();
 
-        return new long[]{ time_before, time_after };
+        return new Long[]{ time_before, time_after };
 
     }
 
-    public long[] read(Hashtable<String,ArrayList<Object>> in){
+    public Long[] read(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("SELECT * from " + cfg.settings.get("db_name") + "." + cfg.settings.get("table") + " where ");
 
@@ -259,8 +259,8 @@ public class CassandraInterface implements Db {
 
         String query = sb.toString();
 
-        long time_before = 0;
-        long time_after = -1;
+        Long time_before = new Long(0);
+        Long time_after = new Long(-1);
 
         try {
 
@@ -284,18 +284,18 @@ public class CassandraInterface implements Db {
 
         }
 
-        return new long[]{ time_before, time_after };
+        return new Long[]{ time_before, time_after };
 
     }
 
-    public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
+    public Long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
 
-        return new long[]{ 0, 0 };
+        return new Long[]{ new Long(0), new Long(0) };
 
     }
 
-    public long[] delete(String key, String value){
+    public Long[] delete(String key, String value){
 
         int cfg_field_list_index = -1;
 
@@ -315,11 +315,11 @@ public class CassandraInterface implements Db {
         }
 
         String query = sb.toString();
-        long time_before = System.nanoTime();
+        Long time_before = System.nanoTime();
         session.execute(query);
-        long time_after = System.nanoTime();
+        Long time_after = System.nanoTime();
 
-        return new long[]{ time_before, time_after };
+        return new Long[]{ time_before, time_after };
 
     }
 
