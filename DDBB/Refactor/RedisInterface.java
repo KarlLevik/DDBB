@@ -28,7 +28,7 @@ public class RedisInterface implements Db {
 
     }
 
-    public long create(Hashtable<String,ArrayList<Object>> in){
+    public long[] create(Hashtable<String,ArrayList<Object>> in){
         long time_before = 0;
         long time_after = 0;
         long time = 0;
@@ -79,19 +79,25 @@ public class RedisInterface implements Db {
             }
         }
 
-        return time;
+        return new long[]{ time_before, time_after };
     }
 
-    public long read(Hashtable<String,ArrayList<Object>> in){
-        return Long.parseLong("0");
+    public long[] read(Hashtable<String,ArrayList<Object>> in){
+
+
+        return new long[]{ 0, 0 };
     }
 
-    public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
-        return Long.parseLong("0");
+    public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
+
+
+        return new long[]{ 0, 0 };
     }
 
-    public long delete(String key, String value){
-        return Long.parseLong("0");
+    public long[] delete(String key, String value){
+
+
+        return new long[]{ 0, 0 };
     }
 
     public static void main(String[] args){

@@ -352,7 +352,7 @@ public class DdbbIO {
 		return cfg;
 
 	}
-
+	/*
 	public static void out(String filename, DdbbReport report) throws Exception {
 
 		Writer writer = new FileWriter(filename);
@@ -362,6 +362,21 @@ public class DdbbIO {
 
 		writer.close();
 
+	} */
+
+	public static void out(String filename, DdbbReport report) throws Exception {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+		System.out.println("report = " + report);
+		for(String op : report.report.keySet()){
+		    writer.write(op + " = [");
+            for(int i = 0; i < report.report.get(op).size() - 1; i++){
+                writer.write("(" + report.report.get(op).get(i)[0] + "," + report.report.get(op).get(i)[1] + ") , ");
+            }
+            writer.write("(" + report.report.get(op).get(report.report.get(op).size() - 1)[0] + "," + report.report.get(op).get(report.report.get(op).size() - 1)[1] + ")]");
+            writer.newLine();
+		}
+
+		writer.close();
 	}
 
 	public static void outCfg(String filename, DdbbConfig cfg) throws Exception {

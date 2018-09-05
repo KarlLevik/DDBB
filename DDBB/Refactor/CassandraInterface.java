@@ -42,7 +42,7 @@ public class CassandraInterface implements Db {
 
     }
 
-    public long create(Hashtable<String,ArrayList<Object>> in){
+    public long[] create(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + cfg.settings.get("table"));
 
@@ -159,15 +159,15 @@ public class CassandraInterface implements Db {
 
         String query = sb.toString();
 
-        Long time_before = System.nanoTime();
+        long time_before = System.nanoTime();
         session.execute(query);
-        Long time_after = System.nanoTime();
+        long time_after = System.nanoTime();
 
-        return time_after - time_before;
+        return new long[]{ time_before, time_after };
 
     }
 
-    public long read(Hashtable<String,ArrayList<Object>> in){
+    public long[] read(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("SELECT * from " + cfg.settings.get("db_name") + "." + cfg.settings.get("table") + " where ");
 
@@ -284,13 +284,18 @@ public class CassandraInterface implements Db {
 
         }
 
-        return time_after - time_before;
+        return new long[]{ time_before, time_after };
 
     }
 
-    public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){ return Long.parseLong("0"); }
+    public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
-    public long delete(String key, String value){
+
+        return new long[]{ 0, 0 };
+
+    }
+
+    public long[] delete(String key, String value){
 
         int cfg_field_list_index = -1;
 
@@ -310,11 +315,11 @@ public class CassandraInterface implements Db {
         }
 
         String query = sb.toString();
-        Long time_before = System.nanoTime();
+        long time_before = System.nanoTime();
         session.execute(query);
-        Long time_after = System.nanoTime();
+        long time_after = System.nanoTime();
 
-        return time_after - time_before;
+        return new long[]{ time_before, time_after };
 
     }
 
