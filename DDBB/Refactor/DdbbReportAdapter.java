@@ -18,10 +18,7 @@ public class DdbbReportAdapter extends TypeAdapter<DdbbReport> {
 		for(String op : report.report.keySet()){
 			writer.name(op);
 			writer.beginObject();
-			for(String type : report.report.get(op).keySet()){
-				writer.name(type);
-				writer.value("[" + String.join(",",(report.report.get(op).get(type))) + "]");
-			}
+			writer.value("[" + String.join(",",(report.report.get(op)) + "]"));
 			writer.endObject();
 		}
 		writer.endObject();

@@ -42,7 +42,7 @@ public class CassandraInterface implements Db {
 
     }
 
-    public long create(Hashtable<String,ArrayList<Object>> in){
+    public String create(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("INSERT INTO " + cfg.settings.get("table"));
 
@@ -159,15 +159,18 @@ public class CassandraInterface implements Db {
 
         String query = sb.toString();
 
-        Long time_before = System.nanoTime();
-        session.execute(query);
-        Long time_after = System.nanoTime();
+        long time_before;
+        long time_after;
 
-        return time_after - time_before;
+        time_before = System.nanoTime();
+        session.execute(query);
+        time_after = System.nanoTime();
+
+        return time_before + "-" + time_after;
 
     }
 
-    public long read(Hashtable<String,ArrayList<Object>> in){
+    public String read(Hashtable<String,ArrayList<Object>> in){
 
         StringBuilder sb = new StringBuilder("SELECT * from " + cfg.settings.get("db_name") + "." + cfg.settings.get("table") + " where ");
 
@@ -260,7 +263,7 @@ public class CassandraInterface implements Db {
         String query = sb.toString();
 
         long time_before = 0;
-        long time_after = -1;
+        long time_after = 0;
 
         try {
 
@@ -284,13 +287,18 @@ public class CassandraInterface implements Db {
 
         }
 
-        return time_after - time_before;
+        return time_before + "-" + time_after;
 
     }
 
-    public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){ return Long.parseLong("0"); }
+    public String update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
-    public long delete(String key, String value){
+
+        return "";
+
+    }
+
+    public String delete(String key, String value){
 
         int cfg_field_list_index = -1;
 
@@ -314,7 +322,7 @@ public class CassandraInterface implements Db {
         session.execute(query);
         Long time_after = System.nanoTime();
 
-        return time_after - time_before;
+        return time_before.toString() + "," + time_after.toString();
 
     }
 

@@ -26,35 +26,27 @@ public class ElasticInterface implements Db {
 
     }
 
-    public long create(Hashtable<String,ArrayList<Object>> in){
+    public String create(Hashtable<String,ArrayList<Object>> in){
 
-
-        Long time_before = System.nanoTime();
-
-        Long time_after = System.nanoTime();
-
-        return time_after - time_before;
+        return "";
 
     }
 
-    public long read(Hashtable<String,ArrayList<Object>> in){
+    public String read(Hashtable<String,ArrayList<Object>> in){
 
-        long time_before = 0;
-
-        return time_before;
+        return "";
 
     }
 
-    public long update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){ return Long.parseLong("0"); }
+    public String update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
-    public long delete(String key, String value){
+        return "";
 
+    }
 
-        Long time_before = System.nanoTime();
+    public String delete(String key, String value){
 
-        Long time_after = System.nanoTime();
-
-        return time_after - time_before;
+        return "";
 
     }
 
