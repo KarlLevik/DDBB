@@ -102,7 +102,7 @@ public class DdbbTool {
 	}
 
 	// Returns the runtime, often of a test, a benchmark or a session
-	public static Long runtime(Long start_time){
+	public static long runtime(Long start_time){
 
 		return (System.nanoTime() - start_time);
 	

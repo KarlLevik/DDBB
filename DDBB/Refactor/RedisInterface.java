@@ -28,10 +28,10 @@ public class RedisInterface implements Db {
 
     }
 
-    public Long[] create(Hashtable<String,ArrayList<Object>> in){
-        Long time_before = new Long(0);
-        Long time_after = new Long(0);
-        Long time = new Long(0);
+    public long[] create(Hashtable<String,ArrayList<Object>> in){
+        long time_before = 0;
+        long time_after = 0;
+        long time = 0;
 
         Integer amount = in.keySet().size();
         String rand_key = (in.keySet().toArray()[(new Random()).nextInt(amount)]).toString();
@@ -79,25 +79,25 @@ public class RedisInterface implements Db {
             }
         }
 
-        return new Long[]{ time_before, time_after };
+        return new long[]{ time_before, time_after };
     }
 
-    public Long[] read(Hashtable<String,ArrayList<Object>> in){
+    public long[] read(Hashtable<String,ArrayList<Object>> in){
 
 
-        return new Long[]{ new Long(0), new Long(0) };
+        return new long[]{ 0, 0 };
     }
 
-    public Long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
+    public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up){
 
 
-        return new Long[]{ new Long(0), new Long(0) };
+        return new long[]{ 0, 0 };
     }
 
-    public Long[] delete(String key, String value){
+    public long[] delete(String key, String value){
 
 
-        return new Long[]{ new Long(0), new Long(0) };
+        return new long[]{ 0, 0 };
     }
 
     public static void main(String[] args){

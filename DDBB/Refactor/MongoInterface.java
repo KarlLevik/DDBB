@@ -50,9 +50,9 @@ public class MongoInterface implements Db {
 
 	}
 
-	public Long[] create(Hashtable<String,ArrayList<Object>> in){
-        Long time_before;
-        Long time_after;
+	public long[] create(Hashtable<String,ArrayList<Object>> in){
+        long time_before;
+        long time_after;
 
 		Document document = new Document();
 
@@ -64,13 +64,13 @@ public class MongoInterface implements Db {
 		collection.insertOne(document);
 		time_after = System.nanoTime();
 
-        return new Long[]{ time_before, time_after };
+        return new long[]{ time_before, time_after };
 
 	}
 
-	public Long[] read(Hashtable<String,ArrayList<Object>> in){
-        Long time_before;
-        Long time_after;
+	public long[] read(Hashtable<String,ArrayList<Object>> in){
+        long time_before;
+        long time_after;
 
 		Document document = new Document();
 
@@ -84,30 +84,30 @@ public class MongoInterface implements Db {
 		//Document it1 = collection.find(document).first();
 		//System.out.println("it = " + it1);
 
-        return new Long[]{ time_before, time_after };
+        return new long[]{ time_before, time_after };
 
 	}
 
-	public Long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up) {
-		Long time_before = new Long(0);
-		Long time_after = new Long(0);
+	public long[] update(Hashtable<String,ArrayList<Object>> in, Hashtable<String,ArrayList<Object>> up) {
+		long time_before = 0;
+		long time_after = 0;
 
 		//collection.updateOne(Filters.eq(in_key.toString(), in_value.toString()),
 		//	Updates.set(new_key.toString(), new_value.toString()));
 
-        return new Long[]{ time_before, time_after };
+        return new long[]{ time_before, time_after };
 	
 	}
 
-	public Long[] delete(String key, String value){
-        Long time_before;
-        Long time_after;
+	public long[] delete(String key, String value){
+        long time_before;
+        long time_after;
 
 		time_before = System.nanoTime();
 		collection.deleteOne(Filters.eq(key, value));
 		time_after = System.nanoTime();
 
-        return new Long[]{ time_before, time_after };
+        return new long[]{ time_before, time_after };
 
 	}
 

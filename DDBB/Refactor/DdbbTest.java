@@ -1,8 +1,9 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Random;
 
 public class DdbbTest implements Runnable {
 
@@ -118,9 +119,9 @@ public class DdbbTest implements Runnable {
 			if(!cfg.update.isEmpty()){
 				update();
 			}
-			if(!cfg.delete.isEmpty()){
-				delete();
-			}
+			//if(!cfg.delete.isEmpty()){
+			//	delete();
+			//}
 			db.disconnectDb();
 
 			DdbbIO.out(file_name + "_RESULT.json", report);
@@ -274,8 +275,8 @@ public class DdbbTest implements Runnable {
 
 		Integer size = 			((Number) data.get("size").get(field_counter)).intValue();
 		boolean size_up_to = 	(boolean) data.get("size_up_to").get(field_counter);
-        boolean fixed_field = 	(boolean) data.get("fixed_fields").get(field_counter);
-        String fixed_value = 	String.valueOf(data.get("fixed_values").get(field_counter));
+		boolean fixed_field = 	(boolean) data.get("fixed_fields").get(field_counter);
+		String fixed_value = 	String.valueOf(data.get("fixed_values").get(field_counter));
 		String value = 			String.valueOf(data.get("val").get(field_counter));
 
 		Object generated_value = new Object();
@@ -302,114 +303,87 @@ public class DdbbTest implements Runnable {
 		return generated_value;
 	}
 
-	// Creates the records in the database
-	private void create() throws Exception {
-		Integer record_number = 0;
-		List<Long[]> results;
-		while(record_number < (int) cfg.create.meta.get("amount")){
+	public void create() throws Exception {
+		int amount = (int) cfg.create.meta.get("amount");
 
-			int record_step = (((int) cfg.create.meta.get("step_generate") < ((int) cfg.create.meta.get("amount") - record_number)) ? (int) cfg.create.meta.get("step_generate") : ((int) cfg.create.meta.get("amount") - record_number));
+		if (!this.cfg.create.meta.containsKey("load_file")) {
+			generate(cfg.create, amount);
 
-			if(!this.cfg.create.meta.containsKey("load_file")){
-				generate(cfg.create, record_step);
-
-				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-					DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
-				}
-
-			} else {
-
-				generated_set = DdbbIO.in_generated((String) this.cfg.create.meta.get("load_file"), record_number, record_step);
-
-				if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
-					DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
-				}
-
+			if (this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")) {
+				DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
 			}
 
-			results = new ArrayList<>();
+		} else {
 
-			for(int i = 0; i < record_step; i++){
-				results.add(db.create(generated_set.get(i)));
-				if(query_delay > 0) {
-					Thread.sleep(query_delay);
-				}
-				record_number++;
+			generated_set = DdbbIO.in_generated((String) this.cfg.create.meta.get("load_file"), 0, amount);
 
+			if (this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")) {
+				DdbbIO.out_generated(file_name + "_CRTE_GNR8.txt", generated_set);
 			}
-
-			Long[] total_result = new Long[2];
-			total_result[0] = results.get(0)[0];
-			total_result[1] = results.get(results.size() - 1)[1];
-
-			report.save("create", total_result);
 
 		}
 
-		System.out.println("Create test finished");
+		ArrayList<long[]> results = new ArrayList<>();
 
+		if (query_delay > 0) {
+			for (int i = 0; i < amount; i++) {
+				results.add(db.create(generated_set.get(i)));
+				Thread.sleep(query_delay);
+			}
+		} else {
+			for (int i = 0; i < amount; i++) {
+				results.add(db.create(generated_set.get(i)));
+			}
+		}
+
+
+		long[] total_result = new long[2];
+		total_result[0] = results.get(0)[0];
+		total_result[1] = results.get(results.size() - 1)[1];
+
+		report.saveList("create", results);
+
+		System.out.println("Create test finished");
 	}
 
-	// Reads the records in the database
-	private void read() throws Exception {
-		Integer record_number = 0;
-		List<Long[]> results;
+	public void read() throws Exception {
+		int amount = (int) cfg.read.meta.get("amount");
 
-		while(record_number < (int) cfg.read.meta.get("amount")){
+		if (!this.cfg.read.meta.containsKey("load_file")) {
+			generate(cfg.read, amount);
 
-			Thread.sleep(query_delay);
-
-			//Integer record_step = (((int) cfg.read.meta.get("step_generate") > ((int) cfg.read.meta.get("amount") - record_number)) ? (int) cfg.read.meta.get("step_generate") : ((int) cfg.read.meta.get("amount") - record_number));
-			Integer record_step = (int) cfg.read.meta.get("step_generate");
-
-			if(!this.cfg.read.meta.containsKey("load_file")){
-
-				generate(cfg.read, record_step);
-
-			} else {
-
-				generated_set = DdbbIO.in_generated((String) this.cfg.read.meta.get("load_file"), record_number, record_step);
-
-			}
-
-			ArrayList<Hashtable<String,ArrayList<Object>>> new_generated_set = new ArrayList<>();
-			for(Hashtable<String,ArrayList<Object>> record : generated_set) {
-
-				new_generated_set.add((Hashtable<String,ArrayList<Object>>) record.clone());
-			}
-
-			if(this.cfg.read.data.containsKey("fields")){
-
-				for(int record_index = 0; record_index < generated_set.size(); record_index++){
-					for(String old_field : generated_set.get(record_index).keySet()) {
-						if (!(cfg.read.data.get("fields").contains(old_field))) {
-							new_generated_set.get(record_index).remove(old_field);
-						}
-					}
-				}
-
-			}
-
-			generated_set = new_generated_set;
-
-			if(this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")){
+			if (this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")) {
 				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
 			}
 
-			results = new ArrayList<>();
+		} else {
 
-			for(int i = 0; i < record_step; i++){
-				results.add(db.read(generated_set.get(i)));
-				record_number++;
+			generated_set = DdbbIO.in_generated((String) this.cfg.read.meta.get("load_file"), 0, amount);
 
+			if (this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")) {
+				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
 			}
 
-			Long[] total_result = new Long[2];
-			total_result[0] = results.get(0)[0];
-			total_result[1] = results.get(results.size() - 1)[1];
-
-			report.save("create", total_result);
 		}
+
+		ArrayList<long[]> results = new ArrayList<>();
+
+		if (query_delay > 0) {
+			for (int i = 0; i < amount; i++) {
+				results.add(db.read(generated_set.get(i)));
+				Thread.sleep(query_delay);
+			}
+		} else {
+			for (int i = 0; i < amount; i++) {
+				results.add(db.read(generated_set.get(i)));
+			}
+		}
+
+		long[] total_result = new long[2];
+		total_result[0] = results.get(0)[0];
+		total_result[1] = results.get(results.size() - 1)[1];
+
+		report.saveList("read", results);
 
 		System.out.println("Read test finished");
 	}
@@ -433,51 +407,50 @@ public class DdbbTest implements Runnable {
 		System.out.println("Update finished");
 
 	}
+/*
+	public void delete() throws Exception {
+		int amount = (int) cfg.delete.meta.get("amount");
 
-	// Deletes the records in the database
-	private void delete() throws Exception {
-		Integer record_number = 0;
+		if (!this.cfg.delete.meta.containsKey("load_file")) {
+			generate(cfg.delete, amount);
 
-		while(record_number < (int) cfg.delete.meta.get("amount")){
-
-			Thread.sleep(query_delay);
-
-			//Integer record_step = (((int) cfg.delete.meta.get("step_generate") > ((int) cfg.delete.meta.get("amount") - record_number)) ? (int) cfg.delete.meta.get("step_generate") : ((int) cfg.delete.meta.get("amount") - record_number));
-			Integer record_step = (int) cfg.delete.meta.get("step_generate");
-
-			List<Long[]> results = new ArrayList<>();
-
-			for(int i = 0; i < record_step; i++){
-				Integer random_field_index = (new Random()).nextInt(cfg.delete.data.get("fields").size() - 1);
-				String random_field = cfg.delete.data.get("fields").get(random_field_index).toString();
-				Integer random_record_index = (new Random()).nextInt((int) cfg.setup.meta.get("amount") + (int) cfg.create.meta.get("amount"));
-
-				ArrayList<String> list = new ArrayList<>();
-				try (BufferedReader br = new BufferedReader(new FileReader("del.dat"))) {
-					for (int j = 0; j < random_record_index - 1; j++) {
-						br.readLine();
-					}
-					list = new ArrayList<>(Arrays.asList(br.readLine().split(",")));
-
-				} catch(Exception e){
-					System.out.println(e);
-				}
-
-				results.add(db.delete(random_field, list.get(random_field_index)));
-				record_number++;
-
+			if (this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")) {
+				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
 			}
 
-			Long[] total_result = new Long[2];
-			total_result[0] = results.get(0)[0];
-			total_result[1] = results.get(results.size() - 1)[1];
+		} else {
 
-			report.save("create", total_result);
+			generated_set = DdbbIO.in_generated((String) this.cfg.delete.meta.get("load_file"), 0, amount);
+
+			if (this.cfg.settings.containsKey("save_generated") && (boolean) this.cfg.settings.get("save_generated")) {
+				DdbbIO.out_generated(file_name + "_READ_GNR8.txt", generated_set);
+			}
 
 		}
 
-		System.out.println("Delete test finished");
+		ArrayList<long[]> results = new ArrayList<>();
 
+		if (query_delay > 0) {
+			for (int i = 0; i < amount; i++) {
+				results.add(db.delete(generated_set.get(i)));
+				Thread.sleep(query_delay);
+			}
+		} else {
+			for (int i = 0; i < amount; i++) {
+				results.add(db.delete(generated_set.get(i)));
+			}
+		}
+
+		long[] total_result = new long[2];
+		total_result[0] = results.get(0)[0];
+		total_result[1] = results.get(results.size() - 1)[1];
+
+		report.saveList("delete", results);
+
+		System.out.println("Delete test finished");
 	}
+*/
+
+
 
 }
